@@ -91,7 +91,7 @@ class SVPsolver{
 
 		bool			solve_cplex(int tlimit, int selection);
       int         selection_k(int i, int selection);
-      double      compute_miqp_cplex( int k, double* sol );
+      double      compute_miqp_cplex( int k );
 
 		bool			p_solve();
 		void			find_min_column();
