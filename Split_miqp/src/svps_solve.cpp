@@ -20,6 +20,91 @@
 
 #define debug 0
 
+int SVPsolver::selection_k(
+      int   i,
+      int   selection
+      )
+{
+   auto k = 0;
+   switch ( selection )
+   {
+      case 0:
+      {
+         k = i;
+         break;
+      }
+
+      default:
+      {
+         assert(0);
+      }
+   }
+
+   return k;
+}
+
+double SVPsolver::compute_miqp_cplex(
+      int   k,
+      double* sol
+      )
+{
+   auto Q = probdata.get_Q();
+
+   return 0;
+}
+
+
+bool SVPsolver::solve_cplex(
+   int      tlimit,
+   int      selection
+   )
+{
+   if( tlimit <= 0 ){
+      return false;
+   }
+
+   stopwatch.set_timelimit( tlimit );
+   stopwatch.start();
+
+   int m = probdata.get_m();
+
+   assert( m > 0 );
+
+   vector<bool> list( m, true );
+
+   // output bounds
+   cout << "Bounds: " << endl;
+   for ( int i = 0; i < m; i++ )
+   {
+      cout << "x_" << i << ": [ " << lb[i] << ", " << ub[i] << "]" << endl;
+   }
+
+   int k;
+   vector<double> sol( m, 0.0 );
+   double optval_Q;
+
+   for ( int i = 0; i < m - 1; i++ )
+   {
+      cout << "-[" << i << "]--------------------------------------------" << endl;
+      k = selection_k( i, selection );
+      cout << "selection: " << k << endl;
+
+      optval_Q = compute_miqp_cplex( k, &sol[0] );
+      cout << "optval(Q): " << optval_Q << endl;
+
+      exit(0);
+      // update list and bound
+      if( stopwatch.check_time() == false ) break;
+   }
+
+
+   if( stopwatch.check_time() == false )
+      return false;
+
+   stopwatch.stop();
+   return true;
+}
+
 bool SVPsolver::solve(
 	bool		para,
 	bool 		s_zero,

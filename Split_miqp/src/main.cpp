@@ -19,13 +19,15 @@ int main( int argc, char** argv){
 
    cout << fixed << setprecision(3);
 
-   if( argc != 2 )
+   if( argc != 4 )
    {
       cerr << "Error: commandline arguments" << endl;
       return -1;
    }
 
    int m;
+   auto tlimit = atoi( argv[2] );
+   auto selection = atoi( argv[3] );
 
    ReadDim( argv[1], &m);
 
@@ -44,6 +46,15 @@ int main( int argc, char** argv){
    svps.set_num_thread( nthreads );
    svps.find_min_column();
    svps.compute_bounds();
+
+   bool run = svps.solve_cplex( tlimit, selection );
+
+   if( !run ){
+		cout << "could not solve .." << endl;
+		return 0;
+	}
+
+	svps.disp_bestsol();
 
    delete[] B_;
 
