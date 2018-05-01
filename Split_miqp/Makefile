@@ -4,7 +4,8 @@ SRCDIR	=	./src
 OBJDIR	=	./obj
 BINDIR	=	./bin
 
-MAINOBJ		=	main.o read_data.o qpsolver.o vector.o \
+MAINOBJ		=	main.o read_data.o \
+					qpsolver.o vector.o \
 					probdata.o svpsolver.o solution.o svps_solve.o \
 					heur_init.o solution_pool.o node.o stopwatch.o \
 					select_node.o relax.o branch.o svps_parallel.o \
@@ -13,19 +14,19 @@ MAINOBJ		=	main.o read_data.o qpsolver.o vector.o \
 MAINSRC		=	$(addprefix $(SRCDIR)/,$(MAINOBJ:.o=.cpp))
 MAINOBJFILES	=	$(addprefix $(OBJDIR)/,$(MAINOBJ))
 
-MAIN		=	SVPSOLVER
+MAIN		=	GENERATE_SPLIT_MIQP
 MAINFILE	=	$(BINDIR)/$(MAIN)
 
 #Mac
 CXX	=	/usr/local/bin/g++-4.9
 
 #Mac
-CXXFLAGS	=	-Wall -lblas -llapack -lpthread -fopenmp
+CXXFLAGS	=	-Wall -lblas -llapack -lpthread -fopenmp -O2 -std=c++14
 
 #Linux
-#CXXFLAGS	=	-Wall -lopenblas -llapack -lpthread -fopenmp
+#CXXFLAGS	=	-Wall -lopenblas -llapack -lpthread -fopenmp -O2 -std=c++14
 
-CXXFLAGS	+=	-DNDEBUG
+#CXXFLAGS	+=	-DNDEBUG
 
 #Mac
 CXXFLAGS	+=	-I/usr/local/Cellar/openblas/0.2.18_2/include
