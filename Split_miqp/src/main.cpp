@@ -49,10 +49,8 @@ int main( int argc, char** argv){
 
    bool run = svps.solve_cplex( tlimit, selection );
 
-   if( !run ){
+   if( !run )
 		cout << "could not solve .." << endl;
-		return 0;
-	}
 
 	svps.disp_bestsol();
 

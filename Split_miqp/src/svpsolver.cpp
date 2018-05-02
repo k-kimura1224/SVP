@@ -266,12 +266,12 @@ void SVPsolver::disp_bestsol()
 
 	assert( val != NULL );
 
-	cout << endl;
-	if( listsize == 0 ){
-		cout << "SVPSOLVER found an optimal solution" << endl;
-	}else{
-		cout << "-- TIMEOVER --" << endl;
-	}
+	//cout << endl;
+	//if( listsize == 0 ){
+	//	cout << "SVPSOLVER found an optimal solution" << endl;
+	//}else{
+	//	cout << "-- TIMEOVER --" << endl;
+	//}
 	cout << endl;
 
 	cout << "time: " << stopwatch.get_result() << "s" << endl;
