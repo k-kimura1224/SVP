@@ -232,6 +232,8 @@ bool SVPsolver::solve_cplex(
    ofstream txtfile;
    txtfile.open( "run.txt", std::ios::out);
    txtfile << "read cplex.lp" << endl;
+   txtfile << "set timelimit " << tlimit << endl;
+   txtfile << "set mip tolerances mipgap 1e-10" << endl;
    txtfile << "opt" << endl;
    txtfile << "write cplex.sol" << endl;
    txtfile << "q" << endl;
