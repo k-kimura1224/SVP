@@ -191,6 +191,8 @@ double SVPsolver::compute_miqp_cplex(
       bestsol = sol;
 
       bestval = val;
+
+      cout << "Found new solution!!" << endl;
    }
 
    fclose( file);
@@ -230,6 +232,8 @@ bool SVPsolver::solve_cplex(
    ofstream txtfile;
    txtfile.open( "run.txt", std::ios::out);
    txtfile << "read cplex.lp" << endl;
+   txtfile << "set timelimit " << tlimit << endl;
+   txtfile << "set mip tolerances mipgap 1e-10" << endl;
    txtfile << "opt" << endl;
    txtfile << "write cplex.sol" << endl;
    txtfile << "q" << endl;
@@ -262,12 +266,17 @@ bool SVPsolver::solve_cplex(
          lowerbound_P = sch.get_min();
          cout << ", lowerbound(P): " << lowerbound_P << endl;
          if ( lowerbound_P > bestval )
+         {
+            cout << "CUT-OFF!!" << endl;
             break;
+         }
       }
 
       list[k] = false;
       ub[k] = 0.0;
       lb[k] = 0.0;
+
+      cout << "bestval: " << bestval << endl;
 
       if( stopwatch.check_time() == false ) break;
 
@@ -278,7 +287,10 @@ bool SVPsolver::solve_cplex(
    system("rm -f clone.txt");
 
    if( stopwatch.check_time() == false )
+   {
+      stopwatch.stop();
       return false;
+   }
 
    stopwatch.stop();
    return true;
