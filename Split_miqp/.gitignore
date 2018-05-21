@@ -5,3 +5,4 @@
 *.lp
 *.txt
 /result/
+*.time

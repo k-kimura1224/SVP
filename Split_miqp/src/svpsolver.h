@@ -89,7 +89,7 @@ class SVPsolver{
 		void			create_sch( int m, double *B_);
 		bool			solve(bool para, bool s_zero, double s_GLB, int tlimit);
 
-		bool			solve_cplex(int tlimit, int selection);
+		bool			solve_cplex(int tlimit, int selection, const char* filename);
       int         selection_k(int i, int selection);
       double      compute_miqp_cplex( int k );
 
