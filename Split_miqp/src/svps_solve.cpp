@@ -167,7 +167,7 @@ double SVPsolver::compute_miqp_cplex(
    {
       for(int i = 7; i < 27; i++ )
       {
-         if( fgets( s, 100, file)==NULL )
+         if( fgets( s, 50, file)==NULL )
          {
             printf("Error reading file <%s>.\n", "cplex.sol");
             exit(0);
