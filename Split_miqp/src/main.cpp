@@ -47,7 +47,7 @@ int main( int argc, char** argv){
    svps.find_min_column();
    svps.compute_bounds();
 
-   bool run = svps.solve_cplex( tlimit, selection );
+   bool run = svps.solve_cplex( tlimit, selection, argv[1] );
 
    if( !run )
 		cout << "could not solve .." << endl;
