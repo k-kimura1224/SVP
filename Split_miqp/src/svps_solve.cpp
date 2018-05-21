@@ -1,4 +1,5 @@
 #include <string>
+#include <string.h>
 #include <sstream>
 #include <fstream>
 #include <iostream>
@@ -164,12 +165,18 @@ double SVPsolver::compute_miqp_cplex(
 
    if ( bestval > val )
    {
-      for(int i=7; i<27; i++){
-         /* skip 6 lines */
-         if( fgets( s, 50, file)==NULL ){
+      for(int i = 7; i < 27; i++ )
+      {
+         if( fgets( s, 100, file)==NULL )
+         {
             printf("Error reading file <%s>.\n", "cplex.sol");
             exit(0);
          }
+
+         if ( !strcmp( s, " <variables>\n" ) )
+            break;
+
+         assert( i < 26 );
       }
 
       char buf[50];
@@ -204,9 +211,51 @@ double SVPsolver::compute_miqp_cplex(
 }
 
 
+static
+void getProblemName(
+	const char*	filename,	/*	input filename			  */
+	char*			probname,	/*	output problemname	  */
+	int			maxSize		/* maximum size of p.name */
+	)
+{
+	int	i=0;
+	int	j=0;
+	int	l;
+
+	/*	first find end of string */
+	while( filename[i]!=0 )
+		++i;
+	l = i;
+
+	/* go back until '.' or '/' or '\' appears */
+	while( (i>0) && (filename[i]!='.') && (filename[i]!='/') && (filename[i]!='\\'))
+		--i;
+
+	/* if we found '.', search for '/' or '\\' */
+	if( filename[i]=='.' ){
+		l = i;
+		while( (i>0) && (filename[i]!='/') && (filename[i]!='\\') )
+			--i;
+	}
+
+	/* crrect counter */
+	if( (filename[i]=='/') || (filename[i]=='\\') )
+		++i;
+
+	/* copy name */
+	while( (i<l) && (filename[i]!=0) ){
+		probname[j++] = filename[i++];
+		if( j>maxSize-1)
+         exit(0);
+	}
+	probname[j] = 0;
+
+}
+
 bool SVPsolver::solve_cplex(
-   int      tlimit,
-   int      selection
+   int         tlimit,
+   int         selection,
+	const char*	filename	/*	input filename			  */
    )
 {
    if( tlimit <= 0 ){
@@ -221,6 +270,7 @@ bool SVPsolver::solve_cplex(
    assert( m > 0 );
 
    vector<bool> list( m, true );
+   vector<int> timelog;
 
    // output bounds
    cout << "Bounds: " << endl;
@@ -229,14 +279,6 @@ bool SVPsolver::solve_cplex(
       cout << "x_" << i << ": [ " << lb[i] << ", " << ub[i] << "]" << endl;
    }
 
-   ofstream txtfile;
-   txtfile.open( "run.txt", std::ios::out);
-   txtfile << "read cplex.lp" << endl;
-   txtfile << "set timelimit " << tlimit << endl;
-   txtfile << "set mip tolerances mipgap 1e-10" << endl;
-   txtfile << "opt" << endl;
-   txtfile << "write cplex.sol" << endl;
-   txtfile << "q" << endl;
    system("rm -f cplex.sol");
    system("rm -f clone*.log");
    system("rm -f cplex.log");
@@ -244,9 +286,21 @@ bool SVPsolver::solve_cplex(
    int k;
    double optval_Q;
    double lowerbound_P;
+   bool result = true;
 
    for ( int i = 0; i < m - 1; i++ )
    {
+      assert( tlimit - stopwatch.get_time() > 3 );
+
+      ofstream txtfile;
+      txtfile.open( "run.txt", std::ios::out);
+      txtfile << "read cplex.lp" << endl;
+      txtfile << "set timelimit " << tlimit - stopwatch.get_time() << endl;
+      txtfile << "set mip tolerances mipgap 1e-10" << endl;
+      txtfile << "opt" << endl;
+      txtfile << "write cplex.sol" << endl;
+      txtfile << "q" << endl;
+
       cout << "-[" << i << "]--------------------------------------------" << endl;
       k = selection_k( i, selection );
       assert( list[k] == true );
@@ -254,6 +308,8 @@ bool SVPsolver::solve_cplex(
 
       optval_Q = compute_miqp_cplex( k );
       cout << "optval(Q): " << optval_Q;
+
+      system("rm -f run.txt");
 
       if ( i < m - 2 )
       {
@@ -278,13 +334,55 @@ bool SVPsolver::solve_cplex(
 
       cout << "bestval: " << bestval << endl;
 
-      if( stopwatch.check_time() == false ) break;
-
+      timelog.push_back( stopwatch.get_time() );
+      //if( stopwatch.check_time() == false ) break;
+      if( tlimit - stopwatch.get_time() < 5  )
+      {
+         result = false;
+         break;
+      }
    }
 
-   system("rm -f run.txt");
    system("rm -f cplex.txt");
    system("rm -f clone.txt");
+
+   char probname[100];
+   getProblemName( filename, probname, 100);
+
+   string com("echo [");
+   com += probname;
+   com += " @";
+   com += to_string(selection);
+   com += "] ";
+   if ( result == true )
+      com += "=== OPTIMAL ===";
+   else
+      com += "== TIME OVER ==";
+
+   com += " TIME: ";
+   com += to_string( stopwatch.get_time() );
+
+   auto ct = 0;
+   for ( auto l : list )
+      if ( l == false ) ct++;
+
+   com += " NUMB: ";
+   com += to_string( ct );
+
+   com += " NOLM: ";
+   com += to_string( (int)sqrt(bestval) );
+   com += " >> result.txt";
+
+   //cout << com << endl;
+   system(com.c_str());
+
+   ofstream timefile;
+   string timefilename(probname);
+   timefilename += ".time";
+   com = "rm -f " + timefilename;
+   system(com.c_str());
+   timefile.open( timefilename, std::ios::out);
+   for( auto t : timelog ) timefile << t << endl;
 
    if( stopwatch.check_time() == false )
    {

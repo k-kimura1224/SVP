@@ -4,4 +4,8 @@
 *.log
 *.lp
 *.txt
+<<<<<<< HEAD
 /result/
+=======
+*.time
+>>>>>>> master
