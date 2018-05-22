@@ -23,7 +23,8 @@
 
 int SVPsolver::selection_k(
       int   i,
-      int   selection
+      int   selection,
+      vector<bool>& list
       )
 {
    auto k = 0;
@@ -41,6 +42,44 @@ int SVPsolver::selection_k(
          break;
       }
 
+      case 2:
+      {
+         auto m = probdata.get_m();
+         vector<bool> copy_list(m);
+         auto max = 0.0;
+         auto max_index = -1;
+         double lb;
+
+         for ( int i = 0; i < m; i++ )
+            copy_list[i] = list[i];
+
+         for ( int i = 0; i < m; i++ )
+         {
+            if ( copy_list[i] == true )
+            {
+               copy_list[i] = false;
+               for ( int j = 0; j < m; j++ )
+                  sch.set_z_i( j, copy_list[j] );
+
+               assert( sch.get_n() > 0 );
+               sch.compute_GS();
+               lb = sch.get_min();
+               if ( max < lb )
+               {
+                  max = lb;
+                  max_index = i;
+               }
+
+               copy_list[i] = true;
+            }
+         }
+
+         assert( max_index != -1 );
+
+         k = max_index;
+
+         break;
+      }
       default:
       {
          assert(0);
@@ -302,7 +341,7 @@ bool SVPsolver::solve_cplex(
       txtfile << "q" << endl;
 
       cout << "-[" << i << "]--------------------------------------------" << endl;
-      k = selection_k( i, selection );
+      k = selection_k( i, selection, list );
       assert( list[k] == true );
       cout << "selection: " << k << endl;
 

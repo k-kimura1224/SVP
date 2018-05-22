@@ -1,0 +1,9 @@
+set timelimit 86400
+set preprocessing presolve n
+set mip tolerances mipgap 1e-10
+
+read BKZ20_49_126.lp
+opt
+write BKZ20_49_126.sol
+
+q
