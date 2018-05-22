@@ -90,7 +90,7 @@ class SVPsolver{
 		bool			solve(bool para, bool s_zero, double s_GLB, int tlimit);
 
 		bool			solve_cplex(int tlimit, int selection, const char* filename);
-      int         selection_k(int i, int selection);
+      int         selection_k(int i, int selection, vector<bool>& list);
       double      compute_miqp_cplex( int k );
 
 		bool			p_solve();
