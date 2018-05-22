@@ -25,7 +25,7 @@ CXXFLAGS	=	-Wall -lblas -llapack -lpthread -fopenmp -O2 -std=c++14
 #Linux
 #CXXFLAGS	=	-Wall -lopenblas -llapack -lpthread -fopenmp -O2
 
-#CXXFLAGS	+=	-DNDEBUG
+CXXFLAGS	+=	-DNDEBUG
 
 #Mac
 CXXFLAGS	+=	-I/usr/local/Cellar/openblas/0.2.18_2/include
