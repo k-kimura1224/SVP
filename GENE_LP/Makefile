@@ -19,21 +19,21 @@ MAIN		=	GENERATE_LPFILE
 MAINFILE	=	$(BINDIR)/$(MAIN)
 
 #Mac
-CXX	=	/usr/local/bin/g++-4.9
+#CXX	=	/usr/local/bin/g++-4.9
 
 #Mac
-CXXFLAGS	=	-Wall -lblas -llapack -lpthread -fopenmp -O2 -std=c++14
+#CXXFLAGS	=	-Wall -lblas -llapack -lpthread -fopenmp -O2 -std=c++14
 
 #Linux
-#CXXFLAGS	=	-Wall -lopenblas -llapack -lpthread -fopenmp -O2 -std=c++14
+CXXFLAGS	=	-Wall -lopenblas -llapack -lpthread -fopenmp -O2 -std=c++14
 
 #CXXFLAGS	+=	-DNDEBUG
 
 #Mac
-CXXFLAGS	+=	-I/usr/local/Cellar/openblas/0.2.18_2/include
+#CXXFLAGS	+=	-I/usr/local/Cellar/openblas/0.2.18_2/include
 
 #Linux
-#CXXLDFLAGS	=	-L/usr/lib64/libopenblas.so
+CXXLDFLAGS	=	-L/usr/lib64/libopenblas.so
 
 .PHONY: all
 all: $(MAIN)
