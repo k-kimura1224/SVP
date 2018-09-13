@@ -1,7 +1,9 @@
 # Makefile
 
+OPT=opt
+PG=false
 SRCDIR	=	./src
-OBJDIR	=	./obj
+OBJDIR	=	./obj/$(OPT)
 BINDIR	=	./bin
 
 MAINOBJ		=	main.o read_data.o qpsolver.o vector.o \
@@ -13,7 +15,13 @@ MAINOBJ		=	main.o read_data.o qpsolver.o vector.o \
 MAINSRC		=	$(addprefix $(SRCDIR)/,$(MAINOBJ:.o=.cpp))
 MAINOBJFILES	=	$(addprefix $(OBJDIR)/,$(MAINOBJ))
 
-MAIN		=	SVPSOLVER
+NAME		=	SVPSOLVER
+ifeq ($(OPT),dbg)
+	MAIN		=	$(NAME).dbg
+else
+	MAIN		=	$(NAME).opt
+endif
+
 MAINFILE	=	$(BINDIR)/$(MAIN)
 
 #Mac
@@ -25,7 +33,13 @@ CXXFLAGS	=	-Wall -lblas -llapack -lpthread -fopenmp -O2 -std=c++14
 #Linux
 #CXXFLAGS	=	-Wall -lopenblas -llapack -lpthread -fopenmp -O2
 
-CXXFLAGS	+=	-DNDEBUG
+ifeq ($(OPT),opt)
+	CXXFLAGS	+=	-DNDEBUG
+endif
+
+ifeq ($(PG),true)
+	CXXFLAGS	+=	-pg
+endif
 
 #Mac
 CXXFLAGS	+=	-I/usr/local/Cellar/openblas/0.2.18_2/include
