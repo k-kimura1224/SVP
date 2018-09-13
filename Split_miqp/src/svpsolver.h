@@ -1,7 +1,7 @@
 #ifndef SVPSOLVER_H__
 #define SVPSOLVER_H__
 
-//#include <vector>
+#include <vector>
 #include <list>
 #include "probdata.h"
 #include "solution.h"
