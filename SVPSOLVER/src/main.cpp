@@ -13,7 +13,6 @@
 //#include "qpsolver.h"
 #include "svpsolver.h"
 
-#define debug 1
 
 using namespace std;
 
@@ -124,7 +123,6 @@ int main( int argc, char** argv){
       com += to_string( svps.get_gap() );
       com += "%";
    }
-
 
    //cout << com << endl;
    system(com.c_str());
