@@ -31,7 +31,7 @@ MAINFILE	=	$(BINDIR)/$(MAIN)
 #CXXFLAGS	=	-Wall -lblas -llapack -lpthread -fopenmp -O2 -std=c++14
 
 #Linux
-CXXFLAGS	=	-Wall -lopenblas -llapack -lpthread -fopenmp -O2
+CXXFLAGS	=	-Wall -lopenblas -llapack -lpthread -fopenmp -O2 -std=c++14
 
 ifeq ($(OPT),opt)
 	CXXFLAGS	+=	-DNDEBUG
