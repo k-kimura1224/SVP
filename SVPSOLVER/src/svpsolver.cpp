@@ -32,15 +32,15 @@ SVPsolver::SVPsolver(){	// default constructor
 	cout << "SVPsolver: default constructor" << endl;
 #endif
 	bestval = -1.0;
-	ub = NULL;
-	lb = NULL;
+	ub = nullptr;
+	lb = nullptr;
 	GLB = - 1.0e+10;
 
 	listsize = 0;
 	nnode = 0;
 	nthreads = -1;
 
-	order = NULL;
+	order = nullptr;
 
 	_Appfac = 0.0;
 	Appfac = 0.0;
@@ -49,8 +49,9 @@ SVPsolver::SVPsolver(){	// default constructor
 	__start = clock();
 	__time = 0.0;
 
-	norm = NULL;
+	norm = nullptr;
    TIMELIMIT = 86400;
+
 }
 
 SVPsolver::SVPsolver( const SVPsolver &source )
@@ -77,38 +78,40 @@ SVPsolver::SVPsolver( const SVPsolver &source )
 	oa_cpool = source.oa_cpool;
    TIMELIMIT = source.TIMELIMIT;
 
-	if( probdata.get_m() > 0 ){
-		assert( source.ub != NULL );
-		assert( source.lb != NULL );
+	if ( probdata.get_m() > 0 )
+   {
+		assert( source.ub != nullptr );
+		assert( source.lb != nullptr );
 
 		int m = probdata.get_m();
 
 		ub = new double[m];
 		lb = new double[m];
 
-		Copy_vec( source.ub, ub, m);
-		Copy_vec( source.lb, lb, m);
+		Copy_vec( source.ub, ub, m );
+		Copy_vec( source.lb, lb, m );
 
-		if( source.order != NULL ){
+		if( source.order != nullptr )
+      {
 			order = new int[m];
-			for(int i=0; i<m; i++){
+			for (int i = 0; i < m; i++ ){
 				order[i] = source.order[i];
 			}
 		}else{
-			order = NULL;
+			order = nullptr;
 		}
 
-		if( source.norm != NULL ){
+		if( source.norm != nullptr ){
 			norm = new double[m];
 			Copy_vec( source.norm, norm, m);
 		}else{
-			norm = NULL;
+			norm = nullptr;
 		}
 	}else{
-		ub = NULL;
-		lb = NULL;
-		order = NULL;
-		norm = NULL;
+		ub = nullptr;
+		lb = nullptr;
+		order = nullptr;
+		norm = nullptr;
 	}
 
 	if( listsize > 0 ){
@@ -145,8 +148,8 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
       TIMELIMIT = source.TIMELIMIT;
 
 		if( probdata.get_m() > 0 ){
-			assert( source.ub != NULL );
-			assert( source.lb != NULL );
+			assert( source.ub != nullptr );
+			assert( source.lb != nullptr );
 
 			int m = probdata.get_m();
 
@@ -158,28 +161,28 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
 			Copy_vec( source.ub, ub, m);
 			Copy_vec( source.lb, lb, m);
 
-			if( source.order != NULL ){
+			if( source.order != nullptr ){
 				delete[] order;
 				order = new int[m];
 				for(int i=0; i<m; i++){
 					order[i] = source.order[i];
 				}
 			}else{
-				order = NULL;
+				order = nullptr;
 			}
 
-			if( source.norm != NULL ){
+			if( source.norm != nullptr ){
 				delete[] norm;
 				norm = new double[m];
 				Copy_vec( source.norm, norm, m);
 			}else{
-				norm = NULL;
+				norm = nullptr;
 			}
 		}else{
-			ub = NULL;
-			lb = NULL;
-			order = NULL;
-			norm = NULL;
+			ub = nullptr;
+			lb = nullptr;
+			order = nullptr;
+			norm = nullptr;
 		}
 
 
@@ -202,10 +205,10 @@ SVPsolver::~SVPsolver()
 	list<NODE>().swap(NodeList);
 	delete[] order;
 	delete[] norm;
-	ub = NULL;
-	lb = NULL;
-	order = NULL;
-	norm = NULL;
+	ub = nullptr;
+	lb = nullptr;
+	order = nullptr;
+	norm = nullptr;
 
 }
 
@@ -215,7 +218,7 @@ void SVPsolver::create_probdata(
 	)
 {
 	assert( m > 0 );
-	assert( B_ != NULL );
+	assert( B_ != nullptr );
 
 	double	*B;		// [m*m],
 	double	*Q;		// [m*m],
@@ -225,7 +228,7 @@ void SVPsolver::create_probdata(
 
 	TraMat( m, m, B_, B);
 
-	Gen_ZeroVec( m*m, Q);
+	Gen_ZeroVec( m * m, Q);
 	Com_mat_AtA( B_, m, m, Q);
 
 	probdata.set_data( m, B, B_, Q);
@@ -236,7 +239,8 @@ void SVPsolver::create_probdata(
 	ub = new double[m];
 	lb = new double[m];
 
-	for(int i=0; i<m; i++){
+	for(int i = 0; i < m; i++ )
+   {
 		ub[i] = 1.0e+10;
 		lb[i] = - 1.0e+10;
 	}
@@ -262,12 +266,12 @@ void SVPsolver::create_sch(
 void SVPsolver::disp_bestsol()
 {
 	int	m;
-	double *val = NULL;
+	double *val = nullptr;
 
 	m = probdata.get_m();
 	val = bestsol.get_solval();
 
-	assert( val != NULL );
+	assert( val != nullptr );
 
 	cout << endl;
 	if( listsize == 0 ){
@@ -312,20 +316,28 @@ void	SVPsolver::compute_bounds()
 	double *a;
 	e = new double[m];
 	a = new double[m];
+   Gen_ZeroVec( m, e);
 
-	for(int i=0; i<m; i++){
-		for(int j=0; j<m; j++){
-			if( j==i )	e[j] = 1.0;
-			else			e[j] = 0.0;
-		}
-		int r = Com_LS_dgesv( B, e, m, a);
-		if( r != 0 ){
+   int r;
+   auto sqrt_bestval = sqrt( bestval );
+
+	for ( int i = 0; i < m; i++ )
+   {
+      assert( e[i] == 0.0 );
+      e[i] = 1.0;
+
+		r = Com_LS_dgesv( B, e, m, a);
+		if ( r != 0 )
+      {
 			cout << "error: r = " << r << endl;
 			exit(-1);
 		}
-		ub[i] =  floor( sqrt(bestval) * Com_nrm( a, m));
+		ub[i] =  floor( sqrt_bestval * Com_nrm( a, m) );
 		lb[i] =  -ub[i];
+
+      e[i] = 0.0;
 	}
+
 	delete[] e;
 	delete[] a;
 
@@ -393,8 +405,8 @@ double SVPsolver::compute_objval(
 	double	*Q = probdata.get_Q();
 
 	assert( m > 0 );
-	assert( Q != NULL );
-	assert( x != NULL );
+	assert( Q != nullptr );
+	assert( x != nullptr );
 
 	double	obj = 0.0;
 

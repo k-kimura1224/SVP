@@ -185,14 +185,17 @@ void SCHMIDT_M::setup(
 
 	n = s_n;
 
-	B_ = new double[n*n];
-	GS_ = new double[n*n];
-	nrm = new double[n*n];
+   auto nn = n * n;
+
+	B_ = new double[nn];
+	GS_ = new double[nn];
+	nrm = new double[nn];
 	z = new bool[n];
 
-	Copy_vec( s_B_, B_, n*n);
+	Copy_vec( s_B_, B_, nn);
 
-	for(int i=0; i<n; i++){
+	for( int i = 0; i < n; i++ )
+   {
 		z[i] = true;
 		nrm[i] = -1.0;
 	}

@@ -77,6 +77,7 @@ bool SVPsolver::p_solve()
 	}
 
 	int			sel;
+
 	RelaxResult	r;
 	QP_time  = 0.0;
 	__time = 0.0;
@@ -100,7 +101,7 @@ bool SVPsolver::p_solve()
 		assert( sel < listsize );
 
 		// solve a relaxation problem
-		r = solve_relaxation(sel);
+		r = solve_relaxation( sel );
 
 		if( r == INFEASIBLE || r == GETINTEGER ){
 			cutoff++;

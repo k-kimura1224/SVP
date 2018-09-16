@@ -16,10 +16,10 @@ class NODE{
 	bool		zero;
 	int		index;
 	bool		solved;
-	
+
 	public:
 
-		NODE();											// default constructor	
+		NODE();											// default constructor
 		NODE( const NODE &source );			// copy constructor
 		NODE& operator=( const NODE& );		// assignment operator
 		~NODE();											// destructor

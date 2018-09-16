@@ -22,16 +22,16 @@ NODE::NODE(){	// default constructor
 	cout << "NODE: default constructor" << endl;
 #endif
 	m = -1;
-	ub = NULL;
-	lb = NULL;
-	warm = NULL;
+	ub = nullptr;
+	lb = nullptr;
+	warm = nullptr;
 	relax_objval = - 1.0e+10;
-	relax_solval = NULL;
+	relax_solval = nullptr;
 	dpt = -1;
 	zero = true;
 	index = -1;
 	solved = false;
-	sumfixed = NULL;
+	sumfixed = nullptr;
 }
 
 NODE::NODE( const NODE &source )
@@ -45,38 +45,38 @@ NODE::NODE( const NODE &source )
 	dpt = source.dpt;
 	index = source.index;
 	solved = source.solved;
-	
+
 	if( m > 0 ){
-		assert( source.ub != NULL );
-		assert( source.lb != NULL );
-		assert( source.warm != NULL );
-		
+		assert( source.ub != nullptr );
+		assert( source.lb != nullptr );
+		assert( source.warm != nullptr );
+
 		ub = new double[m];
 		lb = new double[m];
 		warm = new double[m];
-		
+
 		Copy_vec( source.ub, ub, m);
 		Copy_vec( source.lb, lb, m);
 		Copy_vec( source.warm, warm, m);
 
-		if( source.relax_solval != NULL ){
+		if( source.relax_solval != nullptr ){
 			relax_solval = new double[m];
 			Copy_vec( source.relax_solval, relax_solval, m);
 		}else{
-			relax_solval = NULL;
+			relax_solval = nullptr;
 		}
-		if( source.sumfixed != NULL ){
+		if( source.sumfixed != nullptr ){
 			sumfixed = new double[m];
 			Copy_vec( source.sumfixed, sumfixed, m);
 		}else{
-			sumfixed = NULL;
+			sumfixed = nullptr;
 		}
 	}else{
-		ub = NULL;
-		lb = NULL;
-		warm = NULL;
-		relax_solval = NULL;
-		sumfixed = NULL;
+		ub = nullptr;
+		lb = nullptr;
+		warm = nullptr;
+		relax_solval = nullptr;
+		sumfixed = nullptr;
 	}
 
 }
@@ -88,50 +88,50 @@ NODE& NODE::operator=( const NODE& source )
 	cout << "NODE: assignment operator" << endl;
 #endif
 
-	if( this != &source ){ 	
+	if( this != &source ){
 		m = source.m;
 		relax_objval = source.relax_objval;
 		zero = source.zero;
 		index = source.index;
 		dpt = source.dpt;
 		solved = source.solved;
-		
+
 		if( m > 0 ){
-			assert( source.ub != NULL );
-			assert( source.lb != NULL );
-			assert( source.warm != NULL );
-			
+			assert( source.ub != nullptr );
+			assert( source.lb != nullptr );
+			assert( source.warm != nullptr );
+
 			delete[] ub;
 			delete[] lb;
 			delete[] warm;
 			ub = new double[m];
 			lb = new double[m];
 			warm = new double[m];
-			
+
 			Copy_vec( source.ub, ub, m);
 			Copy_vec( source.lb, lb, m);
 			Copy_vec( source.warm, warm, m);
 
-			if( source.relax_solval != NULL ){
+			if( source.relax_solval != nullptr ){
 				delete[] relax_solval;
 				relax_solval = new double[m];
 				Copy_vec( source.relax_solval, relax_solval, m);
 			}else{
-				relax_solval = NULL;
+				relax_solval = nullptr;
 			}
-			if( source.sumfixed != NULL ){
+			if( source.sumfixed != nullptr ){
 				delete[] sumfixed;
 				sumfixed = new double[m];
 				Copy_vec( source.sumfixed, sumfixed, m);
 			}else{
-				sumfixed = NULL;
+				sumfixed = nullptr;
 			}
 		}else{
-			ub = NULL;
-			lb = NULL;
-			warm = NULL;
-			relax_solval = NULL;
-			sumfixed = NULL;
+			ub = nullptr;
+			lb = nullptr;
+			warm = nullptr;
+			relax_solval = nullptr;
+			sumfixed = nullptr;
 		}
 	}
 
@@ -149,11 +149,11 @@ NODE::~NODE()
 	delete[] warm;
 	delete[] relax_solval;
 	delete[] sumfixed;
-	ub = NULL;
-	lb = NULL;
-	relax_solval = NULL;
-	warm = NULL;
-	sumfixed = NULL;
+	ub = nullptr;
+	lb = nullptr;
+	relax_solval = nullptr;
+	warm = nullptr;
+	sumfixed = nullptr;
 }
 
 void NODE::set_vals(
@@ -168,9 +168,9 @@ void NODE::set_vals(
 	)
 {
 	assert( s_m > 0 );
-	assert( ub == NULL );
-	assert( lb == NULL );
-	assert( warm == NULL );
+	assert( ub == nullptr );
+	assert( lb == nullptr );
+	assert( warm == nullptr );
 
 	m = s_m;
 	relax_objval = s_relax_objval;
@@ -185,14 +185,14 @@ void NODE::set_vals(
 	Copy_vec( s_ub, ub, m);
 	Copy_vec( s_lb, lb, m);
 	Copy_vec( s_warm, warm, m);
-	
+
 }
 
 void NODE::set_relaxsolval(
 	double	*solval
 	)
 {
-	assert( solval != NULL );
+	assert( solval != nullptr );
 	assert( m > 0 );
 
 	delete[] relax_solval;
@@ -215,16 +215,19 @@ bool NODE::alloc_sumfixed()
 {
 	assert( m > 0 );
 
-	bool result=true;
+	bool result = true;
 
-	if( sumfixed == NULL ){
+	if ( sumfixed == nullptr )
+   {
 		sumfixed = new double[m];
 		result = true;
-	}else{
+	}
+   else
+   {
 		result = false;
 	}
 
-	return result; 
+	return result;
 }
 
 void NODE::set_sumfixed(
@@ -232,21 +235,21 @@ void NODE::set_sumfixed(
 	double	*s_sumfixed
 	)
 {
-	assert( s_sumfixed != NULL );
-	assert( sumfixed != NULL );
+	assert( s_sumfixed != nullptr );
+	assert( sumfixed != nullptr );
 	assert( m > 0 );
 	assert( c != 0.0 );
 
 	Com_scal( s_sumfixed, m, c, sumfixed);
 }
-	
+
 void NODE::add_sumfixed(
 	double	c,
 	double	*s_sumfixed
 	)
 {
-	assert( s_sumfixed != NULL );
-	assert( sumfixed != NULL );
+	assert( s_sumfixed != nullptr );
+	assert( sumfixed != nullptr );
 	assert( m > 0 );
 	assert( c != 0.0 );
 

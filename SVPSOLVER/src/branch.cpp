@@ -33,7 +33,7 @@ static int find_branchingvariable1(
 		eval[i] = pow( relax_solval[i] - round(relax_solval[i]), 2);
 	}
 
-	double	max_eval = 0.0;	
+	double	max_eval = 0.0;
 	int		memo = -1;
 	for(int i=0; i<m; i++){
 		if( max_eval <= eval[i] ){
@@ -54,11 +54,11 @@ static int find_branchingvariable2(
 	)
 {
 
-	double	min = 1.0;	
+	double	min = 1.0;
 	int		memo = -1;
 	double	r;
 	for(int i=0; i<m; i++){
-		if( ub[i] != lb[i] 
+		if( ub[i] != lb[i]
 			&& pow(relax_solval[i],2) < 1.0
 			&& relax_solval[i] != 0.0 ){
 			if( relax_solval[i] >  0.0 ){
@@ -101,7 +101,7 @@ static int find_branchingvariable4(
 {
 
 	int memo;
-	
+
 	for(int i=m-1; 0<=i; i--){
 		if( relax_solval[i] - round(relax_solval[i]) != 0){
 			memo = i;
@@ -195,17 +195,18 @@ void	SVPsolver::branch_BIN(
 	int		set_index;
 
 	list<NODE>::iterator it = NodeList.begin();
-	advance( it, sel);
+	advance( it, sel );
 	double	*warm = it->get_warm();
 
 	set_ub = new double[m];
 	set_lb = new double[m];
 
-	// x_i = 0	
+	// x_i = 0
 	int memo = -1;
-	Copy_vec( it->get_ub(), set_ub, m);
-	Copy_vec( it->get_lb(), set_lb, m);
-	for(int i=0; i<m; i++){
+	Copy_vec( it->get_ub(), set_ub, m );
+	Copy_vec( it->get_lb(), set_lb, m );
+	for ( int i = 0; i < m; i++ )
+   {
 		if( set_lb[i] != 0.0 || set_ub[i] != 0.0 ){
 			set_lb[i] = 0.0;
 			set_ub[i] = 0.0;
@@ -215,12 +216,12 @@ void	SVPsolver::branch_BIN(
 	}
 
 	set_warm = it->get_warm();
-	for(int i=0; i<m; i++){
-		if( warm[i] >= set_lb[i] && warm[i] <= set_ub[i] ){
+	for( int i = 0; i < m; i++ )
+   {
+		if( warm[i] >= set_lb[i] && warm[i] <= set_ub[i] )
 			set_warm[i] = warm[i];
-		}else{
+		else
 			set_warm[i] = (set_ub[i]+set_lb[i])/2.0;
-		}
 	}
 
 	set_relax_objval = it->get_lowerbound();
@@ -413,7 +414,7 @@ void	SVPsolver::branch_INT(
 			C_LEFT.add_sumfixed( set_lb[memo], probdata.get_bvec(memo) );
 		}
 	}
-	
+
 	NodeList.push_back( C_LEFT );
 	listsize++;
 

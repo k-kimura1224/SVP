@@ -16,7 +16,7 @@ Functions:
 	Equal: return true if give values are equal
 Template Functions:
 	TraMat: transpose matrix
-	printv: output a vector 
+	printv: output a vector
 	printM: output a matrix
 	Gen_ZeroVec: generate a zero vector
 	count: count positive values
@@ -31,7 +31,7 @@ Inline Functions:
 #include <cblas.h>
 #else
 extern "C" {
-	void cblas_dcopy( int n, const double *x, int incX, double *y,  int incY); 
+	void cblas_dcopy( int n, const double *x, int incX, double *y,  int incY);
 }
 extern "C" {
 	double cblas_dnrm2( int n, const double *x, int incx);
@@ -78,7 +78,7 @@ void Com_scal(
 	);
 
 // compute linear combination
-// z := (alpha)x + (beta)y 
+// z := (alpha)x + (beta)y
 void Com_linecomb(
 	const double	*x,		/* vector */
 	const double	*y,		/* vector */
@@ -88,7 +88,7 @@ void Com_linecomb(
 	double			*z
 	);
 
-// B := (A^t)(A) 
+// B := (A^t)(A)
 void Com_mat_AtA(
 	const double	*A,	/* A[n*m] */
 	const int		n,		/* row */
@@ -141,7 +141,7 @@ bool Equal(
 // Template Functions:
 /* ---------------------------------------------------*/
 
-// transpose A 
+// transpose A
 template <typename Type>
 void TraMat(
 	int 		n,
@@ -150,7 +150,7 @@ void TraMat(
 	Type		*T		/* (m,n) */
 	);
 
-// print a vector 
+// print a vector
 template <typename Type>
 void printv(
 	int	n,
@@ -189,7 +189,7 @@ void Bubble_Sort(
 	Type			*y,	// [n] or NULL
 	int			*z		// [n] or NULL
 	);
-	
+
 
 /* ---------------------------------------------------*/
 // Inline Functions:
@@ -215,7 +215,7 @@ inline void Copy_vec(
 	)
 {
 	int inc=1;	/* increment */
-	cblas_dcopy( n, x, inc, y, inc); 
+	cblas_dcopy( n, x, inc, y, inc);
 }
 // compute a inner product
 inline double Com_dot(

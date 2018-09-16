@@ -46,7 +46,7 @@ int	SVPsolver::select_node(
 		}
 		case 2:
 		{
-			
+
 			if( (index-1) % 10000 == 0 && disp < index ){
 				clock_t start = clock();
 				NodeList.sort();
@@ -65,7 +65,7 @@ int	SVPsolver::select_node(
 			break;
 		}
 	}
-	
+
 	assert( rslt >= 0 );
 	assert( rslt < listsize );
 

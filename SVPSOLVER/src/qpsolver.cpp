@@ -44,7 +44,7 @@ QPsolver::QPsolver( const QPsolver &source )
 #if debug_class
 	cout << "QPsolver: copy constructor" << endl;
 #endif
-	Q = source.Q;	
+	Q = source.Q;
 	p = source.p;
 	A = source.A;
 	b = source.b;
@@ -75,8 +75,8 @@ QPsolver& QPsolver::operator=( const QPsolver& source )
 	cout << "QPsolver: assignment operator" << endl;
 #endif
 
-	if( this != &source ){ 	
-		Q = source.Q;	
+	if( this != &source ){
+		Q = source.Q;
 		p = source.p;
 		A = source.A;
 		b = source.b;
@@ -116,7 +116,7 @@ void	QPsolver::disp_prob(){
 
 	if( n > 0 ){
 		cout << "dim: " << n << endl;
-	
+
 		if( Q ){
 			cout << "Q:" << endl;
 			printM( n, n, Q);
@@ -168,7 +168,7 @@ void	QPsolver::solve(){
 	assert( n > 0 );
 	assert( warm != NULL );
 	assert( Q != NULL );
-	
+
 	double	ep = get_ep();
 	double	*x;
 	x = new double[n];
@@ -199,7 +199,7 @@ void	QPsolver::solve(){
 		//		W_ineq[i] = true;
 		//	}else if( buf > 0 ){
 		//		W_ineq[i] = false;
-		//	}else{ 
+		//	}else{
 		//		cout << "the given initial point is not a feasible solution." << endl;
 		//		cout << buf << endl;
 		//		disp_prob();
@@ -239,7 +239,7 @@ void	QPsolver::solve(){
 	if( k > 0 ){
 		assert( C != NULL );
 		assert( d != NULL );
-		
+
 		for(int i=0; i<k; i++){
 			if( Equal( Com_dot( C+(i*n), x, n), d[i], ep) == false ){
 				cout << "the given initial point is not a feasible solution." << endl;
@@ -250,7 +250,7 @@ void	QPsolver::solve(){
 	}
 	// }} check feasibility for equation constraints
 
-	// find active bounds {{ 
+	// find active bounds {{
 	bool	*W_u = NULL;
 	bool	*W_l = NULL;
 	if( u != NULL ){
@@ -290,7 +290,7 @@ void	QPsolver::solve(){
 				printv( n, u);
 				exit(-1);
 			}
-		
+
 		}
 	}
 	if( l != NULL ){
@@ -317,7 +317,7 @@ void	QPsolver::solve(){
 				cout << "cc:" << buf << endl;
 				exit(-1);
 			}
-		
+
 		}
 	}
 
@@ -358,7 +358,7 @@ void	QPsolver::solve(){
 	while(1){
 		if( debug_ct > 1000 ){
 			cout << "error: qpsolver.cpp" << endl;
-			cout << "th: " << omp_get_thread_num() << endl;	
+			cout << "th: " << omp_get_thread_num() << endl;
 			exit(1);
 		}
 		debug_ct++;
@@ -401,12 +401,12 @@ void	QPsolver::solve(){
 
 		// solve the problem with active set
 		int argmin = solve_activeset( x_new, W_ineq, W_u, W_l);
-		
+
 #if debug
 	cout << "argmin: " << argmin << endl;
 #endif
-			
-		// dx = xnew - x 
+
+		// dx = xnew - x
 		Com_linecomb( x_new, x, n, 1.0, -1.0, dx);
 
 #if debug
@@ -415,7 +415,7 @@ void	QPsolver::solve(){
 #endif
 		if( Com_nrm( dx, n) > ep ){
 			// compute stepsize
-			double alpha = compute_stepsize( x, dx, W_ineq, W_u, W_l);	
+			double alpha = compute_stepsize( x, dx, W_ineq, W_u, W_l);
 #if debug
 	cout << "alpha: " << alpha << endl;
 #endif
@@ -428,9 +428,9 @@ void	QPsolver::solve(){
 	printv( n, x_new);
 #endif
 		}
-		
+
 		/* x_new is feasible for the original problem now */
-		
+
 		// update W_ineq, W_u and W_l
 		update = update_activeset( x_new, W_ineq, W_u, W_l);
 
@@ -504,13 +504,13 @@ void	QPsolver::solve(){
 					}
 				}
 			}
-			
+
 			if( update == true ){
 				Copy_vec( x_new, x, n);
 				continue;
 			}else{
 				cout << "error: QPsolver" << endl;
-				cout << "th: " << omp_get_thread_num() << endl;	
+				cout << "th: " << omp_get_thread_num() << endl;
 				exit(-1);
 			}
 
@@ -554,7 +554,7 @@ int QPsolver::solve_activeset(
 
 		| 2Q , F' || x | = | -p |
 		| F  , 0  || y |   |  g |
-		
+
 	**********************************************/
 	assert( x_new != NULL );
 
@@ -563,7 +563,7 @@ int QPsolver::solve_activeset(
 	int	w_u = count( n, W_u);
 	int	w_l = count( n, W_l);
 	int	w = w_equ + w_ineq + w_u + w_l;
-			
+
 #if debug
 	cout << "w: " << w << endl;
 #endif
@@ -590,7 +590,7 @@ int QPsolver::solve_activeset(
 		assert( C != NULL );
 		assert( w >= k );
 		assert( F != NULL );
-		
+
 		Copy_vec( C, F, k*n);
 		Copy_vec( d, g, k);
 
@@ -663,7 +663,7 @@ int QPsolver::solve_activeset(
 		assert( w >= ct );
 	}
 
-	assert( w == ct );	
+	assert( w == ct );
 
 #if debug
 	cout << "F:" << endl;
@@ -724,7 +724,7 @@ int QPsolver::solve_activeset(
 	cout << "r: ";
 	//printv( h, r);
 #endif
-	
+
 	int	com;
 	switch ( SOLVE_PROBLEM_ACTIVE ) {
 		case 0:
@@ -750,7 +750,7 @@ int QPsolver::solve_activeset(
 	cout << "z: ";
 	printv( h, z);
 #endif
-	
+
 	if( com != 0 ){
 		cout << "error: com = " << com << endl;
 		exit(-1);
@@ -782,7 +782,7 @@ int QPsolver::solve_activeset(
 double	QPsolver::compute_stepsize(
 	double	*x,
 	double	*dx,
-	bool		*W_ineq, 
+	bool		*W_ineq,
 	bool		*W_u,
 	bool		*W_l
 	)
@@ -793,7 +793,7 @@ double	QPsolver::compute_stepsize(
 
 	double	alpha = 1.0;
 	double ep = get_ep();
-	
+
 	if( W_ineq != NULL ){
 		assert( m > 0 );
 		assert( A != NULL );
@@ -917,7 +917,7 @@ double QPsolver::compute_objval(
 	assert( x != NULL );
 
 	double	obj = 0.0;
-	
+
 	double	*Qx; //[n]
 	Qx = new double[n];
 

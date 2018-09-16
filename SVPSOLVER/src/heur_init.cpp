@@ -17,25 +17,24 @@
 
 using namespace std;
 
-#define debug	0
-
 void	SVPsolver::find_min_column()
 {
 	int		m;
-	double 	*B_ = NULL;
-	double	*nrm = NULL;
-	double	min = 0.0;
-	int		memo = -1;
+	double 	*B_ = nullptr;
+	double	*nrm = nullptr;
+	auto	   min = 0.0;
+	auto     memo = -1;
 
 	m = probdata.get_m();
 	B_ = probdata.get_B_();
 	nrm = new double[m];
 
 	assert( m > 0 );
-	assert( B_ != NULL );
-	
+	assert( B_ != nullptr );
+
 	// compute norms
-	for(int i=0; i<m; i++){
+	for( int i = 0; i < m; i++ )
+   {
 		nrm[i] = Com_nrm( &B_[i*m], m);
 		//cout << i << ":" << nrm[i] << endl;
 		if( i==0 ){
@@ -55,7 +54,7 @@ void	SVPsolver::find_min_column()
 	norm = new double[m];
 	Copy_vec( nrm, norm, m);
 
-	// sort	
+	// sort
 	if( BRANCHINGRULE_INT == 4 ){
 		assert( order == NULL );
 		order = new int[m];
