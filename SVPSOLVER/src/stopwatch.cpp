@@ -23,6 +23,7 @@ STOPWATCH::STOPWATCH(){	// default constructor
 #endif
 	run = false;
 	limit = 86400;
+   total = 0;
 }
 
 STOPWATCH::STOPWATCH( const STOPWATCH &source )
@@ -32,12 +33,7 @@ STOPWATCH::STOPWATCH( const STOPWATCH &source )
 #endif
 	run = source.run;
 	limit = source.limit;
-
-	if( run == true ){
-		begin = source.begin;
-		end = source.end;
-	}
-
+   total = source.total;
 }
 
 // assignment operator
@@ -47,14 +43,11 @@ STOPWATCH& STOPWATCH::operator=( const STOPWATCH& source )
 	cout << "STOPWATCH: assignment operator" << endl;
 #endif
 
-	if( this != &source ){
+	if( this != &source )
+   {
 		run = source.run;
 		limit = source.limit;
-
-		if( run == true ){
-			begin = source.begin;
-			end = source.end;
-		}
+      total = source.total;
 	}
 
 	return *this;
@@ -70,27 +63,33 @@ STOPWATCH::~STOPWATCH()
 
 void STOPWATCH::start()
 {
+   assert( run == false );
 	begin = time(NULL);
-	end = time(NULL);
 	run = true;
 }
 
 void STOPWATCH::stop()
 {
+   assert( run == true );
 	end = time(NULL);
+   run = false;
+   total += (int)(end - begin);
 }
 
 int STOPWATCH::get_time()
 {
+   assert( run == true );
 	time_t buf = time(NULL);
 	return (int)(buf - begin);
 }
 
 bool STOPWATCH::check_time()
 {
+   assert( run == true );
 	time_t buf = time(NULL);
 	bool result = true;
-	if( (int)(buf - begin) > limit ){
+	if ( (int)(buf - begin) > limit )
+   {
 		//cout << "----- Time over -----" << endl;
 		result = false;
 	}else{

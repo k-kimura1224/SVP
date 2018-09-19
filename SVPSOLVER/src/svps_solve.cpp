@@ -38,7 +38,7 @@ bool SVPsolver::solve(
 	assert( m > 0 );
 
 	// output bounds
-	if ( para == false )
+	if ( para == false && !quiet )
    {
 		cout << "Bounds: " << endl;
 		for ( int i = 0; i < m; i++ )
@@ -94,20 +94,19 @@ bool SVPsolver::solve(
 	int         selnodeindex;
 	RelaxResult r;
 
-	QP_time = 0.0;
-	__time = 0.0;
-	__start = clock();
-
 	int	disp = index;
 	int	cutoff=0;
 	while ( 1 )
    {
+
+
 		assert( (int)NodeList.size() > 0 );
 		assert( listsize > 0 );
 		assert( (int)NodeList.size() == listsize );
 
 		// select a node from the list
 		selnodeindex = select_node( index, disp );
+
 
 		assert( selnodeindex >= 0 );
 		assert( selnodeindex < listsize );
@@ -123,55 +122,84 @@ bool SVPsolver::solve(
 		if( r == FEASIBLE && HEUR_APP < Appfac ){
 			heur( selnodeindex, para);
 		}
+
 		// output
-		if( (index-1) % 1000 == 0 && disp < index ){
-			list<NODE>::iterator it = NodeList.begin();
-			double min_lb = it->get_lowerbound();
-			for(int i=1; i<listsize; i++){
-				++it;
-				if( min_lb > it->get_lowerbound() ){
-					min_lb = it->get_lowerbound();
-				}
-			}
-			GLB = min_lb;
-			if( para == true ) cout << "t" << omp_get_thread_num() << ":";
-			disp_log(selnodeindex, r, index, cutoff);
-			disp = index;
-			cutoff = 0;
+		if ( !quiet )
+      {
+         if ((index-1) % 1000 == 0 && disp < index )
+         {
+			   auto it = NodeList.begin();
+			   double min_lb = it->get_lowerbound();
+			   for ( int i = 1; i < listsize; i++ )
+            {
+			   	++it;
+			   	if( min_lb > it->get_lowerbound() )
+			   		min_lb = it->get_lowerbound();
+			   }
+
+			   GLB = min_lb;
+
+			   if( para == true )
+               cout << "t" << omp_get_thread_num() << ":";
+
+			   disp_log(selnodeindex, r, index, cutoff);
+			   disp = index;
+			   cutoff = 0;
+         }
 		}
 
 		// branch
-		if( r == UPDATE || r == FEASIBLE ){
+		if( r == UPDATE || r == FEASIBLE )
+      {
 			branch( selnodeindex, index);
 			index += 2;
 		}
+      else
+      {
+		   // remove
+		   auto it = NodeList.begin();
+		   advance( it, selnodeindex);
+		   NodeList.erase( it );
+		   listsize--;
+      }
 
-		// remove
-		clock_t  start = clock();
-		list<NODE>::iterator it = NodeList.begin();
-		advance( it, selnodeindex);
-		NodeList.erase( it );
-		listsize--;
-
-		clock_t  end = clock();
-		__time += (double)(end-start)/CLOCKS_PER_SEC;
 		// break
 		assert( (int)NodeList.size() == listsize );
-		if( stopwatch.check_time() == false ) break;
-		if( listsize == 0 ){
-			if( !para ) cout << "End" << endl;
+
+		if( stopwatch.check_time() == false )
+      {
+         auto it = NodeList.begin();
+			double min_lb = it->get_lowerbound();
+			for ( int i = 1; i < listsize; i++ )
+         {
+				++it;
+				if( min_lb > it->get_lowerbound() )
+					min_lb = it->get_lowerbound();
+			}
+
+			GLB = min_lb;
+         break;
+      }
+
+		if( listsize == 0 )
+      {
+			if( !para )
+            cout << "End" << endl;
 			break;
 		}
 
-
 	}
+
+   cout << testwatch.get_result() << endl;
 
 	nnode = (unsigned long int)index -1;
 
 
-	if( stopwatch.check_time() == false ){
+	if( stopwatch.check_time() == false )
+   {
+	   stopwatch.stop();
 		return false;
-	}
+   }
 
 	stopwatch.stop();
 	return true;

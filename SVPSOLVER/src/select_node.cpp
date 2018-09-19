@@ -47,13 +47,21 @@ int	SVPsolver::select_node(
 		case 2:
 		{
 
-			if( (index-1) % 10000 == 0 && disp < index ){
-				clock_t start = clock();
-				NodeList.sort();
-				clock_t end = clock();
-				cout << "Sorting Time: ";
-				cout << (double)(end-start)/CLOCKS_PER_SEC;
-				cout << "s" << endl;
+			if( (index-1) % 100000 == 0 && disp < index )
+         {
+            if ( quiet )
+            {
+				   NodeList.sort();
+            }
+            else
+            {
+				   clock_t start = clock();
+				   NodeList.sort();
+				   clock_t end = clock();
+				   cout << "Sorting Time: ";
+				   cout << (double)(end-start)/CLOCKS_PER_SEC;
+				   cout << "s" << endl;
+            }
 			}
 			rslt = 0;
 			break;

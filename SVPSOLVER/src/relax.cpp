@@ -36,9 +36,13 @@ RelaxResult SVPsolver::solve_relaxation(
       return INFEASIBLE;
 
    if ( it->get_zero() == true )
+   {
       result = solve_relaxation_BIN_sch( selnodeindex );
+   }
    else
+   {
       result = solve_relaxation_INT( selnodeindex );
+   }
 
    return result;
 }
@@ -264,16 +268,14 @@ RelaxResult SVPsolver::solve_relaxation_INT(
 
    //qps.disp_prob();
 
-   clock_t start = clock();
-
    qps.set_ep( 1e-12 );
 
+   testwatch.start();
    qps.solve();
-   clock_t end = clock();
-   QP_time += (double)(end-start)/CLOCKS_PER_SEC;
+   testwatch.stop();
 
    double *relaxvals = new double[m];
-   double *qpbestvals =qps.get_bestsol();
+   double *qpbestvals = qps.get_bestsol();
    ct = 0;
    for(int i=0; i<m; i++){
       if( l[i] != u[i] ){
@@ -294,7 +296,8 @@ RelaxResult SVPsolver::solve_relaxation_INT(
 
    RelaxResult result;
 
-   if( bestval - qpbestval  < 1.0 ){
+   if( bestval - qpbestval  < 1.0 )
+   {
       result = INFEASIBLE;
    }else{
       result = FEASIBLE;

@@ -49,6 +49,37 @@ class NODE{
 		void	set_sumfixed( double c, double *s_sumfixed );
 		void	add_sumfixed( double c, double *s_sumfixed );
 		double*	get_sumfixed(){ return sumfixed; }
+
+      void  set_lbval( int i, double s_lb )
+      {
+         assert( lb != nullptr );
+         assert( i >= 0 && i < m );
+         lb[i] = s_lb;
+      }
+
+      void  set_ubval( int i, double s_ub )
+      {
+         assert( ub != nullptr );
+         assert( i >= 0 && i < m );
+         ub[i] = s_ub;
+      }
+
+      void  set_dpt( int s_dpt )
+      {
+         assert( dpt >= 0 );
+         dpt = s_dpt;
+      }
+
+      void  set_zero( int s_zero )
+      {
+         zero = s_zero;
+      }
+
+      void  set_index( int s_index )
+      {
+         assert( index >= 0 );
+         index = s_index;
+      }
 };
 
 #endif

@@ -47,10 +47,12 @@ bool SVPsolver::p_solve()
 	}
 
 	// output bounds
-	cout << "Bounds: " << endl;
-	for(int i=0; i<m; i++){
-		cout << "x_" << i << ": [ " << lb[i] << ", " << ub[i] << "]" << endl;
-	}
+   if( !quiet )
+   {
+	   cout << "Bounds: " << endl;
+	   for(int i=0; i<m; i++)
+	   	cout << "x_" << i << ": [ " << lb[i] << ", " << ub[i] << "]" << endl;
+   }
 
 	// generate a root node
 	NODE	root;
@@ -79,9 +81,6 @@ bool SVPsolver::p_solve()
 	int			sel;
 
 	RelaxResult	r;
-	QP_time  = 0.0;
-	__time = 0.0;
-	__start = clock();
 	int	disp = index;
 	int	cutoff=0;
 	bool 	result;
@@ -113,8 +112,8 @@ bool SVPsolver::p_solve()
 		}
 
 		// output
-		if( (index-1) % 1000 == 0 && disp < index ){
-			list<NODE>::iterator it = NodeList.begin();
+		if( !quiet && (index-1) % 1000 == 0 && disp < index ){
+			auto it = NodeList.begin();
 			double min_lb = it->get_lowerbound();
 			for(int i=1; i<listsize; i++){
 				++it;
@@ -133,20 +132,20 @@ bool SVPsolver::p_solve()
 			branch( sel, index);
 			index += 2;
 		}
+      else
+      {
+		   // remove
+		   auto it = NodeList.begin();
+		   advance( it, sel);
+		   NodeList.erase( it );
+		   listsize--;
+      }
 
-		// remove
-		clock_t  start = clock();
-		list<NODE>::iterator it = NodeList.begin();
-		advance( it, sel);
-		//NodeList.erase( NodeList.begin() + sel);
-		NodeList.erase( it );
-		listsize--;
-
-		clock_t  end = clock();
-		__time += (double)(end-start)/CLOCKS_PER_SEC;
 		// break
 		assert( (int)NodeList.size() == listsize );
-		if( stopwatch.check_time() == false ){
+
+		if( stopwatch.check_time() == false )
+      {
 			result = true;
 			break;
 		}
@@ -160,34 +159,25 @@ bool SVPsolver::p_solve()
 
 	nnode = (unsigned long int)index -1;
 
-	if( result == true ){
+	if( result == true )
+   {
 		stopwatch.stop();
 		return true;
 	}
 
+   auto it = NodeList.begin();
+	double min_lb = it->get_lowerbound();
+	for(int i=1; i<listsize; i++){
+		++it;
+		if( min_lb > it->get_lowerbound() ){
+			min_lb = it->get_lowerbound();
+		}
+	}
+	GLB = min_lb;
+
+
 	// parallel {{
 	NodeList.sort();
-
-// LLL n43 seed2
-//	for(int i=0; i<listsize; i++){
-//		list<NODE>::iterator it = NodeList.begin();
-//		advance( it, i);
-//
-//		if( i==2541 ){
-//			cout << i << "->" << it->get_lowerbound() << endl;
-//			cout << "debug" << endl;
-//			SVPsolver sub;
-//			sub.create_probdata( m, probdata.get_B_());
-//			if( it->get_zero() == true ) sub.create_sch( m, probdata.get_B_());
-//			sub.set_bestval( bestval );
-//			sub.set_bounds( it->get_ub(), it->get_lb());
-//			if( BRANCHINGRULE_INT == 4 || BRANCHINGRULE_INT == 5 ) sub.set_order( order );
-//			sub.set_norm( norm );
-//			sub.set_Appfac( Appfac, _Appfac);
-//			double testrun = sub.solve(true, it->get_zero(), it->get_lowerbound(), TIMELIMIT - stopwatch.get_time() );
-//		}
-//	}
-//	exit(1);
 
 	cout << "Parallel mode ---------------------------------------------";
 	cout << "-------------------------------------------" << endl;
@@ -212,6 +202,8 @@ bool SVPsolver::p_solve()
 		sub.set_norm( norm );
 		sub.set_Appfac( Appfac, _Appfac);
       sub.set_timelimit( get_timelimit() - stopwatch.get_time() );
+      sub.set_quiet( quiet );
+
 		p_run = sub.solve(true, it->get_zero(), it->get_lowerbound());
 
 		if( !p_run ){

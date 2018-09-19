@@ -16,12 +16,14 @@
                               // 1: 0th
                               // 2: 0th, sort
 
-#define  BRANCHINGRULE_INT 3     // 0:
-                                 // 1:
-                                 // 2:
-                                 // 3: ver 2.0
-                                 // 4: ver 2.1
-                                 // 5: ver 2.1
+#define  BRANCHINGRULE_INT 3
+      // 0:
+      // 1:
+      // 2:
+      // 3: ver 2.0
+      // 4: ver 2.1
+      // 5: ver 2.1
+      // 6:
 
 #define  CUT_OA   false
 
@@ -60,15 +62,15 @@ class SVPsolver{
    int            listsize;
 
    STOPWATCH      stopwatch;
+   STOPWATCH      testwatch;
+
    unsigned long int    nnode;
 
    int            *order;     // order of norm or bounds
 
    SCHMIDT_M      sch;
 
-   double QP_time;
-   clock_t __start;
-   double __time;
+   bool quiet;
 
    double   *norm;
 
@@ -83,6 +85,8 @@ class SVPsolver{
    // for parallel
    int   nthreads;
 
+   double epsilon;
+
    public:
 
       SVPsolver();                                 // default constructor
@@ -96,6 +100,7 @@ class SVPsolver{
       bool        p_solve();
       void        find_min_column();
       void        compute_bounds();
+      void        tighten_bounds( int memo, double* set_lb, double* set_ub );
       int         select_node(int index, int disp);
       RelaxResult solve_relaxation( int selnodeindex );
       RelaxResult solve_relaxation_BIN_sch(int sel);
@@ -145,6 +150,10 @@ class SVPsolver{
       void        set_Appfac(double a, double _a){
          Appfac = a;
          _Appfac = _a;
+      }
+      void        set_quiet( bool q )
+      {
+         quiet = q;
       }
 };
 

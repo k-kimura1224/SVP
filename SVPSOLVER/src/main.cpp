@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <iomanip>
+#include <unistd.h>
 
 #include "read_data.h"
 //#include "vector.h"
@@ -60,23 +61,67 @@ void getProblemName(
 int main( int argc, char** argv){
 
 	cout << fixed << setprecision(3);
-	if( argc != 4 ){
-		cerr << "Error: commandline arguments" << endl;
-		return -1;
-	}
-	int	nthreads = atoi( argv[2] );
+
+   int   opt;
+   opterr = 0;
+
+   char* filename = nullptr;
+	int	nthreads = 1;
+   int   timelimit = 5000;
+   bool  quiet = false;
+
+   while ( (opt = getopt(argc, argv, "f:p:t:qh")) != -1)
+   {
+      switch ( opt )
+      {
+         case 'f':
+            filename = optarg;
+            break;
+
+         case 'p':
+            nthreads = atoi( optarg );
+            break;
+
+         case 't':
+            timelimit = atoi( optarg );
+            break;
+
+         case 'q':
+            quiet = true;
+            break;
+
+         case 'h':
+            cout << "Usage: " << argv[0] << " [-f filename] [-p nthreads] [-t timelimit]" << endl;
+            break;
+
+         default: /* '?' */
+            cout << "Usage: " << argv[0] << " [-f filename] [-p nthreads] [-t timelimit]" << endl;
+            break;
+        }
+    }
+
+   if ( filename == nullptr )
+   {
+      cout << "Error: no input file" << endl;
+      cout << "Usage: " << argv[0] << " [-f filename] [-p nthreads] [-t timelimit]" << endl;
+      return -1;
+   }
+    //for (i = optind; i < argc; i++) {
+    //    printf("arg = %s\n", argv[i]);
+    //}
+
 	assert( nthreads > 0 );
 
 	int		m;
 
-	ReadDim( argv[1], &m);
+	ReadDim( filename, &m);
 
 	assert( m>0 );
 
 	double	*B_ = NULL;		// [m*m], Colmajor
 	B_	=	new double[m*m];
 
-	ReadData( argv[1], m, B_);
+	ReadData( filename, m, B_);
 
 	SVPsolver	svps;
 
@@ -85,7 +130,8 @@ int main( int argc, char** argv){
 	svps.set_num_thread( nthreads );
 	svps.find_min_column();
 	svps.compute_bounds();
-   svps.set_timelimit( atoi( argv[3] ) );
+   svps.set_timelimit( timelimit );
+   svps.set_quiet( quiet );
 
 	bool run;
 	if( nthreads == 1 ){
@@ -95,7 +141,7 @@ int main( int argc, char** argv){
 	}
 
    char probname[100];
-   getProblemName( argv[1], probname, 100);
+   getProblemName( filename, probname, 100);
 
    string com("echo [");
    com += probname;
@@ -127,12 +173,13 @@ int main( int argc, char** argv){
    //cout << com << endl;
    system(com.c_str());
 
+	svps.disp_bestsol();
 	if( !run ){
+      cout << endl;
 		cout << "could not solve .." << endl;
 		return 0;
 	}
 
-	svps.disp_bestsol();
 
 //
 //

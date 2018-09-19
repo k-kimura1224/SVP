@@ -55,12 +55,11 @@ void	SVPsolver::find_min_column()
 	Copy_vec( nrm, norm, m);
 
 	// sort
-	if( BRANCHINGRULE_INT == 4 ){
+	if( BRANCHINGRULE_INT == 4 || BRANCHINGRULE_INT == 5 ){
 		assert( order == NULL );
 		order = new int[m];
 		double *_null = NULL;
 		Bubble_Sort( m, nrm, _null, order);
-		printv( m, order);
 	}
 
 	// set

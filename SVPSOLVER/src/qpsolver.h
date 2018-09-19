@@ -37,6 +37,17 @@ class QPsolver{
    double   bestval;
 
    double   ep;
+
+   // for solve_activeset_onlybounds
+   double*  H;          // max = n*n
+   double*  r;          // max = n
+   double*  z;          // max = n
+   int*     indexes;    // [n], ({nonactive}{active})
+   double*  fixed;      // max = n
+
+   // for linear system
+   int (*comls)( const double*, const double*, int, double*);
+
    public:
 
    QPsolver();                               // default constructor
@@ -87,6 +98,7 @@ class QPsolver{
    void  disp_prob();
    void  solve();
    int   solve_activeset( double *x_new, bool *W_ineq, bool *W_u, bool *W_l);
+   int   solve_activeset_onlybounds( double *x_new, bool *W_u, bool *W_l);
    double   compute_stepsize( double *x, double *dx, bool *W_ineq, bool *W_u, bool *W_l);
    bool  update_activeset( double *x_new, bool *W_ineq, bool *W_u, bool *W_l);
    double   compute_objval( double *x );
