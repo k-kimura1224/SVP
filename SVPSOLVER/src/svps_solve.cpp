@@ -190,7 +190,7 @@ bool SVPsolver::solve(
 
 	}
 
-   cout << testwatch.get_result() << endl;
+   //cout << testwatch.get_result() << endl;
 
 	nnode = (unsigned long int)index -1;
 

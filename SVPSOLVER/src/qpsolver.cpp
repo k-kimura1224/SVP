@@ -401,6 +401,7 @@ void  QPsolver::solve()
 
    int   debug_ct = 0;
    int   argmin;
+   bool  onlybounds = false;
 
    if( A == nullptr && C == nullptr && l != nullptr && u != nullptr )
    {
@@ -409,6 +410,7 @@ void  QPsolver::solve()
       assert( r == nullptr );
       assert( indexes == nullptr );
 
+      onlybounds = true;
       H = new double[n*n];
       r = new double[n];
       z = new double[n];
@@ -478,7 +480,7 @@ void  QPsolver::solve()
       //printv( n, x_new );
       //assert(0);
       // solve the problem with active set
-      if( A == nullptr && C == nullptr && l != nullptr && u != nullptr )
+      if( onlybounds == true )
       {
          assert( W_ineq == nullptr );
          argmin = solve_activeset_onlybounds( x_new, W_u, W_l);

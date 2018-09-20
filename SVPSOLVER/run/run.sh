@@ -12,8 +12,8 @@ run()
    time=$3
 
 	export OMP_NUM_THREADS=1
-   echo "../bin/SVPSOLVER $file $thread $time > ${name}.log"
-   ../bin/SVPSOLVER $file $thread $time > ${name}.log
+   echo "../bin/SVPSOLVER.opt -f $file -p $thread -t $time > ${name}.log"
+   ../bin/SVPSOLVER.opt -f $file -p $thread -t $time > ${name}.log
 }
 
 dirname=$1
