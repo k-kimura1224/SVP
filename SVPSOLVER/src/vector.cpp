@@ -19,21 +19,21 @@ template void Bubble_Sort( const int n, const double *x, double *y, int *z);
 
 //clapack
 extern "C" {
-	int dposv_( char* uplo, int* n, int* nrhs, 
+	int dposv_( char* uplo, int* n, int* nrhs,
 	double* A, int* lda, double* x,
 	int* ldb, int* info);
 }
 extern "C" {
-	int dgesv_( int *n, int *nrhs, double *a, 
+	int dgesv_( int *n, int *nrhs, double *a,
 	int *lda, int *ipiv, double *b, int *ldb, int *info);
 }
 extern "C" {
-	int dsysv_( char* uplo, int* n, int* nrhs, 
+	int dsysv_( char* uplo, int* n, int* nrhs,
 	double* A, int* lda, int *ipiv, double* b,
 	int* ldb, double *work, int *lwork, int* info);
 }
 extern "C" {
-	int dgetrf_( int* m, int* n, double* B_, int* lda, int* ipiv, int* info); 
+	int dgetrf_( int* m, int* n, double* B_, int* lda, int* ipiv, int* info);
 }
 extern "C" {
 	int dsyev_( char* jobz, char* uplo, int* N, double* Q, int* lda,
@@ -87,7 +87,7 @@ int Com_LS_dposv(
 
 	/* alloc */
 	AA = new double[n*n];
-	
+
 	Copy_vec( A, AA, n*n);
 	Copy_vec( b, x, n);
 
@@ -95,7 +95,7 @@ int Com_LS_dposv(
 
 	/* free */
 	delete[] AA;
-	
+
 	return info;
 
 }
@@ -118,7 +118,7 @@ int Com_LS_dgesv(
 	/* alloc */
 	AA = new double[n*n];
 	ipiv = new int[n];
-	
+
 	Copy_vec( A, AA, n*n);
 	Copy_vec( b, x, n);
 
@@ -127,7 +127,7 @@ int Com_LS_dgesv(
 	/* free */
 	delete[] AA;
 	delete[] ipiv;
-	
+
 	return info;
 
 }
@@ -154,7 +154,7 @@ int Com_LS_dsysv(
 	AA = new double[n*n];
 	ipiv = new int[n];
 	work = new double[lwork];
-	
+
 	Copy_vec( A, AA, n*n);
 	Copy_vec( b, x, n);
 
@@ -164,7 +164,7 @@ int Com_LS_dsysv(
 	delete[] AA;
 	delete[] ipiv;
 	delete[] work;
-	
+
 	return info;
 
 }
@@ -185,7 +185,7 @@ void Com_scal(
 }
 
 // compute linear combination
-// z := (alpha)x + (beta)y 
+// z := (alpha)x + (beta)y
 void Com_linecomb(
 	const double	*x,		/* vector */
 	const double	*y,		/* vector */
@@ -221,7 +221,7 @@ void Com_mat_AtA(
 {
 	double	zero=0.0;
 	double	one=1.0;
-	
+
 
 	cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans,
 					m, m, n, one, A, n, A, n, zero, B, m);
@@ -302,16 +302,16 @@ double	determinant(
 
 	Copy_vec( B_, copyB, m*m);
 
-	dgetrf_( &m, &m, copyB, &lda, ipiv, &info); 
-	
+	dgetrf_( &m, &m, copyB, &lda, ipiv, &info);
+
 	det=1.0;
-	
-	for(i=0; i < m-1; i++){ 
+
+	for(i=0; i < m-1; i++){
 		if(ipiv[i] != i+1)  det = -det;
 	}
-	
+
 	for(i=0; i < m; i++)  det *= copyB[i+m*i];
-	
+
 	delete[] ipiv;
 	delete[] copyB;
 
@@ -385,7 +385,7 @@ void Gen_ZeroVec(
 	}
 }
 
-// transpose A 
+// transpose A
 template <typename Type>
 void TraMat(
 	int 		n,
@@ -439,7 +439,7 @@ int count(
 {
 	if( x == NULL ) return 0;
 
-	int ct=0;	
+	int ct=0;
 	for(int i=0; i<n; i++){
 		if( x[i] ) ct++;
 	}
@@ -462,7 +462,7 @@ void Bubble_Sort(
 	assert( y != NULL || z != NULL );
 
 	Type	*a;
-	a = new Type[n];	
+	a = new Type[n];
 
 	// copy
 	for(int i=0; i<n; i++){

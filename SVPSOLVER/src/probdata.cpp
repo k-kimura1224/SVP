@@ -20,10 +20,10 @@ PROB_DATA::PROB_DATA(){	// default constructor
 #if debug_class
 	cout << "PROB_DATA: default constructor" << endl;
 #endif
-	m	=	-1;
-	B = NULL;
-	B_ = NULL;
-	Q = NULL;
+	m = -1;
+	B = nullptr;
+	B_ = nullptr;
+	Q = nullptr;
 }
 
 PROB_DATA::PROB_DATA( const PROB_DATA &source )
@@ -33,22 +33,27 @@ PROB_DATA::PROB_DATA( const PROB_DATA &source )
 #endif
 	m	=	source.m;
 
-	if( m > 0 ){
-		assert( source.B != NULL );
-		assert( source.B_ != NULL );
-		assert( source.Q != NULL );
+	if( m > 0 )
+   {
+		assert( source.B != nullptr );
+		assert( source.B_ != nullptr );
+		assert( source.Q != nullptr );
 
-		B = new double[m*m];
-		B_ = new double[m*m];
-		Q = new double[m*m];
+      int mm = m * m;
 
-		Copy_vec( source.B, B, m*m);
-		Copy_vec( source.B_, B_, m*m);
-		Copy_vec( source.Q, Q, m*m);
-	}else{
-		B = NULL;
-		B_ = NULL;
-		Q = NULL;
+		B = new double[mm];
+		B_ = new double[mm];
+		Q = new double[mm];
+
+		Copy_vec( source.B, B, mm );
+		Copy_vec( source.B_, B_, mm );
+		Copy_vec( source.Q, Q, mm );
+	}
+   else
+   {
+		B = nullptr;
+		B_ = nullptr;
+		Q = nullptr;
 	}
 }
 
@@ -59,31 +64,38 @@ PROB_DATA& PROB_DATA::operator=( const PROB_DATA& source )
 	cout << "PROB_DATA: assignment operator" << endl;
 #endif
 
-	if( this != &source ){ 	
-		m	=	source.m;
+	if( this != &source )
+   {
+		m = source.m;
 
-		if( m > 0 ){
-			assert( source.B != NULL );
-			assert( source.B_ != NULL );
-			assert( source.Q != NULL );
-			
+		if( m > 0 )
+      {
+			assert( source.B != nullptr );
+			assert( source.B_ != nullptr );
+			assert( source.Q != nullptr );
+
 			delete[] B;
 			delete[] B_;
 			delete[] Q;
 
-			B = new double[m*m];
-			B_ = new double[m*m];
-			Q = new double[m*m];
-	
-			Copy_vec( source.B, B, m*m);
-			Copy_vec( source.B_, B_, m*m);
-			Copy_vec( source.Q, Q, m*m);
-		}else{
-			B = NULL;
-			B_ = NULL;
-			Q = NULL;
+         int mm = m * m;
+
+			B = new double[mm];
+			B_ = new double[mm];
+			Q = new double[mm];
+
+			Copy_vec( source.B, B, mm );
+			Copy_vec( source.B_, B_, mm );
+			Copy_vec( source.Q, Q, mm );
+		}
+      else
+      {
+			B = nullptr;
+			B_ = nullptr;
+			Q = nullptr;
 		}
 	}
+
 	return *this;
 }
 
@@ -96,9 +108,9 @@ PROB_DATA::~PROB_DATA()
 	delete[] B;
 	delete[] B_;
 	delete[] Q;
-	B = NULL;
-	B_ = NULL;
-	Q = NULL;
+	B = nullptr;
+	B_ = nullptr;
+	Q = nullptr;
 }
 
 void PROB_DATA::set_data(
@@ -109,23 +121,25 @@ void PROB_DATA::set_data(
 	)
 {
 	assert( m == -1 );
+   assert( B == nullptr );
+   assert( B_ == nullptr );
+   assert( Q == nullptr );
+
 	assert( s_m > 0 );
-	assert( s_B != NULL );
-	assert( s_B_ != NULL );
-	assert( s_Q != NULL );
+	assert( s_B != nullptr );
+	assert( s_B_ != nullptr );
+	assert( s_Q != nullptr );
 
 	m = s_m;
 
-	delete[] B;
-	delete[] B_;
-	delete[] Q;
+   int mm = m * m;
 
-	B = new double[m*m];
-	B_ = new double[m*m];
-	Q = new double[m*m];
-	
-	Copy_vec( s_B, B, m*m);
-	Copy_vec( s_B_, B_, m*m);
-	Copy_vec( s_Q, Q, m*m);
+	B = new double[mm];
+	B_ = new double[mm];
+	Q = new double[mm];
+
+	Copy_vec( s_B, B, mm );
+	Copy_vec( s_B_, B_, mm );
+	Copy_vec( s_Q, Q, mm );
 }
 

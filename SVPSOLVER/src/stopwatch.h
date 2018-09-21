@@ -12,6 +12,7 @@ class STOPWATCH{
 
 	bool		run;
 
+   int      total;
 	int		limit;
 
 	public:
@@ -24,7 +25,11 @@ class STOPWATCH{
 		void	start();
 		void	stop();
 		void	set_timelimit(int l){ limit = l; }
-		int	get_result(){ return (int)(end - begin); }
+		int	get_result()
+      {
+         assert( run == false );
+         return total;
+      }
 		int	get_time();
 		bool	check_time();
 };
