@@ -19,7 +19,7 @@
 using namespace std;
 
 #define debug	0
-#define log		1
+#define log		0
 
 void	SVPsolver::heur_quadratic( int sel )
 {
@@ -30,8 +30,8 @@ void	SVPsolver::heur_quadratic( int sel )
 
 	double	val;
 	double	val_new;
-	double	*solvals = NULL;
-	double	*solvals_new = NULL;
+	double	*solvals = nullptr;
+	double	*solvals_new = nullptr;
 
 	list<NODE>::iterator it = NodeList.begin();
 	advance( it, sel);
@@ -40,9 +40,9 @@ void	SVPsolver::heur_quadratic( int sel )
 	double	*l = it->get_lb();
 
 	assert( m > 0 );
-	assert( relaxsolvals != NULL );
-	assert( u != NULL );
-	assert( l != NULL );
+	assert( relaxsolvals != nullptr );
+	assert( u != nullptr );
+	assert( l != nullptr );
 
 	solvals = new double[m];
 	solvals_new = new double[m];
@@ -50,7 +50,7 @@ void	SVPsolver::heur_quadratic( int sel )
 	for(int i=0; i<m; i++){
 		solvals[i] = round( relaxsolvals[i] );
 	}
-	
+
 	val = compute_objval( solvals );
 
 	double	lam, lam1, lam2;
@@ -59,9 +59,9 @@ void	SVPsolver::heur_quadratic( int sel )
 	double *normv = new double[m];
 	double	*Bx = new double[m];
 	double	*B_ = probdata.get_B_();
-	
-	assert( B_ != NULL );
-	assert( norm != NULL );
+
+	assert( B_ != nullptr );
+	assert( norm != nullptr );
 
 #if debug
 	cout << "best:" << bestval << endl;
@@ -81,7 +81,7 @@ void	SVPsolver::heur_quadratic( int sel )
 				s1 = Com_dot( &B_[i*m], Bx, m);
 				s2 = normv[i]; //norm[i] * norm[i];
 				t = - s1 / s2;
-	
+
 				if( t < l[i] - solvals[i] ){
 					t = l[i] - solvals[i];
 					if( t != 0.0 ){
@@ -98,13 +98,13 @@ void	SVPsolver::heur_quadratic( int sel )
 					if( t1 != 0.0 ){
 						lam1 += t1 * ( t1*s2 + 2*s1 );
 					}
-	
+
 					t2 = floor(t);
 					lam2 = val;
 					if( t2 != 0.0 ){
 						lam2 += t2 * ( t2*s2 + 2*s1 );
 					}
-	
+
 					if( lam1 > lam2 ){
 						lam = lam2;
 						t = t2;
@@ -113,11 +113,11 @@ void	SVPsolver::heur_quadratic( int sel )
 						t = t1;
 					}
 				}
-		
+
 	#if debug
 		cout << "i:" << i << "-> " << lam << endl;
 	#endif
-	
+
 				if( val_new > lam ){
 					val_new = lam;
 					Copy_vec( solvals, solvals_new, m);
@@ -141,7 +141,7 @@ void	SVPsolver::heur_quadratic( int sel )
 			break;
 		}
 	}
-	
+
 	SOLUTION	solution;
 	solution.set_sol( m, solvals, val);
 	pool.add_solution( solution );

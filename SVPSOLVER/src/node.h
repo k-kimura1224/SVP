@@ -30,15 +30,17 @@ class NODE{
 								double *s_warm, double s_relax_objval,
 								int s_dpt, bool s_zero, int s_index);
 
-		double	get_lowerbound(){ return relax_objval; }
-		int		get_index(){ return index; }
-		int		get_dpt(){ return dpt; }
-		bool		get_zero(){ return zero; }
-		double*	get_ub(){ return ub; }
-		double*	get_lb(){ return lb; }
-		double*	get_warm(){ return warm; }
-		double*	get_relaxsolval(){ return relax_solval; }
-		bool		get_solved(){ return solved; }
+		double	get_lowerbound() const { return relax_objval; }
+		int		get_index() const { return index; }
+		int		get_dpt() const { return dpt; }
+		bool		get_zero() const { return zero; }
+		double*	get_ub() const { return ub; }
+		double*	get_lb() const { return lb; }
+		double*	get_warm() const { return warm; }
+		double*	get_relaxsolval() const { return relax_solval; }
+		bool		get_solved() const { return solved; }
+
+      void     NODEdispInformation();
 
 		void	set_lowerbound( double s_ro ){
 			if( relax_objval < s_ro ) relax_objval = s_ro;

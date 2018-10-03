@@ -10,17 +10,16 @@
 #include <math.h>
 #include <time.h>
 #include <iomanip>
-#include <omp.h>
 
 #include "qpsolver.h"
 #include "vector.h"
+#include "testwatch.h"
 
 using namespace std;
 
 
 #define debug_class  0
 #define debug  0
-#define RUNTIME 0
 
 QPsolver::QPsolver(){   // default constructor
 #if debug_class
@@ -194,29 +193,19 @@ void  QPsolver::disp_prob(){
 
 }
 
-void  QPsolver::solve()
+void  QPsolver::solve(
+      TESTWATCH*  testwatch
+      )
 {
    assert( n > 0 );
    assert( warm != nullptr );
    assert( Q != nullptr );
-
-   #if RUNTIME
-   {
-      clock_t start;
-      clock_t end;
-      start = clock();
-      cout << setprecision(20);
-   }
-   #endif
 
    double   ep = get_ep();
    double   *x;
    x = new double[n];
 
    Copy_vec( warm, x, n );
-   //for ( int i = 0; i < n; i++ ){
-   // x[i] = warm[i];
-   //}
 
    #if debug
       cout << "initial point:";
@@ -392,13 +381,6 @@ void  QPsolver::solve()
    x_new = new double[n];
    dx = new double[n];
 
-   #if RUNTIME
-   {
-      end = clock();
-      cout << "while_start: \t" << (double) (end - start) / CLOCKS_PER_SEC << "sec." << endl;
-   }
-   #endif
-
    int   debug_ct = 0;
    int   argmin;
    bool  onlybounds = false;
@@ -413,10 +395,10 @@ void  QPsolver::solve()
       onlybounds = true;
       H = new double[n*n];
       r = new double[n];
-      z = new double[n];
+      //z = new double[n];
       indexes = new int[n];
       fixed = new double[n];
-      comls = Com_LS_dposv;
+      //comls = Com_LS_dposv;
    }
    else
    {
@@ -429,7 +411,7 @@ void  QPsolver::solve()
       if ( debug_ct > 1000 )
       {
          cout << "error: qpsolver.cpp" << endl;
-         cout << "th: " << omp_get_thread_num() << endl;
+         //cout << "th: " << omp_get_thread_num() << endl;
          exit(1);
       }
       debug_ct++;
@@ -472,13 +454,6 @@ void  QPsolver::solve()
       }
       #endif
 
-      //argmin = solve_activeset( x_new, W_ineq, W_u, W_l);
-      //cout << "argmin: " << argmin << ", old_func.: ";
-      //printv( n, x_new );
-      //argmin = solve_activeset_onlybounds( x_new, W_u, W_l);
-      //cout << "argmin: " << argmin << ", new_func.: ";
-      //printv( n, x_new );
-      //assert(0);
       // solve the problem with active set
       if( onlybounds == true )
       {
@@ -505,7 +480,8 @@ void  QPsolver::solve()
    cout << "dx: ";
    printv( n, dx);
 #endif
-      if( Com_nrm( dx, n) > ep ){
+      if( Com_nrm( dx, n) > ep )
+      {
          // compute stepsize
          double alpha = compute_stepsize( x, dx, W_ineq, W_u, W_l);
 #if debug
@@ -602,19 +578,12 @@ void  QPsolver::solve()
             continue;
          }else{
             cout << "error: QPsolver" << endl;
-            cout << "th: " << omp_get_thread_num() << endl;
+            //cout << "th: " << omp_get_thread_num() << endl;
             exit(-1);
          }
 
       }
    }
-
-   #if RUNTIME
-   {
-      end = clock();
-      cout << "while_end: \t" << (double) (end - start) / CLOCKS_PER_SEC << "sec." << endl;
-   }
-   #endif
 
    bestsol = new double[n];
 
@@ -634,14 +603,6 @@ void  QPsolver::solve()
    delete[] W_l;
    delete[] x_new;
    delete[] dx;
-
-   #if RUNTIME
-   {
-      end = clock();
-      cout << "end: \t\t" << (double) (end - start) / CLOCKS_PER_SEC << "sec." << endl;
-      cout << endl;
-   }
-   #endif
 }
 
 int QPsolver::solve_activeset(
@@ -950,7 +911,6 @@ int QPsolver::solve_activeset_onlybounds(
    assert( wu >= 0 );
    assert( wl >= 0 );
    assert( wl >= 0 );
-   assert( nvars >= 1 );
 
    #if debug
    {
@@ -961,7 +921,7 @@ int QPsolver::solve_activeset_onlybounds(
    assert( H != nullptr );
    assert( r != nullptr );
    assert( indexes != nullptr );
-   assert( z != nullptr );
+   //assert( z != nullptr );
    assert( fixed != nullptr );
 
    double   lambda = 0.0;
@@ -1023,6 +983,8 @@ int QPsolver::solve_activeset_onlybounds(
       return memo;
 
    }
+
+   assert( nvars >= 1 );
 
    ct1 = 0;
    ct2 = n - 1;
@@ -1100,14 +1062,19 @@ int QPsolver::solve_activeset_onlybounds(
 
    int com;
 
-   assert( comls != nullptr );
-   com = comls( H, r, nvars, z);
+   //assert( comls != nullptr );
+   //com = comls( H, r, nvars, z);
+
+   com = Com_LS_dposv_nocopy( H, r, nvars );
+
+   // H and r were changed
 
    #if debug
    {
       cout << "com: " << com << endl;
       cout << "z: ";
-      printv( nvars, z);
+      //printv( nvars, z);
+      printv( nvars, r );
    }
    #endif
 
@@ -1118,8 +1085,10 @@ int QPsolver::solve_activeset_onlybounds(
       exit(-1);
    }
 
+   //for ( int i = 0; i < nvars; i++ )
+   //   x_new[indexes[i]] = z[i];
    for ( int i = 0; i < nvars; i++ )
-      x_new[indexes[i]] = z[i];
+      x_new[indexes[i]] = r[i];
 
    for ( int i = n - 1, j = 0; i >= nvars; i--, j++ )
    {
@@ -1167,9 +1136,6 @@ int QPsolver::solve_activeset_onlybounds(
          buf_int = ct2;
          ct2++;
       }
-
-
-      //cout << "lambda: " << lambda << endl;
 
       if ( lambda < min && fabs( lambda ) > ep )
       {

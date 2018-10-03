@@ -257,3 +257,17 @@ void NODE::add_sumfixed(
 		sumfixed[i] += c*s_sumfixed[i];
 	}
 }
+
+void NODE::NODEdispInformation()
+{
+   cout << "[index:" << index << "]----------------------------" << endl;
+   cout << "m: " << m << endl;
+   cout << "dpt: " << dpt << endl;
+   cout << "zero: " << zero << endl;
+   cout << "solved: " << solved << endl;
+   cout << "bounds&warm: " << endl;
+   for ( int i = 0; i < m; i++ )
+      cout << i << ": [ " << lb[i] << ", " << ub[i] << "], " << warm[i] << endl;
+   cout << "relax_objval: " << relax_objval << endl;
+
+}

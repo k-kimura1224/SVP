@@ -40,7 +40,7 @@ using namespace std;
 
 #define debug	0
 
-void	SVPsolver::heur(int sel, bool para)
+void	SVPsolver::SVPSheur( int sel )
 {
 
 	assert( sel >= 0 );
@@ -53,14 +53,14 @@ void	SVPsolver::heur(int sel, bool para)
 
 	assert( dpt >= 0 );
 
-	if( para == false ){
+	if( subsolver == false ){
 		// single
 		if( it->get_zero() == false ){
 			// unit sphere algorithm
 			dpt2 = dpt - (int)HEUR_UNITSPHERE_FREQOFS;
 			if( dpt2 >= 0
-				&& HEUR_UNITSPHERE == true 
-				&& dpt2 % (int)HEUR_UNITSPHERE_FREQ == 0 
+				&& HEUR_UNITSPHERE == true
+				&& dpt2 % (int)HEUR_UNITSPHERE_FREQ == 0
 				&& dpt2 <= (int)HEUR_UNITSPHERE_DPT ){
 				heur_unitsphere( sel );
 			}
@@ -68,7 +68,7 @@ void	SVPsolver::heur(int sel, bool para)
 			dpt2 = dpt - (int)HEUR_QUADRATIC_FREQOFS;
 			if( dpt2 >= 0
 				&& HEUR_QUADRATIC == true
-				&& dpt2 % (int)HEUR_QUADRATIC_FREQ == 0 
+				&& dpt2 % (int)HEUR_QUADRATIC_FREQ == 0
 				&& dpt2 <= (int)HEUR_QUADRATIC_DPT ){
 				heur_quadratic( sel );
 			}
@@ -78,9 +78,9 @@ void	SVPsolver::heur(int sel, bool para)
 		if( it->get_zero() == false ){
 			// unit sphere algorithm
 			dpt2 = dpt - (int)PARA_HEUR_UNITSPHERE_FREQOFS;
-			if( dpt2 >= 0 
-				&& PARA_HEUR_UNITSPHERE == true 
-				&& dpt2 % (int)PARA_HEUR_UNITSPHERE_FREQ == 0 
+			if( dpt2 >= 0
+				&& PARA_HEUR_UNITSPHERE == true
+				&& dpt2 % (int)PARA_HEUR_UNITSPHERE_FREQ == 0
 				&& dpt2 <= (int)PARA_HEUR_UNITSPHERE_DPT ){
 				heur_unitsphere( sel );
 			}
@@ -88,7 +88,7 @@ void	SVPsolver::heur(int sel, bool para)
 			dpt2 = dpt - (int)PARA_HEUR_QUADRATIC_FREQOFS;
 			if( dpt2 >= 0
 				&& PARA_HEUR_QUADRATIC == true
-				&& dpt2 % (int)PARA_HEUR_QUADRATIC_FREQ == 0 
+				&& dpt2 % (int)PARA_HEUR_QUADRATIC_FREQ == 0
 				&& dpt2 <= (int)PARA_HEUR_QUADRATIC_DPT ){
 				heur_quadratic( sel );
 			}

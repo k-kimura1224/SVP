@@ -17,7 +17,7 @@
 
 using namespace std;
 
-void	SVPsolver::find_min_column()
+void	SVPsolver::SVPSheurFindMinColumn()
 {
 	int		m;
 	double 	*B_ = nullptr;

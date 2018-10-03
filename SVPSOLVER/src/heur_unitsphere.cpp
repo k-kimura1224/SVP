@@ -18,7 +18,7 @@
 
 using namespace std;
 
-#define debug	1
+#define debug	0
 
 void	SVPsolver::heur_unitsphere( int sel )
 {

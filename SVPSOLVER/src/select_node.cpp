@@ -13,69 +13,39 @@
 
 using namespace std;
 
-#define debug	0
+#define debug  0
 
 
-int	SVPsolver::select_node(
-	int index,
-	int disp
-	)
+int   SVPsolver::SVPSselectNode(
+   int index,
+   int disp
+   )
 {
-	int	rslt = -1;
-	switch ( NODESELECTION ) {
-		case 0:
-		{
-			double	min;
-			list<NODE>::iterator it = NodeList.begin();
-			//min = NodeList[0].get_lowerbound();
-			min = it->get_lowerbound();
-			rslt = 0;
-			for(int i=1; i<listsize; i++){
-				++it;
-				if( min > it->get_lowerbound() ){
-					min = it->get_lowerbound();
-					rslt = i;
-				}
-			}
-			break;
-		}
-		case 1:
-		{
-			rslt = 0;
-			break;
-		}
-		case 2:
-		{
+   int   rslt = -1;
+   auto  buf = (index-1)%100000;
 
-			if( (index-1) % 100000 == 0 && disp < index )
-         {
-            if ( quiet )
-            {
-				   NodeList.sort();
-            }
-            else
-            {
-				   clock_t start = clock();
-				   NodeList.sort();
-				   clock_t end = clock();
-				   cout << "Sorting Time: ";
-				   cout << (double)(end-start)/CLOCKS_PER_SEC;
-				   cout << "s" << endl;
-            }
-			}
-			rslt = 0;
-			break;
-		}
-		default:
-		{
-			cout << "error: select_node" << endl;
-			exit(-1);
-			break;
-		}
-	}
+   if( ( buf == 0 || buf == 1 ) && disp < index )
+   {
+      if ( quiet )
+      {
+         NodeList.sort();
+      }
+      else
+      {
+         clock_t start = clock();
+         NodeList.sort();
+         clock_t end = clock();
+         cout << "Sorting Time: ";
+         cout << (double)(end-start)/CLOCKS_PER_SEC;
+         cout << "s" << endl;
+      }
+      GLB = NodeList.begin()->get_lowerbound();
+   }
 
-	assert( rslt >= 0 );
-	assert( rslt < listsize );
+   rslt = 0;
 
-	return rslt;
+   assert( rslt >= 0 );
+   assert( rslt < listsize );
+
+   return rslt;
 }

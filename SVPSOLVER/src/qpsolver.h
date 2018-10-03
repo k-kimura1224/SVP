@@ -2,7 +2,7 @@
 #define QPSOLVER_H_
 
 #include <assert.h>
-#include "stopwatch.h"
+#include "testwatch.h"
 
 using namespace std;
 
@@ -96,7 +96,7 @@ class QPsolver{
    }
 
    void  disp_prob();
-   void  solve();
+   void  solve( TESTWATCH* testwatch );
    int   solve_activeset( double *x_new, bool *W_ineq, bool *W_u, bool *W_l);
    int   solve_activeset_onlybounds( double *x_new, bool *W_u, bool *W_l);
    double   compute_stepsize( double *x, double *dx, bool *W_ineq, bool *W_u, bool *W_l);

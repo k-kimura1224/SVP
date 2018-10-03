@@ -24,40 +24,35 @@ using namespace std;
 
 #define debug  0
 
-RelaxResult SVPsolver::solve_relaxation(
-   int   selnodeindex
+RelaxResult SVPsolver::SVPSsolveRelaxation(
+      NODE&    node
    )
 {
    RelaxResult result;
-   auto it = NodeList.begin();
-   advance( it, selnodeindex );
 
-   if ( bestval - it->get_lowerbound() < 1.0 )
+   if ( bestval - node.get_lowerbound() < 1.0 )
       return INFEASIBLE;
 
-   if ( it->get_zero() == true )
+   if ( node.get_zero() == true )
    {
-      result = solve_relaxation_BIN_sch( selnodeindex );
+      result = SVPSsolveRelaxationBIN( node );
    }
    else
    {
-      result = solve_relaxation_INT( selnodeindex );
+      result = SVPSsolveRelaxationINT( node );
    }
 
    return result;
 }
 
-RelaxResult SVPsolver::solve_relaxation_BIN_sch(
-   int   sel
+RelaxResult SVPsolver::SVPSsolveRelaxationBIN(
+      NODE&    node
    )
 {
    int   m = probdata.get_m();
-   auto  it = NodeList.begin();
 
-   advance( it, sel );
-
-   double *u = it->get_ub();
-   double *l = it->get_lb();
+   double *u = node.get_ub();
+   double *l = node.get_lb();
 
    int ct = 0;
 
@@ -84,8 +79,8 @@ RelaxResult SVPsolver::solve_relaxation_BIN_sch(
 
    auto schmin = sch.get_min();
 
-   if( it->get_lowerbound() < schmin )
-      it->set_lowerbound( schmin );
+   if( node.get_lowerbound() < schmin )
+      node.set_lowerbound( schmin );
 
    if ( schmin >= bestval )
    {
@@ -104,18 +99,15 @@ RelaxResult SVPsolver::solve_relaxation_BIN_sch(
    return result;
 }
 
-RelaxResult SVPsolver::solve_relaxation_INT(
-   int   sel
+RelaxResult SVPsolver::SVPSsolveRelaxationINT(
+      NODE&    node
    )
 {
-   auto it = NodeList.begin();
-   advance( it, sel );
-
    int      m = probdata.get_m();
    double   *Q = probdata.get_Q();
-   double   *u = it->get_ub();
-   double   *l = it->get_lb();
-   double   *warm = it->get_warm();
+   double   *u = node.get_ub();
+   double   *l = node.get_lb();
+   double   *warm = node.get_warm();
 
    int   n = 0;
 
@@ -181,20 +173,20 @@ RelaxResult SVPsolver::solve_relaxation_INT(
    // cout << "[0,1]=" << subQ[1+(0*n)] <<endl;
       assert( subQ[0+(1*n)] == subQ[1+(0*n)] );
 
-      if( it->get_sumfixed() != nullptr ){
+      if( node.get_sumfixed() != nullptr ){
          p = qpdata.get_pvec();
          assert( p != nullptr );
 
          ct = 0;
          for(int i=0; i<m; i++){
             if( l[i] != u[i] ){
-               p[ct++] = 2*Com_dot( probdata.get_bvec(i), it->get_sumfixed(), m);
+               p[ct++] = 2*Com_dot( probdata.get_bvec(i), node.get_sumfixed(), m);
             }
          }
          assert( ct == n );
 
          qps.set_obj( n, subQ, p);
-         c_term = Com_dot( it->get_sumfixed(), it->get_sumfixed(), m);
+         c_term = Com_dot( node.get_sumfixed(), node.get_sumfixed(), m);
       }else{
          qps.set_obj_quad( n, subQ);
       }
@@ -270,9 +262,8 @@ RelaxResult SVPsolver::solve_relaxation_INT(
 
    qps.set_ep( 1e-12 );
 
-   testwatch.start();
-   qps.solve();
-   testwatch.stop();
+   qps.solve( nullptr );
+   //qps.solve( &testwatch );
 
    double *relaxvals = new double[m];
    double *qpbestvals = qps.get_bestsol();
@@ -286,12 +277,12 @@ RelaxResult SVPsolver::solve_relaxation_INT(
    }
    assert( ct == n );
 
-   it->set_relaxsolval( relaxvals );
+   node.set_relaxsolval( relaxvals );
 
    double qpbestval = qps.get_bestval() + c_term;
 
-   if( it->get_lowerbound() < qpbestval ){
-      it->set_lowerbound( qpbestval );
+   if( node.get_lowerbound() < qpbestval ){
+      node.set_lowerbound( qpbestval );
    }
 
    RelaxResult result;

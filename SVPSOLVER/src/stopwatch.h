@@ -30,7 +30,7 @@ class STOPWATCH{
          assert( run == false );
          return total;
       }
-		int	get_time();
+		int	get_time() const;
 		bool	check_time();
 };
 

@@ -3,18 +3,18 @@
 
 //#include <vector>
 #include <list>
+#include <mutex>
+#include <condition_variable>
+
 #include "probdata.h"
 #include "qpdata.h"
 #include "solution.h"
 #include "solution_pool.h"
 #include "node.h"
 #include "stopwatch.h"
+#include "testwatch.h"
 #include "Schmidt_manager.h"
 #include "cut_pool.h"
-
-#define  NODESELECTION  2     // 0:depth fisrt search
-                              // 1: 0th
-                              // 2: 0th, sort
 
 #define  BRANCHINGRULE_INT 3
       // 0:
@@ -45,6 +45,16 @@ enum RelaxResult {
    GETINTEGER
 };
 
+enum Status {
+   SETUP,
+   SOLVING,
+   SOLVED,
+   TIMEOVER,
+   FULL_OF_LEFTNODES,
+   FULL_OF_NODES
+};
+
+
 class SVPsolver{
    PROB_DATA      probdata;
 
@@ -59,10 +69,11 @@ class SVPsolver{
    double         Appfac;
 
    list<NODE>     NodeList;
-   int            listsize;
+   int   listsize;
+   int   index;
 
    STOPWATCH      stopwatch;
-   STOPWATCH      testwatch;
+   TESTWATCH      testwatch;
 
    unsigned long int    nnode;
 
@@ -77,13 +88,20 @@ class SVPsolver{
    CUT_POOL    oa_cpool;   //a pool of cutting planes by using
                            //outer approximation
 
+   Status status;
+
    int TIMELIMIT;
+   int LEFTNODELIMIT;
+   int NODELIMIT;
 
    // for relaxation
    QP_DATA  qpdata;
 
    // for parallel
    int   nthreads;
+   bool  subsolver;
+   mutex mtx;
+   condition_variable cv;
 
    double epsilon;
 
@@ -94,18 +112,63 @@ class SVPsolver{
       SVPsolver& operator=( const SVPsolver& );    // assignment operator
       ~SVPsolver();                                // destructor
 
-      void        create_probdata( int m, double *B_);
-      void        create_sch( int m, double *B_);
-      bool        solve(bool para, bool s_zero, double s_GLB);
-      bool        p_solve();
-      void        find_min_column();
-      void        compute_bounds();
+      // setup {
+      void        SVPSsetup(  const int s_m, const double* s_B_, const int s_nthreads,
+                              const int s_timelimit, const bool s_quiet, const bool w_subsolver,
+                              const bool w_sch, const bool w_bounds, const bool w_heur,
+                              const bool w_app, const bool w_grn );
+      void        SVPScreateProbdata( const int m, const double *B_);
+
+      void        SVPSheurFindMinColumn();
+      void        SVPScomputeBounds();
+      void        SVPSgenerateRootNode( bool w_sch );
+      // } setup
+
+      // setup for subsolver {
+      void        SVPSsetGlobalLowerBound( const double s_GLB ){ GLB = s_GLB; }
+      void        SVPSsetNode( const NODE &setnode );
+      NODE&       SVPSgetNode();
+      void        SVPSpopNode();
+      // } setup for subsolver
+
+      // solve {
+      bool        SVPSsolve();
+      void        SVPSstartTime();
+      void        SVPSoutputBounds();
+      bool        SVPSrunBranchandBound();
+      bool        SVPSresolve();
+      // } solve
+
+      // solve via parallel {
+      bool        SVPSparasolve();
+      void        SVPSsolveSubprob( unsigned short int& n_running_threads, double& sublb_i,
+                                    const int thread_id );
+      void        SVPSresetIndex();
+      // } solve via parallel
+
+      // branch-and-bound {
+      bool        SVPScheckLimit();
+      // } branch-and-bound
+
+      // relaxation {
+      RelaxResult SVPSsolveRelaxation( NODE& node );
+      RelaxResult SVPSsolveRelaxationBIN( NODE& node );
+      RelaxResult SVPSsolveRelaxationINT( NODE& node );
+      // } relaxation
+
+      // node selection {
+      int   SVPSselectNode( int index, int disp );
+      // }  node selection
+
+      // get
+      double      SVPSgetGlobalLowerBound() const { return GLB; }
+      string      SVPSgetStringStatus() const;
+
+      void        SVPScreateSch( int m, double* B_ );
+      auto        SVPSgetStatus(){ return status; }
+      //bool        p_solve();
       void        tighten_bounds( int memo, double* set_lb, double* set_ub );
-      int         select_node(int index, int disp);
-      RelaxResult solve_relaxation( int selnodeindex );
-      RelaxResult solve_relaxation_BIN_sch(int sel);
-      RelaxResult solve_relaxation_INT(int sel);
-      void        heur(int sel, bool para);
+      void        SVPSheur( int sel );
       void        heur_unitsphere(int sel);
       void        heur_quadratic(int sel);
       void        disp_log(int   sel, RelaxResult r, int index, int cutoff);
@@ -114,40 +177,63 @@ class SVPsolver{
       void        branch(int  sel, int index);
       void        branch_BIN(int sel, int index);
       void        branch_INT(int sel, int index);
-      double      get_bestval(){ return bestval; }
-      SOLUTION    get_bestsol(){ return bestsol; }
+      auto        SVPSgetBestval(){ return bestval; }
+      auto        SVPSgetBestsol(){ return bestsol; }
       PROB_DATA   get_probdata(){ return probdata; }
-      unsigned long int get_nnode(){ return nnode; }
+      unsigned long int SVPSgetNnode(){ return nnode; }
       void        gene_OAcuts( double *u, double *l, double *Q, double M);
 
-      void        set_timelimit( int tlimit ){ TIMELIMIT = tlimit; }
-      int         get_timelimit(){ return TIMELIMIT; }
+      void        SVPSsetTimelimit( int tlimit ){ TIMELIMIT = tlimit; }
+      int         SVPSgetTimelimit(){ return TIMELIMIT; }
+      void        SVPSsetLeftnodelimit( const int nlimit ){
+                     assert( nlimit > 0 && nlimit <= 2000000000 );
+                     LEFTNODELIMIT = nlimit;
+                  }
+      void        SVPSsetNodelimit( const int nlimit ){
+                     assert( nlimit > 0 && nlimit <= 2000000000 );
+                     NODELIMIT = nlimit;
+                  }
 
       int         get_runtime(){ return stopwatch.get_result(); }
-      int         get_listsize(){ return listsize; }
+      auto        SVPSgetListsize(){ return listsize; }
       double      get_gap(){ return 100*(bestval - GLB)/bestval; }
 
       // for parallel mode
       void        set_num_thread(int n){ nthreads = n; }
-      void        set_bestval(double val){ bestval = val; }
-      void        set_bounds(double *u, double *l){
-         for(int i=0; i<probdata.get_m(); i++){
+      void        SVPSsetBestval( const double val ){ bestval = val; }
+      void        SVPSsetBounds(const double *u, const double *l)
+      {
+         assert( u != nullptr );
+         assert( l != nullptr );
+         assert( ub != nullptr );
+         assert( lb != nullptr );
+
+         int m = probdata.get_m();
+         for( int i = 0; i < m; i++ )
+         {
             ub[i] = u[i];
             lb[i] = l[i];
          }
       }
-      void        set_order(int *s_order){
-         order = new int[probdata.get_m()];
-         for(int i=0; i<probdata.get_m(); i++) order[i] = s_order[i];
+      void        SVPSsetOrder( const int *s_order)
+      {
+         assert( s_order != nullptr );
+         int m = probdata.get_m();
+         order = new int[m];
+         for (int i = 0; i < m; i++)
+            order[i] = s_order[i];
       }
-      void        set_norm(double *s_norm){
+      void        SVPSsetNorm( const double *s_norm)
+      {
          assert( probdata.get_m() > 0 );
-         assert( s_norm != NULL );
-         assert( norm == NULL );
-         norm = new double[probdata.get_m()];
-         Copy_vec( s_norm, norm, probdata.get_m());
+         assert( s_norm != nullptr );
+         assert( norm == nullptr );
+         int m = probdata.get_m();
+         norm = new double[m];
+         Copy_vec( s_norm, norm, m );
       }
-      void        set_Appfac(double a, double _a){
+      void        SVPSsetAppfac( const double a, const double _a )
+      {
          Appfac = a;
          _Appfac = _a;
       }
