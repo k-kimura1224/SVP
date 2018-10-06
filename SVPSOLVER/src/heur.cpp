@@ -40,57 +40,60 @@ using namespace std;
 
 #define debug	0
 
-void	SVPsolver::SVPSheur( int sel )
+void	SVPsolver::SVPSheur( const NODE& node )
 {
-
-	assert( sel >= 0 );
-	assert( sel < listsize );
-
-	list<NODE>::iterator it = NodeList.begin();
-	advance( it, sel);
-	int	dpt = it->get_dpt();
+	int	dpt = node.get_dpt();
 	int	dpt2;
 
 	assert( dpt >= 0 );
 
-	if( subsolver == false ){
+	if( subsolver == false )
+   {
 		// single
-		if( it->get_zero() == false ){
+		if( node.get_zero() == false )
+      {
 			// unit sphere algorithm
 			dpt2 = dpt - (int)HEUR_UNITSPHERE_FREQOFS;
 			if( dpt2 >= 0
 				&& HEUR_UNITSPHERE == true
 				&& dpt2 % (int)HEUR_UNITSPHERE_FREQ == 0
-				&& dpt2 <= (int)HEUR_UNITSPHERE_DPT ){
-				heur_unitsphere( sel );
+				&& dpt2 <= (int)HEUR_UNITSPHERE_DPT )
+         {
+				SVPSheurUnitsphere( node );
 			}
 			// solve quadratic optimization with one variable
 			dpt2 = dpt - (int)HEUR_QUADRATIC_FREQOFS;
 			if( dpt2 >= 0
 				&& HEUR_QUADRATIC == true
 				&& dpt2 % (int)HEUR_QUADRATIC_FREQ == 0
-				&& dpt2 <= (int)HEUR_QUADRATIC_DPT ){
-				heur_quadratic( sel );
+				&& dpt2 <= (int)HEUR_QUADRATIC_DPT )
+         {
+				SVPSheurQuadratic( node );
 			}
 		}
-	}else{
+	}
+   else
+   {
 		// parallel
-		if( it->get_zero() == false ){
+		if( node.get_zero() == false )
+      {
 			// unit sphere algorithm
 			dpt2 = dpt - (int)PARA_HEUR_UNITSPHERE_FREQOFS;
 			if( dpt2 >= 0
 				&& PARA_HEUR_UNITSPHERE == true
 				&& dpt2 % (int)PARA_HEUR_UNITSPHERE_FREQ == 0
-				&& dpt2 <= (int)PARA_HEUR_UNITSPHERE_DPT ){
-				heur_unitsphere( sel );
+				&& dpt2 <= (int)PARA_HEUR_UNITSPHERE_DPT )
+         {
+				SVPSheurUnitsphere( node );
 			}
 			// solve quadratic optimization with one variable
 			dpt2 = dpt - (int)PARA_HEUR_QUADRATIC_FREQOFS;
 			if( dpt2 >= 0
 				&& PARA_HEUR_QUADRATIC == true
 				&& dpt2 % (int)PARA_HEUR_QUADRATIC_FREQ == 0
-				&& dpt2 <= (int)PARA_HEUR_QUADRATIC_DPT ){
-				heur_quadratic( sel );
+				&& dpt2 <= (int)PARA_HEUR_QUADRATIC_DPT )
+         {
+				SVPSheurQuadratic( node );
 			}
 		}
 	}

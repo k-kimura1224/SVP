@@ -22,6 +22,7 @@ class NODE{
 		NODE();											// default constructor
 		NODE( const NODE &source );			// copy constructor
 		NODE& operator=( const NODE& );		// assignment operator
+      NODE( NODE &&source ) noexcept;       // move constructor
 		~NODE();											// destructor
 		bool operator<(const NODE &rhs) const
 		{ return relax_objval < rhs.relax_objval; }
@@ -39,6 +40,7 @@ class NODE{
 		double*	get_warm() const { return warm; }
 		double*	get_relaxsolval() const { return relax_solval; }
 		bool		get_solved() const { return solved; }
+		double*	get_sumfixed() const { return sumfixed; }
 
       void     NODEdispInformation();
 
@@ -50,7 +52,6 @@ class NODE{
 		bool	alloc_sumfixed();
 		void	set_sumfixed( double c, double *s_sumfixed );
 		void	add_sumfixed( double c, double *s_sumfixed );
-		double*	get_sumfixed(){ return sumfixed; }
 
       void  set_lbval( int i, double s_lb )
       {

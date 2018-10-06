@@ -903,7 +903,6 @@ int QPsolver::solve_activeset_onlybounds(
    int   nvars = n - w;
 
    int buf_int = 0;
-   int buf_bool;
    double coef = 0.0;
    int ct1;
    int ct2;
@@ -958,8 +957,7 @@ int QPsolver::solve_activeset_onlybounds(
          assert( W_l[i] == true || W_u[i] == true );
          assert( W_l[i] == false || W_u[i] == false );
 
-         buf_bool = W_l[i];
-         if ( buf_bool == true )
+         if ( W_l[i] == true )
          {
             lambda *= - 1.0;
             buf_int = ct1 + wu;
@@ -1124,8 +1122,7 @@ int QPsolver::solve_activeset_onlybounds(
       assert( W_l[ind_j] == true || W_u[ind_j] == true );
       assert( W_l[ind_j] == false || W_u[ind_j] == false );
 
-      buf_bool = W_l[ind_j];
-      if ( buf_bool == true )
+      if ( W_l[ind_j] == true )
       {
          lambda *= - 1.0;
          buf_int = ct1 + wu;

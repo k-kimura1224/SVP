@@ -23,238 +23,10 @@
 
 #define debug 0
 
-//bool SVPsolver::p_solve()
-//{
-//   assert( nthreads > 0 );
-//
-//   if ( TIMELIMIT <= 0 )
-//      return false;
-//
-//   // start time
-//   SVPSstartTime();
-//
-//   // output bounds
-//   SVPSoutputBounds();
-//
-//   // generate oa_cpool
-//   if( CUT_OA == true )
-//   {
-//      exit(-1);
-//      gene_OAcuts( ub, lb, probdata.get_Q(), bestval);
-//   }
-//
-//   int         sel;
-//   int m = probdata.get_m();
-//   assert( m > 0 );
-//
-//   RelaxResult r;
-//   int   disp = index;
-//   int   cutoff=0;
-//   bool  result;
-//   while(1){
-//      assert( (int)NodeList.size() > 0 );
-//      assert( listsize > 0 );
-//      assert( (int)NodeList.size() == listsize );
-//
-//      if( listsize >= NUM_INITNODES ){
-//         result = false;
-//         break;
-//      }
-//      // select a node from the list
-//      sel = select_node(index, disp );
-//
-//      assert( sel >= 0 );
-//      assert( sel < listsize );
-//
-//      // solve a relaxation problem
-//      r = solve_relaxation( sel );
-//
-//      if( r == INFEASIBLE || r == GETINTEGER ){
-//         cutoff++;
-//      }
-//
-//      // run heuristics
-//      if( r == FEASIBLE && HEUR_APP < Appfac ){
-//         SVPSheur( sel );
-//      }
-//
-//      // output
-//      if( !quiet && (index-1) % 1000 == 0 && disp < index ){
-//         auto it = NodeList.begin();
-//         double min_lb = it->get_lowerbound();
-//         for(int i=1; i<listsize; i++){
-//            ++it;
-//            if( min_lb > it->get_lowerbound() ){
-//               min_lb = it->get_lowerbound();
-//            }
-//         }
-//         GLB = min_lb;
-//         disp_log(sel, r, index, cutoff);
-//         disp = index;
-//         cutoff = 0;
-//      }
-//
-//      // branch
-//      if( r == UPDATE || r == FEASIBLE ){
-//         branch( sel, index);
-//         index += 2;
-//      }
-//      else
-//      {
-//         // remove
-//         auto it = NodeList.begin();
-//         advance( it, sel);
-//         NodeList.erase( it );
-//         listsize--;
-//      }
-//
-//      // break
-//      assert( (int)NodeList.size() == listsize );
-//
-//      if( stopwatch.check_time() == false )
-//      {
-//         result = true;
-//         break;
-//      }
-//      if( listsize == 0 ){
-//         cout << "End" << endl;
-//         result = true;
-//         break;
-//      }
-//
-//   }
-//
-//   nnode = (unsigned long int)index -1;
-//
-//   if( result == true )
-//   {
-//      stopwatch.stop();
-//      return true;
-//   }
-//
-//   auto it = NodeList.begin();
-//   double min_lb = it->get_lowerbound();
-//   for(int i=1; i<listsize; i++){
-//      ++it;
-//      if( min_lb > it->get_lowerbound() ){
-//         min_lb = it->get_lowerbound();
-//      }
-//   }
-//   GLB = min_lb;
-//
-//
-//   // parallel {{
-//   NodeList.sort();
-//
-//   cout << "Parallel mode ---------------------------------------------";
-//   cout << "-------------------------------------------" << endl;
-//   assert( (int)NodeList.size() == listsize );
-//
-//   bool        p_run;
-//   double      p_min;
-//
-//#pragma omp parallel num_threads(nthreads)
-//   {
-//   #pragma omp for schedule(dynamic, PARASIZE) private(p_run,p_min)
-//   for(int i=0; i<listsize; i++){
-//      auto it = NodeList.begin();
-//      advance( it, i);
-//
-//      SVPsolver sub;
-//      int sub_timelimit = TIMELIMIT - stopwatch.get_time();
-//
-//      sub.SVPSsetup( m, probdata.get_B_(), 1, sub_timelimit, quiet,
-//            true, it->get_zero(), false, false, false, false );
-//      sub.SVPSsetGlobalLowerBound( it->get_lowerbound() );
-//      sub.SVPSsetBestval( bestval );
-//      sub.SVPSsetBounds( it->get_ub(), it->get_lb());
-//      if( BRANCHINGRULE_INT == 4 || BRANCHINGRULE_INT == 5 ) sub.SVPSsetOrder( order );
-//      sub.SVPSsetNorm( norm );
-//      sub.SVPSsetAppfac( Appfac, _Appfac );
-//      //sub.SVPSgenerateRootNode( it->get_zero() );
-//      sub.SVPSsetNode( *it );
-//
-//      p_run = sub.SVPSsolve();
-//
-//      if( !p_run ){
-//         #pragma omp critical
-//         {
-//            nnode += sub.SVPSgetNnode();
-//         }
-//      }else{
-//
-//         it->set_solved( true );
-//
-//         int p_ct = 0;
-//         if( i%(int)PARASIZE == 0 ){
-//            p_min = bestval;
-//            list<NODE>::iterator itr = NodeList.begin();
-//            for(int j=0; j<listsize; ++j,++itr) {
-//               if( itr->get_solved() == true ){
-//                  p_ct++;
-//               }
-//               if( itr->get_solved() == false && p_min > itr->get_lowerbound() ){
-//                  p_min = itr->get_lowerbound();
-//               }
-//            }
-//            #pragma omp critical
-//            {
-//               GLB = p_min;
-//            }
-//         }
-//
-//         #pragma omp critical
-//         {
-//            if( bestval > sub.SVPSgetBestval() ){
-//               bestval = sub.SVPSgetBestval();
-//               bestsol = sub.SVPSgetBestsol();
-//               pool.add_solution( bestsol );
-//               Appfac = sqrt( bestval ) / _Appfac;
-//            }
-//
-//            nnode += sub.SVPSgetNnode();
-//
-//            if( i%(int)PARASIZE == 0 ){
-//               cout << "*";
-//               cout << stopwatch.get_time() << "s: ";
-//               cout << "GLB=" << GLB << ", ";
-//               cout << "best=" << bestval << ", ";
-//               cout << "gap=" << 100*(bestval - GLB)/bestval << "%, ";
-//               cout << "AF=" << Appfac << ", ";
-//               cout << "#solved=" << p_ct;
-//               cout << endl;
-//            }
-//
-//         }
-//      }
-//   }
-//   }
-//   cout << "End" << endl;
-//   // }} parallel
-//
-//   double   min = bestval;
-//   list<NODE>::iterator itr = NodeList.begin();
-//   for(int j=0; j<listsize; ++j,++itr) {
-//      if( itr->get_solved() == false && min > itr->get_lowerbound() ){
-//         min = itr->get_lowerbound();
-//      }
-//   }
-//   GLB = min;
-//
-//   if( GLB == bestval ){
-//      NodeList.clear();
-//      listsize = 0;
-//   }
-//
-//   stopwatch.stop();
-//   return true;
-//
-//}
-
 void SVPsolver::SVPSsolveSubprob(
-      unsigned short int&  n_running_threads,
-      double&              sublb_i,
-      const int            thread_id
+      int&        n_running_threads,
+      double&     sublb_i,
+      const int   thread_id
       )
 {
    SVPsolver   sub;
@@ -269,18 +41,18 @@ void SVPsolver::SVPSsolveSubprob(
       sub_timelimit = TIMELIMIT - stopwatch.get_time();
 
       sub.SVPSsetup( m, B_, 1, sub_timelimit, true,
-               true, true, false, false, false, false );
+               true, true, false, false, false, false, false );
       sub.SVPSsetBounds( ub, lb );
-      if( BRANCHINGRULE_INT == 4 || BRANCHINGRULE_INT == 5 )
-         sub.SVPSsetOrder( order );
       sub.SVPSsetNorm( norm );
 
       sub.SVPSsetGlobalLowerBound( GLB );
       sub.SVPSsetBestval( bestval );
+      sub.SVPSsetupNodelist();
       sub.SVPSsetAppfac( Appfac, _Appfac );
 
-      sub.SVPSsetNode( *(NodeList.begin()) );
-      SVPSpopNode();
+      const auto setup = (nodelist.*setup_para_selection)();
+      sub.SVPSmoveNode( (nodelist.*para_selection)(setup) );
+      SVPSpopNode( setup );
    }
    // } lock
 
@@ -289,8 +61,11 @@ void SVPsolver::SVPSsolveSubprob(
 
    unsigned long int totalpop = 0;
 
-   bool  result;
-   int   sub_nodelimit = init_sub_nodelimit;
+   bool     result;
+   int      sub_nodelimit = init_sub_nodelimit;
+   const bool     disp = !quiet;
+   const double   pop_maxrate = 1.0 - ( 1.0 / (double) nthreads );
+   assert( pop_maxrate > 0.0 && pop_maxrate <= 1.0 );
 
    while ( 1 )
    {
@@ -309,10 +84,13 @@ void SVPsolver::SVPSsolveSubprob(
             pool.add_solution( bestsol );
             Appfac = sqrt( bestval ) / _Appfac;
 
-            cout << stopwatch.get_time() << "s (left: " << listsize << ") [t" << thread_id << "] ";
-            cout << "get new solution ";
-            cout << "-- BESTVAL: " << bestval << "  NORM: " << sqrt( bestval ) << "  AP: " << Appfac << " --";
-            cout << endl;
+            if ( disp )
+            {
+               cout << stopwatch.get_time() << "s (left: " << nodelist.getListsize() << ") [t" << thread_id << "] ";
+               cout << "get new solution ";
+               cout << "-- BESTVAL: " << bestval << "  NORM: " << sqrt( bestval ) << "  AP: " << Appfac << " --";
+               cout << endl;
+            }
          }
          else if ( subbestval > bestval )
          {
@@ -325,15 +103,18 @@ void SVPsolver::SVPSsolveSubprob(
             assert( sub.SVPSgetStatus() == SOLVED );
             nnode += sub.SVPSgetNnode();
 
-            if ( NodeList.empty() )
+            if ( !nodelist.getListsize() )
             {
-               assert( listsize == 0 );
+               assert( nodelist.getListsize() == 0 );
                n_running_threads--;
 
                if ( n_running_threads == 0 )
                {
-                  cout << stopwatch.get_time() << "s (left: " << listsize << ") [t" << thread_id << "] ";
-                  cout << "break (SOLVED)" << endl;
+                  if ( disp )
+                  {
+                     cout << stopwatch.get_time() << "s (left: " << nodelist.getListsize() << ") [t" << thread_id << "] ";
+                     cout << "break (SOLVED)" << endl;
+                  }
 
                   result = true;
                   status = SOLVED;
@@ -342,18 +123,25 @@ void SVPsolver::SVPSsolveSubprob(
                   break;
                }
 
-               cout << stopwatch.get_time() << "s (left: " << listsize << ") [t" << thread_id << "] ";
-               cout << "sleep" << endl;
+               if ( disp )
+               {
+                  cout << stopwatch.get_time() << "s (left: " << nodelist.getListsize() << ") [t" << thread_id << "] ";
+                  cout << "sleep" << endl;
+               }
+
                cv.wait( lock, [this, &n_running_threads]
-                     { return ( !NodeList.empty() || n_running_threads == 0 ); } );
+                     { return ( nodelist.getListsize() || n_running_threads == 0 ); } );
 
                if ( n_running_threads == 0 )
                {
-                  assert( NodeList.empty() );
+                  assert( !nodelist.getListsize() );
                   assert( status == SOLVED );
 
-                  cout << stopwatch.get_time() << "s (left: " << listsize << ") [t" << thread_id << "] ";
-                  cout << "break (SOLVED)" << endl;
+                  if ( disp )
+                  {
+                     cout << stopwatch.get_time() << "s (left: " << nodelist.getListsize() << ") [t" << thread_id << "] ";
+                     cout << "break (SOLVED)" << endl;
+                  }
 
                   assert( nnode > totalpop );
                   nnode -= totalpop;
@@ -367,41 +155,50 @@ void SVPsolver::SVPSsolveSubprob(
             }
 
             sub.SVPSresetIndex();
+            sub.SVPSsetupNodelist();
 
-            int pushsize = listsize * 0.1;
+            const auto setup = (nodelist.*setup_para_selection)();
+            const auto nodelistsize = nodelist.getListsize();
+            const auto maxsize = (nodelist.*getSubsize)( setup );
+            int pushsize = nodelistsize * 0.1;
 
-            if ( listsize < 100 )
-               pushsize = listsize;
-            else if ( pushsize < 100 )
+            if ( maxsize <= 100 )
+               pushsize = maxsize;
+            else if ( pushsize <= 100 )
                pushsize = 100;
 
-            double   min_lb = NodeList.begin()->get_lowerbound();
-            double   lb_i;
+            assert( pushsize <= maxsize );
+
+            double   min_lb = (nodelist.*para_selection)(setup).get_lowerbound();
 
             for ( int i = 0; i < pushsize; i++ )
             {
-               assert( !NodeList.empty() );
+               assert( (nodelist.*getSubsize)( setup ) > 0 );
 
-               lb_i = NodeList.begin()->get_lowerbound();
+               auto&    node = (nodelist.*para_selection)(setup);
+               double   lb_i = node.get_lowerbound();
 
                if ( min_lb > lb_i )
                   min_lb = lb_i;
 
-               sub.SVPSsetNode( *(NodeList.begin()) );
-               SVPSpopNode();
+               sub.SVPSmoveNode( node );
+               SVPSpopNode( setup );
             }
 
             sub.SVPSsetGlobalLowerBound( min_lb );
 
-		      assert( (int)NodeList.size() == listsize );
+            assert( (nodelist.*check_size)() );
 
             sub_nodelimit = init_sub_nodelimit;
 
-            cout << stopwatch.get_time() << "s (left: " << listsize << ") [t" << thread_id << "] ";
-            cout << "push->" << pushsize << endl;
+            if ( disp )
+            {
+               cout << stopwatch.get_time() << "s (left: " << nodelist.getListsize() << ") [t" << thread_id << "] ";
+               cout << "push->" << pushsize << endl;
+            }
          }
          else
-         {
+         { // result == false
             Status substatus = sub.SVPSgetStatus();
 
             assert( substatus == FULL_OF_NODES
@@ -412,22 +209,39 @@ void SVPsolver::SVPSsolveSubprob(
             {
                assert( sub.SVPSgetListsize() > 0 );
                auto sub_listsize = sub.SVPSgetListsize();
-               if ( sub_listsize > listsize )
+               if ( sub_listsize > nodelist.getListsize() )
                {
-                  int popsize = sub_listsize * 0.5;
+                  int popsize = 0;
+                  const auto setup = sub.SVPSgetSetupParaSelection();
+                  const auto maxsize = sub.SVPSgetSubsize( setup );
+
+                  assert( pop_maxrate > 0.0 && pop_maxrate <= 1.0 );
+
+                  if ( n_running_threads > 1 )
+                     popsize = sub_listsize * 0.5;
+                  else
+                     popsize = sub_listsize * pop_maxrate;
+
+                  if ( maxsize < popsize )
+                     popsize = maxsize;
+
+                  assert( popsize > 0 && popsize <= sub_listsize );
 
                   totalpop += popsize;
 
                   for ( int i = 0; i < popsize; i++ )
                   {
-                     SVPSsetNode( sub.SVPSgetNode() );
-                     sub.SVPSpopNode();
+                     SVPSmoveNode( sub.SVPSgetNode_para_selection(setup) );
+                     sub.SVPSpopNode( setup );
                   }
 
                   cv.notify_all();
 
-                  cout << stopwatch.get_time() << "s (left: " << listsize << ") [t" << thread_id << "] ";
-                  cout << "pop->" << popsize << endl;
+                  if ( disp )
+                  {
+                     cout << stopwatch.get_time() << "s (left: " << nodelist.getListsize() << ") [t" << thread_id << "] ";
+                     cout << "pop->" << popsize << endl;
+                  }
                }
 
                if ( max_sub_nodelimit > sub_nodelimit )
@@ -437,8 +251,11 @@ void SVPsolver::SVPSsolveSubprob(
             }
             else
             {
-               cout << stopwatch.get_time() << "s (left: " << listsize << ") [t" << thread_id << "] ";
-               cout << "break (" << sub.SVPSgetStringStatus() << ")" << endl;
+               if ( disp )
+               {
+                  cout << stopwatch.get_time() << "s (left: " << nodelist.getListsize() << ") [t" << thread_id << "] ";
+                  cout << "break (" << sub.SVPSgetStringStatus() << ")" << endl;
+               }
 
                status = substatus;
                result = false;
@@ -496,21 +313,23 @@ bool SVPsolver::SVPSparasolve()
       return true;
    }
 
-   NodeList.sort();
    status = SOLVING;
+
+   if ( type == LIST )
+      nodelist.sort();
 
    // parallel {{
 
    cout << "Parallel mode ---------------------------------------------";
    cout << "-------------------------------------------" << endl;
-   assert( (int)NodeList.size() == listsize );
+   assert( (nodelist.*check_size)() );
 
    cout << "-- BESTVAL: " << bestval << "  NORM: " << sqrt( bestval ) << "  AP: " << Appfac << " --";
    cout << endl;
 
-   vector<thread>       threads;
-   unsigned short int   n_running_threads = nthreads;
-   double*              sublb = new double[nthreads];
+   vector<thread> threads;
+   int            n_running_threads = nthreads;
+   double*        sublb = new double[nthreads];
 
    for ( int i = 1; i < nthreads; i++ )
    {
@@ -530,14 +349,8 @@ bool SVPsolver::SVPSparasolve()
    else
    {
       result = false;
-      double   min_lb = bestval;
+      double   min_lb = (nodelist.*get_GLB)();
       double   node_lb;
-      for ( auto& node : NodeList )
-      {
-         node_lb = node.get_lowerbound();
-         if ( node_lb < min_lb )
-            min_lb = node_lb;
-      }
       assert( sublb != nullptr );
       for ( int i = 0; i < nthreads; i++ )
       {
@@ -556,7 +369,6 @@ bool SVPsolver::SVPSparasolve()
 
 void SVPsolver::SVPSresetIndex()
 {
-   assert( NodeList.empty() );
-   assert( listsize == 0 );
+   assert( nodelist.getListsize() == 0 );
    index = 0;
 }

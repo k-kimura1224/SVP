@@ -18,6 +18,7 @@
 #include "solution.h"
 #include "stopwatch.h"
 #include "node.h"
+#include "nodelist.h"
 #include "Schmidt_manager.h"
 
 using namespace std;
@@ -34,7 +35,20 @@ SVPsolver::SVPsolver(){ // default constructor
    lb = nullptr;
    GLB = 0.0;
 
-   listsize = 0;
+   type = LIST;
+   type = TWO_DEQUE;
+
+   push_back = nullptr;
+   move_back = nullptr;
+   nodeselection = nullptr;
+   cut_off = nullptr;
+   get_GLB = nullptr;
+   check_size = nullptr;
+   setup_para_selection = nullptr;
+   para_selection = nullptr;
+   pop_front = nullptr;
+   getSubsize = nullptr;
+
    index = 0;
    nnode = 0;
    nthreads = -1;
@@ -70,7 +84,18 @@ SVPsolver::SVPsolver( const SVPsolver &source )
    pool = source.pool;
    _Appfac = source._Appfac;
    Appfac = source.Appfac;
-   listsize = source.listsize;
+   type = source.type;
+   nodelist = source.nodelist;
+   push_back = source.push_back;
+   move_back = source.move_back;
+   nodeselection = source.nodeselection;
+   cut_off = source.cut_off;
+   get_GLB = source.get_GLB;
+   check_size = source.check_size;
+   setup_para_selection = source.setup_para_selection;
+   para_selection = source.para_selection;
+   pop_front = source.pop_front;
+   getSubsize = source.getSubsize;
    index = source.index;
    stopwatch = source.stopwatch;
    testwatch = source.testwatch;
@@ -121,12 +146,6 @@ SVPsolver::SVPsolver( const SVPsolver &source )
       order = nullptr;
       norm = nullptr;
    }
-
-   if( listsize > 0 ){
-      copy( source.NodeList.begin(), source.NodeList.end(), back_inserter(NodeList));
-   }
-
-
 }
 
 // assignment operator
@@ -144,7 +163,18 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
       pool = source.pool;
       _Appfac = source._Appfac;
       Appfac = source.Appfac;
-      listsize = source.listsize;
+      type = source.type;
+      push_back = source.push_back;
+      move_back = source.move_back;
+      nodeselection = source.nodeselection;
+      cut_off = source.cut_off;
+      get_GLB = source.get_GLB;
+      check_size = source.check_size;
+      setup_para_selection = source.setup_para_selection;
+      para_selection = source.para_selection;
+      pop_front = source.pop_front;
+      getSubsize = source.getSubsize;
+      nodelist = source.nodelist;
       index = source.index;
       stopwatch = source.stopwatch;
       testwatch = source.testwatch;
@@ -197,11 +227,6 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
          order = nullptr;
          norm = nullptr;
       }
-
-
-      if( listsize > 0 ){
-         copy( source.NodeList.begin(), source.NodeList.end(), back_inserter(NodeList));
-      }
    }
 
    return *this;
@@ -215,7 +240,6 @@ SVPsolver::~SVPsolver()
 #endif
    delete[] ub;
    delete[] lb;
-   list<NODE>().swap(NodeList);
    delete[] order;
    delete[] norm;
    ub = nullptr;
@@ -223,6 +247,16 @@ SVPsolver::~SVPsolver()
    order = nullptr;
    norm = nullptr;
 
+   push_back = nullptr;
+   move_back = nullptr;
+   nodeselection = nullptr;
+   cut_off = nullptr;
+   get_GLB = nullptr;
+   check_size = nullptr;
+   setup_para_selection = nullptr;
+   para_selection = nullptr;
+   pop_front = nullptr;
+   getSubsize = nullptr;
 }
 
 void SVPsolver::SVPSsetup(
@@ -236,7 +270,8 @@ void SVPsolver::SVPSsetup(
       const bool     w_bounds,      // wheter bounds are computed
       const bool     w_heur,        // wheter heuristic is executed
       const bool     w_app,         // wheter Appfac is initialized
-      const bool     w_grn          // wheter root node is generated
+      const bool     w_grn,         // wheter root node is generated
+      const bool     w_nl           // wheter nodelist is set
       )
 {
    auto m = s_m;
@@ -256,7 +291,7 @@ void SVPsolver::SVPSsetup(
    }
 
    // Appfac
-   if ( w_app == true )
+   if ( w_app )
    {
       _Appfac = tgamma( ((double)m/2.0) + 1 );
       _Appfac = pow( _Appfac, 1.0/(double)m );
@@ -274,7 +309,7 @@ void SVPsolver::SVPSsetup(
    subsolver = w_subsolver;
 
    // sch
-   if ( w_sch == true )
+   if ( w_sch )
       sch.setup( m, B_);
 
    // nthreads
@@ -282,11 +317,17 @@ void SVPsolver::SVPSsetup(
    nthreads = s_nthreads;
 
    // heuristic
-   if ( w_heur == true )
+   if ( w_heur )
       SVPSheurFindMinColumn();
 
+   // nodelist
+   if ( w_nl )
+   {
+      SVPSsetupNodelist();
+   }
+
    // computation of bounds
-   if ( w_bounds == true )
+   if ( w_bounds )
       SVPScomputeBounds();
 
    // TIMELIMIT
@@ -370,43 +411,37 @@ void SVPsolver::SVPSgenerateRootNode(
 		}
 	}
 
-	NodeList.push_back( root );
-	listsize++;
-	index++;
+	(nodelist.*move_back)( root );
+   // Do not use root after here
 
 	if ( subsolver == true )
 		delete[] init_warm;
 }
 
-void SVPsolver::SVPSsetNode(
-      const NODE  &setnode
+void SVPsolver::SVPSmoveNode(
+      NODE&    movenode
       )
 {
 
-   NodeList.push_back( setnode );
+   movenode.set_index( index );
+   (nodelist.*move_back)( movenode );
 
-   auto node = NodeList.end();
-   node--;
-   node->set_index( index );
-
-   listsize++;
    index++;
+   // Do not use movenode after here
 }
 
-NODE& SVPsolver::SVPSgetNode()
+NODE& SVPsolver::SVPSgetNode_para_selection( const int setup )
 {
-   auto node = NodeList.begin();
-   return *node;
+   assert( (nodelist.*getSubsize)(setup) > 0 );
+   return (nodelist.*para_selection)(setup);
 }
 
-void SVPsolver::SVPSpopNode()
+void SVPsolver::SVPSpopNode( const int setup )
 {
-   assert( !NodeList.empty() );
-   assert( (int)NodeList.size() == listsize );
+   assert( nodelist.getListsize() > 0 );
+   assert( (nodelist.*check_size)() );
 
-   NodeList.pop_front();
-   listsize--;
-
+   (nodelist.*pop_front)(setup);
 }
 
 string SVPsolver::SVPSgetStringStatus() const
@@ -443,12 +478,14 @@ void SVPsolver::disp_bestsol()
 
    assert( val != nullptr );
 
+   int nodelistsize = nodelist.getListsize();
+
    cout << endl;
-   if( listsize == 0 )
+   if( nodelistsize == 0 )
    {
       cout << "SVPSOLVER found an optimal solution" << endl;
    }
-   else if ( listsize >= LEFTNODELIMIT )
+   else if ( nodelistsize >= LEFTNODELIMIT )
    {
       cout << "-- LEFT_NODE_LIMIT --" << endl;
    }
@@ -467,7 +504,7 @@ void SVPsolver::disp_bestsol()
    cout << "norm: " << sqrt( bestval ) << endl;
    cout << "AF: " << Appfac << endl;
 
-   if( listsize != 0 ){
+   if( nodelistsize != 0 ){
       cout << "lower bound: " << GLB << endl;
       cout << "gap: " << 100*(bestval - GLB)/bestval << "%" << endl;
    }
@@ -601,23 +638,20 @@ void  SVPsolver::tighten_bounds(
 
 
 void  SVPsolver::disp_log(
-   int   k,
-   RelaxResult r,
-   int   index,
-   int   cutoff
+   const NODE&       node,
+   const RelaxResult r,
+   const int         index,
+   const int         cutoff
    )
 {
+   auto k = node.get_index();
    assert( k >= 0 );
-   assert( k < listsize );
-
-   list<NODE>::iterator it = NodeList.begin();
-   advance( it, k);
 
    cout << stopwatch.get_time() << "s";
-   cout << " [" << it->get_index() << "/";
-   cout << listsize << "(" << index-1 << ")] ";
-   cout << "dpt:" << it->get_dpt() << " ";
-   cout << "[ " << it->get_lowerbound() << ", ";
+   cout << " [" << k << "/";
+   cout << nodelist.getListsize() << "(" << index-1 << ")] ";
+   cout << "dpt:" << node.get_dpt() << " ";
+   cout << "[ " << node.get_lowerbound() << ", ";
    cout << GLB << ", ";
    cout << bestval << ", ";
    cout << 100*(bestval - GLB)/bestval << "%]";

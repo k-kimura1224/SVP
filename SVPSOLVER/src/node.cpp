@@ -138,6 +138,29 @@ NODE& NODE::operator=( const NODE& source )
 	return *this;
 }
 
+NODE::NODE( NODE &&source ) noexcept
+{	// move constructor
+#if debug_class
+	cout << "NODE: move constructor" << endl;
+#endif
+   m = source.m;
+   ub = source.ub;
+   lb = source.lb;
+   warm = source.warm;
+   sumfixed = source.sumfixed;
+   relax_objval = source.relax_objval;
+   relax_solval = source.relax_solval;
+   dpt = source.dpt;
+   zero = source.zero;
+   index = source.index;
+   solved = source.solved;
+	source.ub = nullptr;
+	source.lb = nullptr;
+	source.relax_solval = nullptr;
+	source.warm = nullptr;
+	source.sumfixed = nullptr;
+}
+
 // destructor
 NODE::~NODE()
 {

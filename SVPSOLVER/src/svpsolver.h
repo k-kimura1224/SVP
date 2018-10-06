@@ -15,15 +15,7 @@
 #include "testwatch.h"
 #include "Schmidt_manager.h"
 #include "cut_pool.h"
-
-#define  BRANCHINGRULE_INT 3
-      // 0:
-      // 1:
-      // 2:
-      // 3: ver 2.0
-      // 4: ver 2.1
-      // 5: ver 2.1
-      // 6:
+#include "nodelist.h"
 
 #define  CUT_OA   false
 
@@ -68,8 +60,20 @@ class SVPsolver{
    double         _Appfac;
    double         Appfac;
 
-   list<NODE>     NodeList;
-   int   listsize;
+   TYPE_NODELIST  type;
+   NODELIST       nodelist;
+
+   void     (NODELIST::*push_back)( const NODE& );
+   void     (NODELIST::*move_back)( NODE& );
+   NODE&    (NODELIST::*nodeselection)( double* globallowerbound, const double bestval, const int index, const int disp );
+   void     (NODELIST::*cut_off)();
+   double   (NODELIST::*get_GLB)() const;
+   bool     (NODELIST::*check_size)() const;
+   int      (NODELIST::*setup_para_selection)() const;
+   NODE&    (NODELIST::*para_selection)( const int );
+   void     (NODELIST::*pop_front)( const int );
+   int      (NODELIST::*getSubsize)( const int ) const;
+
    int   index;
 
    STOPWATCH      stopwatch;
@@ -116,19 +120,53 @@ class SVPsolver{
       void        SVPSsetup(  const int s_m, const double* s_B_, const int s_nthreads,
                               const int s_timelimit, const bool s_quiet, const bool w_subsolver,
                               const bool w_sch, const bool w_bounds, const bool w_heur,
-                              const bool w_app, const bool w_grn );
+                              const bool w_app, const bool w_grn, const bool w_nl );
       void        SVPScreateProbdata( const int m, const double *B_);
 
       void        SVPSheurFindMinColumn();
       void        SVPScomputeBounds();
       void        SVPSgenerateRootNode( bool w_sch );
+      void        SVPSsetupNodelist() {
+         nodelist.setup( type, bestval );
+         switch ( type )
+         {
+            case TWO_DEQUE:
+            {
+               push_back = &NODELIST::push_back_TDEQUE;
+               move_back = &NODELIST::move_back_TDEQUE;
+               nodeselection = &NODELIST::nodeselection_TDEQUE;
+               cut_off = &NODELIST::cutoff_TDEQUE;
+               get_GLB = &NODELIST::get_GLB_TDEQUE;
+               check_size = &NODELIST::check_size_TDEQUE;
+               setup_para_selection = &NODELIST::setup_para_selection_TDEQUE;
+               para_selection = &NODELIST::para_selection_TDEQUE;
+               pop_front = &NODELIST::pop_front_TDEQUE;
+               getSubsize = &NODELIST::getSubsize_TDEQUE;
+               break;
+            }
+            default:
+            {
+               push_back = &NODELIST::push_back_LIST;
+               move_back = &NODELIST::move_back_LIST;
+               nodeselection = &NODELIST::nodeselection_LIST;
+               cut_off = &NODELIST::cutoff_LIST;
+               get_GLB = &NODELIST::get_GLB_LIST;
+               check_size = &NODELIST::check_size_LIST;
+               setup_para_selection = &NODELIST::setup_para_selection_LIST;
+               para_selection = &NODELIST::para_selection_LIST;
+               pop_front = &NODELIST::pop_front_LIST;
+               getSubsize = &NODELIST::getSubsize_LIST;
+               break;
+            }
+         }
+      }
       // } setup
 
       // setup for subsolver {
       void        SVPSsetGlobalLowerBound( const double s_GLB ){ GLB = s_GLB; }
-      void        SVPSsetNode( const NODE &setnode );
-      NODE&       SVPSgetNode();
-      void        SVPSpopNode();
+      void        SVPSmoveNode( NODE& setnode );
+      NODE&       SVPSgetNode_para_selection( const int setup );
+      void        SVPSpopNode( const int setup );
       // } setup for subsolver
 
       // solve {
@@ -141,7 +179,7 @@ class SVPsolver{
 
       // solve via parallel {
       bool        SVPSparasolve();
-      void        SVPSsolveSubprob( unsigned short int& n_running_threads, double& sublb_i,
+      void        SVPSsolveSubprob( int& n_running_threads, double& sublb_i,
                                     const int thread_id );
       void        SVPSresetIndex();
       // } solve via parallel
@@ -160,6 +198,24 @@ class SVPsolver{
       int   SVPSselectNode( int index, int disp );
       // }  node selection
 
+      // branch {
+      void        SVPSbranch( NODE& node, int index );
+      void        SVPSbranch_BIN( NODE& node, int index );
+      void        SVPSbranch_INT( NODE& node, int index );
+      // } branch
+
+      // heuristics {
+      void        SVPSheur( const NODE& node );
+      void        SVPSheurUnitsphere( const NODE& node );
+      void        SVPSheurQuadratic( const NODE& node );
+      // } heuristics
+
+      // nodelist {
+      auto        SVPSgetListsize() const { return nodelist.getListsize(); }
+      auto        SVPSgetSubsize( const int sub ) const { return (nodelist.*getSubsize)(sub); }
+      auto        SVPSgetSetupParaSelection() const { return (nodelist.*setup_para_selection)(); }
+      // } nodelist
+      //
       // get
       double      SVPSgetGlobalLowerBound() const { return GLB; }
       string      SVPSgetStringStatus() const;
@@ -168,15 +224,9 @@ class SVPsolver{
       auto        SVPSgetStatus(){ return status; }
       //bool        p_solve();
       void        tighten_bounds( int memo, double* set_lb, double* set_ub );
-      void        SVPSheur( int sel );
-      void        heur_unitsphere(int sel);
-      void        heur_quadratic(int sel);
-      void        disp_log(int   sel, RelaxResult r, int index, int cutoff);
+      void        disp_log( const NODE& node, const RelaxResult r, const int index, const int cutoff);
       void        disp_bestsol();
       double      compute_objval( double *x );
-      void        branch(int  sel, int index);
-      void        branch_BIN(int sel, int index);
-      void        branch_INT(int sel, int index);
       auto        SVPSgetBestval(){ return bestval; }
       auto        SVPSgetBestsol(){ return bestsol; }
       PROB_DATA   get_probdata(){ return probdata; }
@@ -195,7 +245,6 @@ class SVPsolver{
                   }
 
       int         get_runtime(){ return stopwatch.get_result(); }
-      auto        SVPSgetListsize(){ return listsize; }
       double      get_gap(){ return 100*(bestval - GLB)/bestval; }
 
       // for parallel mode

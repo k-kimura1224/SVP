@@ -21,11 +21,8 @@ using namespace std;
 #define debug	0
 #define log		0
 
-void	SVPsolver::heur_quadratic( int sel )
+void	SVPsolver::SVPSheurQuadratic( const NODE& node )
 {
-	assert( sel >= 0 );
-	assert( sel < listsize );
-
 	int		m = probdata.get_m();
 
 	double	val;
@@ -33,11 +30,9 @@ void	SVPsolver::heur_quadratic( int sel )
 	double	*solvals = nullptr;
 	double	*solvals_new = nullptr;
 
-	list<NODE>::iterator it = NodeList.begin();
-	advance( it, sel);
-	double	*relaxsolvals = it->get_relaxsolval();
-	double	*u = it->get_ub();
-	double	*l = it->get_lb();
+	double	*relaxsolvals = node.get_relaxsolval();
+	double	*u = node.get_ub();
+	double	*l = node.get_lb();
 
 	assert( m > 0 );
 	assert( relaxsolvals != nullptr );
@@ -152,7 +147,7 @@ void	SVPsolver::heur_quadratic( int sel )
 		Appfac = sqrt( bestval ) / _Appfac;
 #if log
 		cout << "*********************************" << endl;
-		cout << "*   heur_quadratic  dpt: " << it->get_dpt() << endl;
+		cout << "*   heur_quadratic  dpt: " << node.get_dpt() << endl;
 		cout << "*********************************" << endl;
 #endif
 	}
