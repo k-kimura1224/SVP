@@ -114,10 +114,10 @@ PROB_DATA::~PROB_DATA()
 }
 
 void PROB_DATA::set_data(
-	int		s_m,
-	double	*s_B,
-	double	*s_B_,
-	double	*s_Q
+	const int		s_m,
+	const double	*s_B,
+	const double	*s_B_,
+	const double	*s_Q
 	)
 {
 	assert( m == -1 );

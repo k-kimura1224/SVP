@@ -52,6 +52,13 @@ int Com_LS_dposv(
 	double			*x			/* solution */
 	);
 
+/* if successful, return 0 */
+int Com_LS_dposv_nocopy(
+	double	*A,		/* A[n*n] */
+	double	*b,		/* b[n]	*/
+	int		n					/* size */
+	);
+
 // compute Ax=b with LU decomposition
 int Com_LS_dgesv(
 	const double	*A,		/* A[n*n] */
@@ -116,8 +123,8 @@ void Com_mat_Ax(
 
 // compute determinant matrix
 double determinant(
-	double	*B_,
-	int		m
+	const double	*B_,
+	const int		m
 	);
 
 // compute eigenvalues and eigenvectors
@@ -144,10 +151,10 @@ bool Equal(
 // transpose A
 template <typename Type>
 void TraMat(
-	int 		n,
-	int		m,
-	Type		*A,	/* [n*m] or [n][m] */
-	Type		*T		/* (m,n) */
+	const int 		n,
+	const int		m,
+	const Type		*A,	/* [n*m] or [n][m] */
+	Type	      	*T		/* (m,n) */
 	);
 
 // print a vector

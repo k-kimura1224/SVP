@@ -9,11 +9,14 @@ BINDIR	=	./bin
 MAINOBJ		=	main.o read_data.o qpsolver.o vector.o \
 					probdata.o svpsolver.o solution.o svps_solve.o \
 					heur_init.o solution_pool.o node.o stopwatch.o \
-					select_node.o relax.o branch.o svps_parallel.o \
+					relax.o branch.o svps_parallel.o \
 					heur.o heur_unitsphere.o Schmidt_manager.o \
-					heur_quadratic.o cut.o cut_pool.o cut_oa.o qpdata.o
+					heur_quadratic.o cut.o cut_pool.o cut_oa.o qpdata.o \
+					testwatch.o nodelist.o
 MAINSRC		=	$(addprefix $(SRCDIR)/,$(MAINOBJ:.o=.cpp))
 MAINOBJFILES	=	$(addprefix $(OBJDIR)/,$(MAINOBJ))
+
+DEPFILE		=	$(SRCDIR)/svp.depend
 
 NAME		=	SVPSOLVER
 ifeq ($(OPT),dbg)
@@ -24,14 +27,15 @@ endif
 
 MAINFILE	=	$(BINDIR)/$(MAIN)
 
-#Mac
-#CXX	=	/usr/local/bin/g++-4.9
+CXX	=	/usr/local/bin/g++-7
+
+CXXFLAGS	=	-Wall -llapack -lpthread -fopenmp -O2 -std=c++14
 
 #Mac
-#CXXFLAGS	=	-Wall -lblas -llapack -lpthread -fopenmp -O2 -std=c++14
+#CXXFLAGS	+=	-lblas
 
 #Linux
-CXXFLAGS	=	-Wall -lopenblas -llapack -lpthread -fopenmp -O2 -std=c++14
+CXXFLAGS 	+=	-lopenblas
 
 ifeq ($(OPT),opt)
 	CXXFLAGS	+=	-DNDEBUG
@@ -53,14 +57,18 @@ all: $(MAIN)
 $(MAIN):	$(MAINOBJFILES)
 		@$(CXX) -o $(MAINFILE) $(CXXLDFLAGS) $(MAINOBJFILES) $(CXXFLAGS)
 
+
 $(OBJDIR)/%.o:	$(SRCDIR)/%.cpp
 		@echo "-> compiling $@"
-		@$(CXX) $(CXXFLAGS) -c -g $< 
+		@$(CXX)  -c -g $(CXXFLAGS) $<
 		@mv *.o $(OBJDIR)
+
+-include		$(DEPFILE)
 
 .PHONY: clean
 clean:
 	@rm -rf $(MAINFILE) $(MAINOBJFILES)
 	@echo "-> cleaning bin/"
 	@echo "-> cleaning obj/"
+
 #

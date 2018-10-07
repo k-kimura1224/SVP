@@ -6,8 +6,8 @@
 #include "vector.h"
 
 using namespace std;
-template	void TraMat( int n, int m, int *A, int *T);
-template	void TraMat( int n, int m, double *A, double *T);
+template	void TraMat( const int n, const int m, const int *A, int *T);
+template	void TraMat( const int n, const int m, const double *A, double *T);
 template void printv( int n, int *x);
 template void printv( int n, double *x);
 template void printM( int n, int m, int *x);
@@ -100,7 +100,22 @@ int Com_LS_dposv(
 
 }
 
+/* if successful, return 0 */
+int Com_LS_dposv_nocopy(
+	double	*A,		/* A[n*n] */
+	double	*b,		/* b[n]	*/
+	int		n					/* size */
+	)
+{
+	char	uplo[2]	=	"L";
+	int	one		=	1;
+	int	info;
 
+	dposv_( uplo, &n, &one, A, &n, b, &n, &info);
+
+	return info;
+
+}
 /* compute Ax=b with LU decomposition */
 /* if successful, return 0 */
 int Com_LS_dgesv(
@@ -287,10 +302,11 @@ void Com_mat_Atx(
 }
 // Compute determinant B
 double	determinant(
-	double			*B_,	// [m*m]
-	int				m
+	const double			*B_,	// [m*m]
+	const int				M
 	)
 {
+   int      m = M;
 	int		i;
 	double	det;
 
@@ -388,11 +404,12 @@ void Gen_ZeroVec(
 // transpose A
 template <typename Type>
 void TraMat(
-	int 		n,
-	int		m,
-	Type		*A,	/* [n*m] or [n][m] */
-	Type		*T		/* (m,n) */
-){
+	const int 		n,
+	const int		m,
+	const Type		*A,	/* [n*m] or [n][m] */
+	Type		      *T		/* (m,n) */
+)
+{
 	int i,j;
 
 	for(i=0; i<m; ++i){

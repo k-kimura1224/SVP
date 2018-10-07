@@ -8,81 +8,32 @@
 #include <algorithm>
 #include <assert.h>
 #include <math.h>
-#include <omp.h>
+
+#include <thread>
+//#include <omp.h>
 
 #include "svpsolver.h"
 #include "solution.h"
 #include "solution_pool.h"
 #include "node.h"
 #include "stopwatch.h"
+#include "testwatch.h"
 #include "probdata.h"
 #include "vector.h"
 
 #define debug 0
 
-bool SVPsolver::solve(
-	bool		para,
-	bool 		s_zero,
-	double	s_GLB
-	)
+bool SVPsolver::SVPSsolve()
 {
-   int tlimit = get_timelimit();
 
-	if ( tlimit <= 0 )
+	if ( TIMELIMIT <= 0 )
 		return false;
 
-	stopwatch.set_timelimit( tlimit );
-	stopwatch.start();
-
-	int m = probdata.get_m();
-	assert( m > 0 );
+   // start time
+   SVPSstartTime();
 
 	// output bounds
-	if ( para == false && !quiet )
-   {
-		cout << "Bounds: " << endl;
-		for ( int i = 0; i < m; i++ )
-			cout << "x_" << i << ": [ " << lb[i] << ", " << ub[i] << "]" << endl;
-	}
-
-	// generate a root node
-	NODE	root;
-	int	index = 0;
-
-	double	*init_warm = nullptr;
-
-	if( para == false )
-   {
-		init_warm = bestsol.get_solval();
-	}
-   else
-   {
-		init_warm = new double[m];
-		for( int i = 0; i < m; i++ )
-			init_warm[i] = (ub[i] + lb[i])/2.0;
-	}
-
-	root.set_vals( m, ub, lb, init_warm, s_GLB, 0, s_zero, index);
-
-	for( int i = 0; i < m; i++ )
-   {
-		if ( lb[i] - ub[i] == 0 && lb[i] != 0.0 )
-      {
-			if ( root.alloc_sumfixed() == true )
-				root.set_sumfixed( lb[i], probdata.get_bvec(i) );
-			else
-				root.add_sumfixed( lb[i], probdata.get_bvec(i) );
-		}
-	}
-
-	NodeList.push_back( root );
-	listsize++;
-	index++;
-
-	if ( para == true )
-		delete[] init_warm;
-
-	init_warm = nullptr;
+   SVPSoutputBounds();
 
 	// generate oa_cpool
 	if ( CUT_OA == true )
@@ -91,59 +42,94 @@ bool SVPsolver::solve(
 		gene_OAcuts( ub, lb, probdata.get_Q(), bestval);
 	}
 
-	int         selnodeindex;
+   // branch-and-bound algorithm
+   bool result = SVPSrunBranchandBound();
+	stopwatch.stop();
+
+	nnode = (unsigned long int) index -1;
+
+	return result;
+}
+
+
+bool SVPsolver::SVPSresolve()
+{
+
+	if ( TIMELIMIT <= 0 )
+		return false;
+
+   // start time
+   SVPSstartTime();
+
+   // branch-and-bound algorithm
+   bool result = SVPSrunBranchandBound();
+	stopwatch.stop();
+
+	nnode = (unsigned long int) index -1;
+
+	return result;
+}
+
+void SVPsolver::SVPSstartTime()
+{
+	stopwatch.set_timelimit( TIMELIMIT );
+	stopwatch.start();
+}
+
+void SVPsolver::SVPSoutputBounds()
+{
+	int m = probdata.get_m();
+	assert( m > 0 );
+
+	if ( subsolver == false && !quiet )
+   {
+		cout << "Bounds: " << endl;
+		for ( int i = 0; i < m; i++ )
+			cout << "x_" << i << ": [ " << lb[i] << ", " << ub[i] << "]" << endl;
+	}
+}
+
+bool SVPsolver::SVPSrunBranchandBound()
+{
+   status = SOLVING;
+
+   bool        result = false;
 	RelaxResult r;
 
-	int	disp = index;
-	int	cutoff=0;
+   int   disp = index;
+	int	cutoff = 0;
+
 	while ( 1 )
    {
-
-
-		assert( (int)NodeList.size() > 0 );
-		assert( listsize > 0 );
-		assert( (int)NodeList.size() == listsize );
-
+      assert( (nodelist.*check_size)() );
+      //testwatch.start();
+      //testwatch.stop();
 		// select a node from the list
-		selnodeindex = select_node( index, disp );
-
-
-		assert( selnodeindex >= 0 );
-		assert( selnodeindex < listsize );
+      auto& node = (nodelist.*nodeselection)( &GLB, bestval, index, disp );
 
 		// solve a relaxation problem
-		r = solve_relaxation( selnodeindex );
+		r = SVPSsolveRelaxation( node );
 
-		if( r == INFEASIBLE || r == GETINTEGER ){
+		if( r == INFEASIBLE || r == GETINTEGER )
 			cutoff++;
-		}
 
 		// run heuristics
-		if( r == FEASIBLE && HEUR_APP < Appfac ){
-			heur( selnodeindex, para);
-		}
+		if( r == FEASIBLE && HEUR_APP < Appfac )
+			SVPSheur( node );
 
 		// output
 		if ( !quiet )
       {
-         if ((index-1) % 1000 == 0 && disp < index )
+         auto buf = ( index - 1 ) % 1000;
+         if ( ( buf == 0 || buf == 1 ) && disp < index )
          {
-			   auto it = NodeList.begin();
-			   double min_lb = it->get_lowerbound();
-			   for ( int i = 1; i < listsize; i++ )
-            {
-			   	++it;
-			   	if( min_lb > it->get_lowerbound() )
-			   		min_lb = it->get_lowerbound();
-			   }
+			   //if( subsolver == true )
+            //   cout << "t" << omp_get_thread_num() << ":";
+			   if( subsolver == true )
+               cout << this_thread::get_id() << ":";
 
-			   GLB = min_lb;
-
-			   if( para == true )
-               cout << "t" << omp_get_thread_num() << ":";
-
-			   disp_log(selnodeindex, r, index, cutoff);
-			   disp = index;
+			   disp_log( node, r, index, cutoff);
+            disp = index;
 			   cutoff = 0;
          }
 		}
@@ -151,56 +137,63 @@ bool SVPsolver::solve(
 		// branch
 		if( r == UPDATE || r == FEASIBLE )
       {
-			branch( selnodeindex, index);
+			SVPSbranch( node, index);
 			index += 2;
 		}
       else
       {
 		   // remove
-		   auto it = NodeList.begin();
-		   advance( it, selnodeindex);
-		   NodeList.erase( it );
-		   listsize--;
+         (nodelist.*cut_off)();
       }
 
 		// break
-		assert( (int)NodeList.size() == listsize );
-
-		if( stopwatch.check_time() == false )
+      auto checktiming = ( index - 1 ) % 1000;
+      if ( checktiming == 0 || checktiming == 1 )
       {
-         auto it = NodeList.begin();
-			double min_lb = it->get_lowerbound();
-			for ( int i = 1; i < listsize; i++ )
-         {
-				++it;
-				if( min_lb > it->get_lowerbound() )
-					min_lb = it->get_lowerbound();
-			}
-
-			GLB = min_lb;
-         break;
+         if ( SVPScheckLimit() == true )
+            break;
       }
 
-		if( listsize == 0 )
+		if( nodelist.getListsize() == 0 )
       {
-			if( !para )
+         result = true;
+         status = SOLVED;
+			if( !subsolver )
             cout << "End" << endl;
 			break;
 		}
 
 	}
 
-   //cout << testwatch.get_result() << endl;
+   //cout << "testwatch: " << testwatch.get_result() << endl;
 
-	nnode = (unsigned long int)index -1;
+   return result;
+}
 
+bool SVPsolver::SVPScheckLimit()
+{
+   bool result = false;
 
 	if( stopwatch.check_time() == false )
    {
-	   stopwatch.stop();
-		return false;
+      result = true;
+      status = TIMEOVER;
+   }
+   else if ( nodelist.getListsize() >= LEFTNODELIMIT )
+   {
+      result = true;
+      status = FULL_OF_LEFTNODES;
+   }
+   else if ( index >= NODELIMIT )
+   {
+      result = true;
+      status = FULL_OF_NODES;
    }
 
-	stopwatch.stop();
-	return true;
+   if ( result )
+   {
+		GLB = (nodelist.*get_GLB)();
+   }
+
+   return result;
 }

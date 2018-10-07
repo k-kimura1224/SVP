@@ -10,7 +10,6 @@
 #include <time.h>
 
 #include "stopwatch.h"
-#include "svpsolver.h"
 
 using namespace std;
 
@@ -76,11 +75,11 @@ void STOPWATCH::stop()
    total += (int)(end - begin);
 }
 
-int STOPWATCH::get_time()
+int STOPWATCH::get_time() const
 {
    assert( run == true );
 	time_t buf = time(NULL);
-	return (int)(buf - begin);
+	return total + (int)(buf - begin);
 }
 
 bool STOPWATCH::check_time()
@@ -88,9 +87,8 @@ bool STOPWATCH::check_time()
    assert( run == true );
 	time_t buf = time(NULL);
 	bool result = true;
-	if ( (int)(buf - begin) > limit )
+	if ( total + (int)(buf - begin) > limit )
    {
-		//cout << "----- Time over -----" << endl;
 		result = false;
 	}else{
 		result = true;

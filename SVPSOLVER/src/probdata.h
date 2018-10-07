@@ -10,18 +10,18 @@ class PROB_DATA{
 	double*     Q;		// [m*m], B'B
 	public:
 
-		PROB_DATA();											// default constructor	
+		PROB_DATA();											// default constructor
 		PROB_DATA( const PROB_DATA &source );			// copy constructor
 		PROB_DATA& operator=( const PROB_DATA& );		// assignment operator
 		~PROB_DATA();											// destructor
 
-		void set_data( int s_m, double *s_B, double *s_B_, double *s_Q );
+		void set_data( const int s_m, const double *s_B, const double *s_B_, const double *s_Q );
 
-		int		get_m(){ return m; }
-		double*	get_B(){ return B; }
-		double*	get_B_(){ return B_; }
-		double*	get_Q(){ return Q; }
-		double*	get_bvec( int k ){ return B_+(k*m); }
+		int		get_m() const { return m; }
+		double*	get_B() const { return B; }
+		double*	get_B_() const { return B_; }
+		double*	get_Q() const { return Q; }
+		double*	get_bvec( const int k ) const { return B_+(k*m); }
 };
 
 #endif
