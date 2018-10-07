@@ -301,7 +301,7 @@ bool SVPsolver::SVPSparasolve()
    assert( probdata.get_m() >= 40 );
    // branch-and-bound algorithm
    int   ORIG_LEFTNODELIMIT = LEFTNODELIMIT;
-   LEFTNODELIMIT = 2 * nthreads;
+   LEFTNODELIMIT = 1000 * nthreads;
    bool  result = SVPSrunBranchandBound();
    LEFTNODELIMIT = ORIG_LEFTNODELIMIT;
 
