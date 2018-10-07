@@ -27,7 +27,7 @@ endif
 
 MAINFILE	=	$(BINDIR)/$(MAIN)
 
-CXX	=	/usr/local/bin/g++-7
+#CXX	=	/usr/local/bin/g++-7
 
 CXXFLAGS	=	-Wall -llapack -lpthread -fopenmp -O2 -std=c++14
 
