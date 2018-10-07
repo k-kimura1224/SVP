@@ -123,10 +123,12 @@ void NODELIST::push_back_TDEQUE(
    assert( type == TWO_DEQUE );
    assert( standardvalue > 0.0 );
 
-   if ( node.get_lowerbound() < standardvalue )
-      node_deque_1.push_back( node );
-   else
+  if ( node.get_lowerbound() > standardvalue )
       node_deque_2.push_back( node );
+   else if ( Equal( standardgap, 0.1, 1.0e-12 ) )
+      node_deque_2.push_back( node );
+   else
+      node_deque_1.push_back( node );
 
    ++listsize;
 }
@@ -149,10 +151,12 @@ void NODELIST::move_back_TDEQUE(
    assert( type == TWO_DEQUE );
    assert( standardvalue > 0.0 );
 
-   if ( node.get_lowerbound() < standardvalue )
-      node_deque_1.push_back( move( node ) );
-   else
+   if ( node.get_lowerbound() > standardvalue )
       node_deque_2.push_back( move( node ) );
+   else if ( Equal( standardgap, 0.1, 1.0e-12 ) )
+      node_deque_2.push_back( move( node ) );
+   else
+      node_deque_1.push_back( move( node ) );
 
    ++listsize;
 }
@@ -195,6 +199,9 @@ NODE& NODELIST::nodeselection_TDEQUE(
    assert( standardvalue > 0.0 );
    assert( standardgap > 0.0 && standardgap < 1.0 );
 
+   if ( Equal( standardgap, 0.1, 1.0e-12 ) )
+      return node_deque_2.front();
+
    *globallowerbound = standardvalue;
    standardgap -= 0.1;
    standardvalue = ( 1.0 - standardgap ) * bestval;
@@ -202,6 +209,10 @@ NODE& NODELIST::nodeselection_TDEQUE(
    //cout << "node_selection - start" << endl;
    do {
       assert( !node_deque_2.empty() );
+
+      if ( Equal( standardgap, 0.1, 1.0e-12 ) )
+         return node_deque_2.front();
+
       int size = (int) node_deque_2.size();
       for ( int i = 0; i < size; )
       {

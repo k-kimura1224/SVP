@@ -67,7 +67,16 @@ class NODELIST{
          --listsize;
       }
       void     cutoff_TDEQUE() {
-         node_deque_1.pop_front();
+         if ( !node_deque_1.empty() )
+         {
+            node_deque_1.pop_front();
+         }
+         else
+         {
+            assert( !node_deque_2.empty() );
+            node_deque_2.pop_front();
+         }
+
          --listsize;
       }
 
