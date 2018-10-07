@@ -105,10 +105,14 @@ bool SVPsolver::SVPSrunBranchandBound()
       //testwatch.start();
       //testwatch.stop();
 		// select a node from the list
+      //cout << "selnode-start";
       auto& node = (nodelist.*nodeselection)( &GLB, bestval, index, disp );
+      //cout << "-end-";
 
 		// solve a relaxation problem
+      //cout << "relax-start";
 		r = SVPSsolveRelaxation( node );
+      //cout << "-end-";
 
 		if( r == INFEASIBLE || r == GETINTEGER )
 			cutoff++;
@@ -137,14 +141,19 @@ bool SVPsolver::SVPSrunBranchandBound()
 		// branch
 		if( r == UPDATE || r == FEASIBLE )
       {
+         //cout << "branch-start";
 			SVPSbranch( node, index);
 			index += 2;
+         //cout << "-end-";
 		}
       else
       {
 		   // remove
+         //cout << "remove-start";
          (nodelist.*cut_off)();
-      }
+         //cout << "-end-";
+		}
+      //cout << nodelist.getListsize() << endl;
 
 		// break
       auto checktiming = ( index - 1 ) % 1000;
