@@ -1,0 +1,104 @@
+BKZ20-SVP_n40_seed0
+Total (root+branch&cut) =  657.30 sec. (216924.21 ticks)
+MIP - Integer optimal solution:  Objective =  2.8983850000e+06
+Solution time =  657.31 sec.  Iterations = 54786385  Nodes = 8246316
+
+BKZ20-SVP_n40_seed1
+Total (root+branch&cut) = 1393.86 sec. (448060.03 ticks)
+MIP - Integer optimal solution:  Objective =  3.0096790000e+06
+Solution time = 1393.86 sec.  Iterations = 100993535  Nodes = 16883787
+
+BKZ20-SVP_n40_seed2
+Total (root+branch&cut) =  464.82 sec. (161272.42 ticks)
+MIP - Integer optimal solution:  Objective =  2.7282630000e+06
+Solution time =  464.83 sec.  Iterations = 37596974  Nodes = 5630909
+
+BKZ20-SVP_n40_seed3
+Total (root+branch&cut) =  133.91 sec. (51896.31 ticks)
+MIP - Integer optimal solution:  Objective =  2.5381070000e+06
+Solution time =  133.93 sec.  Iterations = 13032838  Nodes = 1801727
+
+BKZ20-SVP_n40_seed4
+Total (root+branch&cut) =  409.42 sec. (173800.23 ticks)
+MIP - Integer optimal solution:  Objective =  2.9800440000e+06
+Solution time =  409.43 sec.  Iterations = 28900881  Nodes = 5164429
+
+BKZ20-SVP_n43_seed0
+Total (root+branch&cut) = 3022.14 sec. (1129083.81 ticks)
+MIP - Integer optimal solution:  Objective =  3.0372230000e+06
+Solution time = 3022.15 sec.  Iterations = 166343741  Nodes = 31112267
+
+BKZ20-SVP_n43_seed1
+Total (root+branch&cut) = 1513.71 sec. (653310.04 ticks)
+MIP - Integer optimal solution:  Objective =  2.9757830000e+06
+Solution time = 1513.73 sec.  Iterations = 97289523  Nodes = 17871761
+
+BKZ20-SVP_n43_seed2
+Total (root+branch&cut) =  204.40 sec. (76861.25 ticks)
+MIP - Integer optimal solution:  Objective =  2.3882350000e+06
+Solution time =  204.41 sec.  Iterations = 20257661  Nodes = 2537636
+
+BKZ20-SVP_n43_seed3
+Total (root+branch&cut) = 2138.16 sec. (727351.06 ticks)
+MIP - Integer optimal solution:  Objective =  2.8009280000e+06
+Solution time = 2138.18 sec.  Iterations = 161090696  Nodes = 25370706
+
+BKZ20-SVP_n43_seed4
+Total (root+branch&cut) = 2477.12 sec. (774355.05 ticks)
+MIP - Integer optimal solution:  Objective =  3.1156310000e+06
+Solution time = 2477.13 sec.  Iterations = 162372245  Nodes = 27558502
+
+BKZ20-SVP_n46_seed0
+Total (root+branch&cut) = 9528.81 sec. (4336071.02 ticks)
+MIP - Integer optimal solution:  Objective =  2.9893710000e+06
+Solution time = 9528.82 sec.  Iterations = 498751977  Nodes = 78524333
+
+BKZ20-SVP_n46_seed1
+Total (root+branch&cut) = 66285.92 sec. (52580792.22 ticks)
+MIP - Integer optimal solution:  Objective =  3.2120290000e+06
+Solution time = 66285.94 sec.  Iterations = 2110699021  Nodes = 333119359
+
+BKZ20-SVP_n46_seed2
+Total (root+branch&cut) = 3191.39 sec. (1007120.26 ticks)
+MIP - Integer optimal solution:  Objective =  2.8577100000e+06
+Solution time = 3191.40 sec.  Iterations = 195601237  Nodes = 31508496
+
+BKZ20-SVP_n46_seed3
+Total (root+branch&cut) = 23955.99 sec. (25380666.13 ticks)
+MIP - Integer optimal solution:  Objective =  3.2814910000e+06
+Solution time = 23956.00 sec.  Iterations = 698624112  Nodes = 135275275
+
+BKZ20-SVP_n46_seed4
+Total (root+branch&cut) = 31467.61 sec. (22826904.14 ticks)
+MIP - Integer optimal solution:  Objective =  3.1758980000e+06
+Solution time = 31467.62 sec.  Iterations = 1144298948  Nodes = 185902191
+
+BKZ20-SVP_n49_seed0
+Total (root+branch&cut) = 86412.17 sec. (67065729.52 ticks)
+Current MIP best bound =  2.5475664810e+06 (gap = 906788, 26.25%)
+MIP - Time limit exceeded, integer feasible:  Objective =  3.4543540000e+06
+Solution time = 86412.17 sec.  Iterations = 2477587203  Nodes = 364935835 (163125904)
+
+BKZ20-SVP_n49_seed1
+Total (root+branch&cut) = 86410.60 sec. (78301876.89 ticks)
+Current MIP best bound =  2.5868941293e+06 (gap = 509262, 16.45%)
+MIP - Time limit exceeded, integer feasible:  Objective =  3.0961560000e+06
+Solution time = 86410.61 sec.  Iterations = 2717763580  Nodes = 354624300 (90977992)
+
+BKZ20-SVP_n49_seed2
+Total (root+branch&cut) = 86410.71 sec. (102005920.28 ticks)
+Current MIP best bound =  2.4079888205e+06 (gap = 887080, 26.92%)
+MIP - Time limit exceeded, integer feasible:  Objective =  3.2950690000e+06
+Solution time = 86410.72 sec.  Iterations = 2401335382  Nodes = 306509968 (134515022)
+
+BKZ20-SVP_n49_seed3
+Total (root+branch&cut) = 86411.01 sec. (173137905.41 ticks)
+Current MIP best bound =  2.8934884993e+06 (gap = 487085, 14.41%)
+MIP - Time limit exceeded, integer feasible:  Objective =  3.3805730000e+06
+Solution time = 86411.02 sec.  Iterations = 1486884266  Nodes = 245399365 (73622140)
+
+BKZ20-SVP_n49_seed4
+Total (root+branch&cut) = 85720.53 sec. (173072822.40 ticks)
+MIP - Integer optimal solution:  Objective =  3.3076150000e+06
+Solution time = 85720.54 sec.  Iterations = 1401535830  Nodes = 269071304
+
