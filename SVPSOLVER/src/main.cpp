@@ -19,54 +19,54 @@ using namespace std;
 
 static
 void getProblemName(
-	const char*	filename,	/*	input filename			  */
-	char*			probname,	/*	output problemname	  */
-	int			maxSize		/* maximum size of p.name */
-	)
+   const char* filename,   /* input filename         */
+   char*       probname,   /* output problemname     */
+   int         maxSize     /* maximum size of p.name */
+   )
 {
-	int	i=0;
-	int	j=0;
-	int	l;
+   int   i=0;
+   int   j=0;
+   int   l;
 
-	/*	first find end of string */
-	while( filename[i]!=0 )
-		++i;
-	l = i;
+   /* first find end of string */
+   while( filename[i]!=0 )
+      ++i;
+   l = i;
 
-	/* go back until '.' or '/' or '\' appears */
-	while( (i>0) && (filename[i]!='.') && (filename[i]!='/') && (filename[i]!='\\'))
-		--i;
+   /* go back until '.' or '/' or '\' appears */
+   while( (i>0) && (filename[i]!='.') && (filename[i]!='/') && (filename[i]!='\\'))
+      --i;
 
-	/* if we found '.', search for '/' or '\\' */
-	if( filename[i]=='.' ){
-		l = i;
-		while( (i>0) && (filename[i]!='/') && (filename[i]!='\\') )
-			--i;
-	}
+   /* if we found '.', search for '/' or '\\' */
+   if( filename[i]=='.' ){
+      l = i;
+      while( (i>0) && (filename[i]!='/') && (filename[i]!='\\') )
+         --i;
+   }
 
-	/* crrect counter */
-	if( (filename[i]=='/') || (filename[i]=='\\') )
-		++i;
+   /* crrect counter */
+   if( (filename[i]=='/') || (filename[i]=='\\') )
+      ++i;
 
-	/* copy name */
-	while( (i<l) && (filename[i]!=0) ){
-		probname[j++] = filename[i++];
-		if( j>maxSize-1)
+   /* copy name */
+   while( (i<l) && (filename[i]!=0) ){
+      probname[j++] = filename[i++];
+      if( j>maxSize-1)
          exit(0);
-	}
-	probname[j] = 0;
+   }
+   probname[j] = 0;
 
 }
 
 int main( int argc, char** argv){
 
-	cout << fixed << setprecision(3);
+   cout << fixed << setprecision(3);
 
    int   opt;
    opterr = 0;
 
    char* filename = nullptr;
-	int	nthreads = 1;
+   int   nthreads = 1;
    int   timelimit = 5000;
    bool  quiet = false;
 
@@ -107,33 +107,33 @@ int main( int argc, char** argv){
       return -1;
    }
 
-	assert( nthreads > 0 );
+   assert( nthreads > 0 );
 
-	int		m;
+   int      m;
 
-	ReadDim( filename, &m);
+   ReadDim( filename, &m);
 
-	assert( m>0 );
+   assert( m>0 );
 
-	double	*B_ = NULL;		// [m*m], Colmajor
-	B_	=	new double[m*m];
+   double   *B_ = NULL;    // [m*m], Colmajor
+   B_ =  new double[m*m];
 
-	ReadData( filename, m, B_);
+   ReadData( filename, m, B_);
 
-	SVPsolver	svps;
+   SVPsolver   svps;
    svps.SVPSsetup( m, B_, nthreads, timelimit, quiet,
          false, true, true, true, true, true, true );
 
-	bool run;
-	if( nthreads == 1 )
+   bool run;
+   if( nthreads == 1 )
    {
-		run = svps.SVPSsolve();
-	}
+      run = svps.SVPSsolve();
+   }
    else
    {
-		//run = svps.p_solve();
-		run = svps.SVPSparasolve();
-	}
+      //run = svps.p_solve();
+      run = svps.SVPSparasolve();
+   }
 
    char probname[100];
    getProblemName( filename, probname, 100);
@@ -153,7 +153,6 @@ int main( int argc, char** argv){
 
    com += " NOLM: ";
    com += to_string( (int)sqrt(svps.SVPSgetBestval()) );
-   com += " >> result.txt";
 
    com += " NODE: ";
    com += to_string( svps.SVPSgetNnode() );
@@ -165,17 +164,30 @@ int main( int argc, char** argv){
       com += "%";
    }
 
+   struct rusage r;
+   if (getrusage(RUSAGE_SELF, &r) != 0) {
+         /*Failure*/
+   }
+
+   int mem = floor( (1.0e-6)*r.ru_maxrss );
+
+   com += " MAXMEM: ";
+   com += to_string( mem );
+   com += "MB";
+
+   com += " >> result.txt";
+
    //cout << com << endl;
    system(com.c_str());
 
-	svps.disp_bestsol();
-	if( !run ){
+   svps.disp_bestsol();
+   if( !run ){
       cout << endl;
-		cout << "could not solve .." << endl;
-		return 0;
-	}
+      cout << "could not solve .." << endl;
+      return 0;
+   }
 
-	delete[] B_;
+   delete[] B_;
 
-	return 0;
+   return 0;
 }

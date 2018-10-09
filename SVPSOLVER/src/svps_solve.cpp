@@ -36,11 +36,11 @@ bool SVPsolver::SVPSsolve()
    SVPSoutputBounds();
 
 	// generate oa_cpool
-	if ( CUT_OA == true )
-   {
-      exit(-1);
-		gene_OAcuts( ub, lb, probdata.get_Q(), bestval);
-	}
+	//if ( CUT_OA == true )
+   //{
+   //   exit(-1);
+	//	gene_OAcuts( ub, lb, probdata.get_Q(), bestval);
+	//}
 
    // branch-and-bound algorithm
    bool result = SVPSrunBranchandBound();
@@ -108,11 +108,10 @@ bool SVPsolver::SVPSrunBranchandBound()
       //cout << "selnode-start";
       auto& node = (nodelist.*nodeselection)( &GLB, bestval, index, disp );
       //cout << "-end-";
+      //
 
 		// solve a relaxation problem
-      //cout << "relax-start";
 		r = SVPSsolveRelaxation( node );
-      //cout << "-end-";
 
 		if( r == INFEASIBLE || r == GETINTEGER )
 			cutoff++;

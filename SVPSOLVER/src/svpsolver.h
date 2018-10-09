@@ -50,8 +50,8 @@ enum Status {
 class SVPsolver{
    PROB_DATA      probdata;
 
-   double         *ub;
-   double         *lb;
+   int*  ub;
+   int*  lb;
 
    double         GLB;
    double         bestval;
@@ -80,8 +80,6 @@ class SVPsolver{
    TESTWATCH      testwatch;
 
    unsigned long int    nnode;
-
-   int            *order;     // order of norm or bounds
 
    SCHMIDT_M      sch;
 
@@ -223,7 +221,7 @@ class SVPsolver{
       void        SVPScreateSch( int m, double* B_ );
       auto        SVPSgetStatus(){ return status; }
       //bool        p_solve();
-      void        tighten_bounds( int memo, double* set_lb, double* set_ub );
+      void        tighten_bounds( int memo, int* set_lb, int* set_ub );
       void        disp_log( const NODE& node, const RelaxResult r, const int index, const int cutoff);
       void        disp_bestsol();
       double      compute_objval( double *x );
@@ -250,7 +248,7 @@ class SVPsolver{
       // for parallel mode
       void        set_num_thread(int n){ nthreads = n; }
       void        SVPSsetBestval( const double val ){ bestval = val; }
-      void        SVPSsetBounds(const double *u, const double *l)
+      void        SVPSsetBounds( const int* u, const int* l )
       {
          assert( u != nullptr );
          assert( l != nullptr );
@@ -263,14 +261,6 @@ class SVPsolver{
             ub[i] = u[i];
             lb[i] = l[i];
          }
-      }
-      void        SVPSsetOrder( const int *s_order)
-      {
-         assert( s_order != nullptr );
-         int m = probdata.get_m();
-         order = new int[m];
-         for (int i = 0; i < m; i++)
-            order[i] = s_order[i];
       }
       void        SVPSsetNorm( const double *s_norm)
       {

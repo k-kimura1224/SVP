@@ -292,11 +292,11 @@ bool SVPsolver::SVPSparasolve()
    SVPSoutputBounds();
 
    // generate oa_cpool
-   if( CUT_OA == true )
-   {
-      exit(-1);
-      gene_OAcuts( ub, lb, probdata.get_Q(), bestval);
-   }
+   //if( CUT_OA == true )
+   //{
+   //   exit(-1);
+   //   gene_OAcuts( ub, lb, probdata.get_Q(), bestval);
+   //}
 
    assert( probdata.get_m() >= 40 );
    // branch-and-bound algorithm
@@ -342,7 +342,7 @@ bool SVPsolver::SVPSparasolve()
    for ( auto &th: threads )
       th.join();
 
-   assert( status != SOLVING );
+      assert( status != SOLVING );
 
    if ( status == SOLVED )
       result = true;

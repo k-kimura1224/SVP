@@ -24,13 +24,11 @@ NODE::NODE(){	// default constructor
 	m = -1;
 	ub = nullptr;
 	lb = nullptr;
-	warm = nullptr;
 	relax_objval = - 1.0e+10;
 	relax_solval = nullptr;
 	dpt = -1;
 	zero = true;
 	index = -1;
-	solved = false;
 	sumfixed = nullptr;
 }
 
@@ -44,20 +42,19 @@ NODE::NODE( const NODE &source )
 	zero = source.zero;
 	dpt = source.dpt;
 	index = source.index;
-	solved = source.solved;
 
 	if( m > 0 ){
 		assert( source.ub != nullptr );
 		assert( source.lb != nullptr );
-		assert( source.warm != nullptr );
 
-		ub = new double[m];
-		lb = new double[m];
-		warm = new double[m];
+		ub = new int[m];
+		lb = new int[m];
 
-		Copy_vec( source.ub, ub, m);
-		Copy_vec( source.lb, lb, m);
-		Copy_vec( source.warm, warm, m);
+      for( int i = 0; i < m; ++i )
+      {
+         ub[i] = source.ub[i];
+         lb[i] = source.lb[i];
+      }
 
 		if( source.relax_solval != nullptr ){
 			relax_solval = new double[m];
@@ -74,7 +71,6 @@ NODE::NODE( const NODE &source )
 	}else{
 		ub = nullptr;
 		lb = nullptr;
-		warm = nullptr;
 		relax_solval = nullptr;
 		sumfixed = nullptr;
 	}
@@ -94,23 +90,21 @@ NODE& NODE::operator=( const NODE& source )
 		zero = source.zero;
 		index = source.index;
 		dpt = source.dpt;
-		solved = source.solved;
 
 		if( m > 0 ){
 			assert( source.ub != nullptr );
 			assert( source.lb != nullptr );
-			assert( source.warm != nullptr );
 
 			delete[] ub;
 			delete[] lb;
-			delete[] warm;
-			ub = new double[m];
-			lb = new double[m];
-			warm = new double[m];
+			ub = new int[m];
+			lb = new int[m];
 
-			Copy_vec( source.ub, ub, m);
-			Copy_vec( source.lb, lb, m);
-			Copy_vec( source.warm, warm, m);
+         for( int i = 0; i < m; ++i )
+         {
+            ub[i] = source.ub[i];
+            lb[i] = source.lb[i];
+         }
 
 			if( source.relax_solval != nullptr ){
 				delete[] relax_solval;
@@ -129,7 +123,6 @@ NODE& NODE::operator=( const NODE& source )
 		}else{
 			ub = nullptr;
 			lb = nullptr;
-			warm = nullptr;
 			relax_solval = nullptr;
 			sumfixed = nullptr;
 		}
@@ -146,18 +139,15 @@ NODE::NODE( NODE &&source ) noexcept
    m = source.m;
    ub = source.ub;
    lb = source.lb;
-   warm = source.warm;
    sumfixed = source.sumfixed;
    relax_objval = source.relax_objval;
    relax_solval = source.relax_solval;
    dpt = source.dpt;
    zero = source.zero;
    index = source.index;
-   solved = source.solved;
 	source.ub = nullptr;
 	source.lb = nullptr;
 	source.relax_solval = nullptr;
-	source.warm = nullptr;
 	source.sumfixed = nullptr;
 }
 
@@ -169,31 +159,29 @@ NODE::~NODE()
 #endif
 	delete[] ub;
 	delete[] lb;
-	delete[] warm;
 	delete[] relax_solval;
 	delete[] sumfixed;
 	ub = nullptr;
 	lb = nullptr;
 	relax_solval = nullptr;
-	warm = nullptr;
 	sumfixed = nullptr;
 }
 
 void NODE::set_vals(
-	int		s_m,
-	double	*s_ub,
-	double	*s_lb,
-	double	*s_warm,
-	double	s_relax_objval,
-	int		s_dpt,
-	bool 		s_zero,
-	int		s_index
+	const int		s_m,
+	const int	   *s_ub,
+	const int	   *s_lb,
+	const double	*s_relaxsolval,
+	const double	s_relax_objval,
+	const int		s_dpt,
+	const bool 		s_zero,
+	const int		s_index
 	)
 {
 	assert( s_m > 0 );
 	assert( ub == nullptr );
 	assert( lb == nullptr );
-	assert( warm == nullptr );
+	assert( relax_solval == nullptr );
 
 	m = s_m;
 	relax_objval = s_relax_objval;
@@ -201,13 +189,16 @@ void NODE::set_vals(
 	zero = s_zero;
 	index = s_index;
 
-	ub = new double[m];
-	lb = new double[m];
-	warm = new double[m];
+	ub = new int[m];
+	lb = new int[m];
+	relax_solval = new double[m];
 
-	Copy_vec( s_ub, ub, m);
-	Copy_vec( s_lb, lb, m);
-	Copy_vec( s_warm, warm, m);
+   for( int i = 0; i < m; ++i )
+   {
+      ub[i] = s_ub[i];
+      lb[i] = s_lb[i];
+   }
+	Copy_vec( s_relaxsolval, relax_solval, m);
 
 }
 
@@ -216,10 +207,8 @@ void NODE::set_relaxsolval(
 	)
 {
 	assert( solval != nullptr );
+	assert( relax_solval != nullptr );
 	assert( m > 0 );
-
-	delete[] relax_solval;
-	relax_solval = new double[m];
 
 	//Copy_vec( solval, relax_solval, m);
 	double ep = 1e-10;
@@ -287,10 +276,9 @@ void NODE::NODEdispInformation()
    cout << "m: " << m << endl;
    cout << "dpt: " << dpt << endl;
    cout << "zero: " << zero << endl;
-   cout << "solved: " << solved << endl;
-   cout << "bounds&warm: " << endl;
+   cout << "bounds&relax_solval: " << endl;
    for ( int i = 0; i < m; i++ )
-      cout << i << ": [ " << lb[i] << ", " << ub[i] << "], " << warm[i] << endl;
+      cout << i << ": [ " << lb[i] << ", " << ub[i] << "], " << relax_solval[i] << endl;
    cout << "relax_objval: " << relax_objval << endl;
 
 }

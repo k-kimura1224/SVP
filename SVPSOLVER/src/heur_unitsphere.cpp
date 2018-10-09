@@ -30,8 +30,8 @@ void  SVPsolver::SVPSheurUnitsphere( const NODE& node )
    double   *solvals_new = nullptr;
 
    double   *relaxsolvals = node.get_relaxsolval();
-   double   *u = node.get_ub();
-   double   *l = node.get_lb();
+   auto   *u = node.get_ub();
+   auto   *l = node.get_lb();
 
    assert( m > 0 );
    assert( relaxsolvals != nullptr );

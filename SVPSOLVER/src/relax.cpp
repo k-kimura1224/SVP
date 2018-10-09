@@ -49,23 +49,23 @@ RelaxResult SVPsolver::SVPSsolveRelaxationBIN(
       NODE&    node
    )
 {
-   int   m = probdata.get_m();
+   const auto  m = probdata.get_m();
 
-   double *u = node.get_ub();
-   double *l = node.get_lb();
+   const auto *u = node.get_ub();
+   const auto *l = node.get_lb();
 
    int ct = 0;
 
-   for ( int i = 0; i < m; i++ )
+   for ( int i = 0; i < m; ++i )
    {
-      if( u[i] == 0.0 && l[i] == 0.0 )
+      if( u[i]  || l[i]  )
       {
-         sch.set_z_i( i, false );
-         ct++;
+         sch.set_z_i( i, true );
       }
       else
       {
-         sch.set_z_i( i, true );
+         sch.set_z_i( i, false );
+         ct++;
       }
    }
 
@@ -107,7 +107,7 @@ RelaxResult SVPsolver::SVPSsolveRelaxationINT(
    auto  Q = probdata.get_Q();
    auto  u = node.get_ub();
    auto  l = node.get_lb();
-   auto  warm = node.get_warm();
+   auto  warm = node.get_relaxsolval();
 
    vector<int> nofixed_index;
    nofixed_index.reserve( m );
@@ -118,7 +118,7 @@ RelaxResult SVPsolver::SVPSsolveRelaxationINT(
          nofixed_index.push_back( i );
    }
 
-   int   n = (int) nofixed_index.size();
+   const int   n = (int) nofixed_index.size();
 
    if ( n == 0 )
       return INFEASIBLE;
@@ -130,6 +130,8 @@ RelaxResult SVPsolver::SVPSsolveRelaxationINT(
    double*  subw = nullptr;
    double*  p = nullptr;
    double   c_term = 0.0;
+   double*  d_l = nullptr;
+   double*  d_u = nullptr;
 
    QPsolver  qps;
 
@@ -139,9 +141,16 @@ RelaxResult SVPsolver::SVPSsolveRelaxationINT(
 
    if( n == m )
    {
+      d_l = new double[m];
+      d_u = new double[m];
+      for ( int i = 0; i < m; i++ )
+      {
+         d_l[i] = l[i];
+         d_u[i] = u[i];
+      }
       qps.set_obj_quad( m, Q);
-      qps.set_lb( m, l);
-      qps.set_ub( m, u);
+      qps.set_lb( m, d_l);
+      qps.set_ub( m, d_u);
       qps.set_warm( m, warm);
    }
    else
@@ -318,6 +327,8 @@ RelaxResult SVPsolver::SVPSsolveRelaxationINT(
    delete[] A;
    delete[] b;
    delete[] relaxvals;
+   delete[] d_l;
+   delete[] d_u;
 
    return result;
 }

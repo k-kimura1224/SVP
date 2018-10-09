@@ -53,8 +53,6 @@ SVPsolver::SVPsolver(){ // default constructor
    nnode = 0;
    nthreads = -1;
 
-   order = nullptr;
-
    _Appfac = 0.0;
    Appfac = 0.0;
 
@@ -118,20 +116,13 @@ SVPsolver::SVPsolver( const SVPsolver &source )
 
       int m = probdata.get_m();
 
-      ub = new double[m];
-      lb = new double[m];
+      ub = new int[m];
+      lb = new int[m];
 
-      Copy_vec( source.ub, ub, m );
-      Copy_vec( source.lb, lb, m );
-
-      if( source.order != nullptr )
+      for( int i = 0; i < m; ++i )
       {
-         order = new int[m];
-         for (int i = 0; i < m; i++ ){
-            order[i] = source.order[i];
-         }
-      }else{
-         order = nullptr;
+         ub[i] = source.ub[i];
+         lb[i] = source.lb[i];
       }
 
       if( source.norm != nullptr ){
@@ -143,7 +134,6 @@ SVPsolver::SVPsolver( const SVPsolver &source )
    }else{
       ub = nullptr;
       lb = nullptr;
-      order = nullptr;
       norm = nullptr;
    }
 }
@@ -198,20 +188,14 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
 
          delete[] ub;
          delete[] lb;
-         ub = new double[m];
-         lb = new double[m];
+         ub = new int[m];
+         lb = new int[m];
 
-         Copy_vec( source.ub, ub, m);
-         Copy_vec( source.lb, lb, m);
 
-         if( source.order != nullptr ){
-            delete[] order;
-            order = new int[m];
-            for(int i=0; i<m; i++){
-               order[i] = source.order[i];
-            }
-         }else{
-            order = nullptr;
+         for( int i = 0; i < m; ++i )
+         {
+            ub[i] = source.ub[i];
+            lb[i] = source.lb[i];
          }
 
          if( source.norm != nullptr ){
@@ -224,7 +208,6 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
       }else{
          ub = nullptr;
          lb = nullptr;
-         order = nullptr;
          norm = nullptr;
       }
    }
@@ -240,11 +223,9 @@ SVPsolver::~SVPsolver()
 #endif
    delete[] ub;
    delete[] lb;
-   delete[] order;
    delete[] norm;
    ub = nullptr;
    lb = nullptr;
-   order = nullptr;
    norm = nullptr;
 
    push_back = nullptr;
@@ -281,13 +262,13 @@ void SVPsolver::SVPSsetup(
 	SVPScreateProbdata( m, B_ );
 
    // allocation of bounds
-   ub = new double[m];
-   lb = new double[m];
+   ub = new int[m];
+   lb = new int[m];
 
    for ( int i = 0; i < m; i++ )
    {
-      ub[i] = 1.0e+10;
-      lb[i] = - 1.0e+10;
+      ub[i] = 1000000;
+      lb[i] = 1000000;
    }
 
    // Appfac
@@ -351,7 +332,7 @@ void SVPsolver::SVPScreateProbdata(
    assert( m > 0 );
    assert( B_ != nullptr );
 
-   int      mm = m * m;
+   const int mm = m * m;
 
    double   *B;      // [m*m],
    double   *Q;      // [m*m],
@@ -375,7 +356,7 @@ void SVPsolver::SVPSgenerateRootNode(
       bool  w_sch
       )
 {
-	int m = probdata.get_m();
+	const int m = probdata.get_m();
 	assert( m > 0 );
 
 	NODE	root;
@@ -397,12 +378,14 @@ void SVPsolver::SVPSgenerateRootNode(
 
 	root.set_vals( m, ub, lb, init_warm, GLB, 0, w_sch, index );
 
-   double l_i;
+   int l_i;
+   int u_i;
 
 	for( int i = 0; i < m; i++ )
    {
       l_i = lb[i];
-		if ( Equal( l_i, ub[i], epsilon ) && !Equal( l_i, 0.0, epsilon ) )
+      u_i = ub[i];
+		if ( l_i == u_i && l_i )
       {
 			if ( root.alloc_sumfixed() == true )
 				root.set_sumfixed( l_i, probdata.get_bvec(i) );
@@ -564,8 +547,8 @@ void  SVPsolver::SVPScomputeBounds()
 
 void  SVPsolver::tighten_bounds(
       int      memo,
-      double*  set_lb,
-      double*  set_ub
+      int*  set_lb,
+      int*  set_ub
       )
 {
    int      m = probdata.get_m();
