@@ -142,37 +142,36 @@ void SCHMIDT_M::compute_GS(){
    assert( z != nullptr );
 
    min = -1.0;
-   for(int i=0; i<n; i++){
-      if( z[i] == true ){
-         Copy_vec( &B_[i*n], &GS_[i*n], n);
-         for(int j=0; j<i; j++){
-            if( z[j] == true ){
-               Com_linecomb( &GS_[i*n], &GS_[j*n], n, 1.0, - u(i,j), &GS_[i*n]);
-            }
+   for( int i = 0, in = 0; i < n; i++, in += n )
+   {
+      if( z[i] )
+      {
+         Copy_vec( &B_[in], &GS_[in], n );
+
+         for ( int j = 0; j < i; j++ )
+         {
+            if( z[j] )
+               Com_linecomb( &GS_[in], &GS_[j*n], n, 1.0, - u(i,j), &GS_[in] );
          }
-         nrm[i] = Com_dot( &GS_[i*n], &GS_[i*n], n);
-         if( min == -1.0 ){
+
+         nrm[i] = Com_dot( &GS_[in], &GS_[in], n);
+
+         assert( nrm[i] > 0.0 );
+
+         if( min < 0.0 )
             min = nrm[i];
-         }else if( min > nrm[i] ){
+         else if( min > nrm[i] )
             min = nrm[i];
-         }
-      }else{
-         for(int j=0; j<n; j++){
-            GS_[(i*n)+j] = 0.0;
-         }
+      }
+      else
+      {
+         for ( int j = 0; j < n; j++ )
+            GS_[in+j] = 0.0;
+
          nrm[i] = 0.0;
       }
 
    }
-
-   //for(int i=0; i<n; i++){
-   // for(int j=0; j<n; j++){
-   //    if( i != j)
-   //       cout << Com_dot( &GS_[i*n], &GS_[j*n], n) << endl;
-   // }
-   //}
-
-
 }
 
 void SCHMIDT_M::setup(
@@ -182,6 +181,10 @@ void SCHMIDT_M::setup(
 {
    assert( s_n > 0 );
    assert( s_B_ != nullptr );
+   assert( z == nullptr );
+   assert( B_ == nullptr );
+   assert( GS_ == nullptr );
+   assert( nrm == nullptr );
 
    n = s_n;
 

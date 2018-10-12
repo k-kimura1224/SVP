@@ -33,7 +33,8 @@ class NODELIST{
 		NODELIST& operator=( const NODELIST& );	// assignment operator
 		~NODELIST();										// destructor
 
-      void     setup( const TYPE_NODELIST s_type, const double bestval );
+      void     setup( const TYPE_NODELIST s_type, const double bestval,
+                      const double gap=0.9 );
 
       int      getListsize() const { return listsize; }
 

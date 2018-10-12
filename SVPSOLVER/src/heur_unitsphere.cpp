@@ -20,8 +20,13 @@ using namespace std;
 
 #define debug  0
 
-void  SVPsolver::SVPSheurUnitsphere( const NODE& node )
+void  SVPsolver::SVPSheurUnitsphere(
+      const NODE&    node,
+      const double*  vars_localub,
+      const double*  vars_locallb
+      )
 {
+
    int      m = probdata.get_m();
 
    double   val;
@@ -30,13 +35,9 @@ void  SVPsolver::SVPSheurUnitsphere( const NODE& node )
    double   *solvals_new = nullptr;
 
    double   *relaxsolvals = node.get_relaxsolval();
-   auto   *u = node.get_ub();
-   auto   *l = node.get_lb();
 
    assert( m > 0 );
    assert( relaxsolvals != nullptr );
-   assert( u != nullptr );
-   assert( l != nullptr );
 
    solvals = new double[m];
    solvals_new = new double[m];
@@ -61,7 +62,7 @@ void  SVPsolver::SVPSheurUnitsphere( const NODE& node )
 
       for(int i=0; i<m; i++){
          lsol[i] += 1;
-         if( lsol[i] <= u[i] ){
+         if( lsol[i] <= vars_localub[i] ){
             lmin = compute_objval( lsol );
             if( val_new > lmin ){
                val_new = lmin;
@@ -69,7 +70,7 @@ void  SVPsolver::SVPSheurUnitsphere( const NODE& node )
             }
          }
          lsol[i] -= 2;
-         if( l[i] <= lsol[i] ){
+         if( vars_locallb[i] <= lsol[i] ){
             lmin = compute_objval( lsol );
             if( val_new > lmin ){
                val_new = lmin;

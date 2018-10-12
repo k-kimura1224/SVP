@@ -8,10 +8,10 @@
 using namespace std;
 template	void TraMat( const int n, const int m, const int *A, int *T);
 template	void TraMat( const int n, const int m, const double *A, double *T);
-template void printv( int n, int *x);
-template void printv( int n, double *x);
-template void printM( int n, int m, int *x);
-template void printM( int n, int m, double *x);
+template void printv( const int n, const int *x);
+template void printv( const int n, const double *x);
+template void printM( const int n, const int m, const int *x);
+template void printM( const int n, const int m, const double *x);
 template void Gen_ZeroVec( int n, int *x);
 template void Gen_ZeroVec( int n, double *x);
 template int count( int n, bool *x);
@@ -421,7 +421,7 @@ void TraMat(
 
 template <typename Type>
 void printv(
-	int	n,
+	const int	n,
 	Type	*x
 	)
 {
@@ -434,8 +434,8 @@ void printv(
 
 template <typename Type>
 void printM(
-	int	n,
-	int	m,
+	const int	n,
+	const int	m,
 	Type	*x
 	)
 {

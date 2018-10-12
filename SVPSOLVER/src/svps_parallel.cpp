@@ -36,13 +36,13 @@ void SVPsolver::SVPSsolveSubprob(
    {
       lock_guard<mutex> lock(mtx);
 
-      auto  m = probdata.get_m();
-      auto  B_ = probdata.get_B_();
+      const auto m = probdata.get_m();
+      const auto B_ = probdata.get_B_();
       sub_timelimit = TIMELIMIT - stopwatch.get_time();
 
       sub.SVPSsetup( m, B_, 1, sub_timelimit, true,
-               true, true, false, false, false, false, false );
-      sub.SVPSsetBounds( ub, lb );
+               true, false, false, false, false, false );
+      sub.SVPSsetBounds( bounds );
       sub.SVPSsetNorm( norm );
 
       sub.SVPSsetGlobalLowerBound( GLB );
@@ -56,15 +56,15 @@ void SVPsolver::SVPSsolveSubprob(
    }
    // } lock
 
-   constexpr int  init_sub_nodelimit = 100000;
-   constexpr int  max_sub_nodelimit = init_sub_nodelimit * 20;
+   constexpr int init_sub_nodelimit = 100000;
+   constexpr int max_sub_nodelimit = init_sub_nodelimit * 20;
 
    unsigned long int totalpop = 0;
 
-   bool     result;
-   int      sub_nodelimit = init_sub_nodelimit;
-   const bool     disp = !quiet;
-   const double   pop_maxrate = 1.0 - ( 1.0 / (double) nthreads );
+   bool result;
+   int sub_nodelimit = init_sub_nodelimit;
+   const bool disp = !quiet;
+   const double pop_maxrate = 1.0 - ( 1.0 / (double) nthreads );
    assert( pop_maxrate > 0.0 && pop_maxrate <= 1.0 );
 
    while ( 1 )
@@ -317,6 +317,9 @@ bool SVPsolver::SVPSparasolve()
 
    if ( type == LIST )
       nodelist.sort();
+
+   if ( type == TWO_DEQUE )
+      nodelist.setup( type, bestval, 0.3 );
 
    // parallel {{
 

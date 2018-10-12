@@ -25,113 +25,77 @@ using namespace std;
 #define debug  0
 
 RelaxResult SVPsolver::SVPSsolveRelaxation(
-      NODE&    node
+      NODE&          node,
+      const double*  vars_localub,
+      const double*  vars_locallb
    )
 {
-   RelaxResult result;
 
    if ( bestval - node.get_lowerbound() < 1.0 )
       return INFEASIBLE;
 
-   if ( node.get_zero() == true )
-   {
-      result = SVPSsolveRelaxationBIN( node );
-   }
-   else
-   {
-      result = SVPSsolveRelaxationINT( node );
-   }
-
-   return result;
-}
-
-RelaxResult SVPsolver::SVPSsolveRelaxationBIN(
-      NODE&    node
-   )
-{
-   const auto  m = probdata.get_m();
-
-   const auto *u = node.get_ub();
-   const auto *l = node.get_lb();
-
-   int ct = 0;
-
-   for ( int i = 0; i < m; ++i )
-   {
-      if( u[i]  || l[i]  )
-      {
-         sch.set_z_i( i, true );
-      }
-      else
-      {
-         sch.set_z_i( i, false );
-         ct++;
-      }
-   }
-
-   if ( ct == m ) return INFEASIBLE;
-
-   assert( sch.get_n() > 0 );
-
-   RelaxResult result;
-
-   sch.compute_GS();
-
-   auto schmin = sch.get_min();
-
-   if( node.get_lowerbound() < schmin )
-      node.set_lowerbound( schmin );
-
-   if ( schmin >= bestval )
-   {
-      result = INFEASIBLE;
-#if debug
-      cout << "*********************************" << endl;
-      cout << "*   Schmidt_manager  #zero: " << ct << endl;
-      cout << "*********************************" << endl;
-#endif
-   }
-   else
-   {
-      result = FEASIBLE;
-   }
+   RelaxResult result = SVPSsolveRelaxationINT( node, vars_localub, vars_locallb );
 
    return result;
 }
 
 RelaxResult SVPsolver::SVPSsolveRelaxationINT(
-      NODE&    node
+      NODE&          node,
+      const double*  vars_localub,
+      const double*  vars_locallb
    )
 {
-   auto  m = probdata.get_m();
-   auto  Q = probdata.get_Q();
-   auto  u = node.get_ub();
-   auto  l = node.get_lb();
-   auto  warm = node.get_relaxsolval();
+   // copy
+   const auto m = probdata.get_m();
+   const auto Q = probdata.get_Q();
+   const auto ep = epsilon;
+   auto& qd = qpdata;
+
+   auto warm = node.get_relaxsolval();
+
+   assert( m > 0 );
+   assert( Q != nullptr );
+   assert( ep < 1.0 && ep > 0.0 );
 
    vector<int> nofixed_index;
    nofixed_index.reserve( m );
 
-   for ( int i = 0; i < m; i++ )
+   double *relaxvals = nullptr;
+
+   for ( auto i = 0; i < m; ++i )
    {
-      if ( l[i] != u[i] )
+      if ( !Equal( vars_localub[i], vars_locallb[i], ep )  )
          nofixed_index.push_back( i );
    }
 
-   const int   n = (int) nofixed_index.size();
+   nofixed_index.shrink_to_fit();
 
+   const int n = (int) nofixed_index.size();
+
+   // all values are fixed
    if ( n == 0 )
-      return INFEASIBLE;
+   {
+      relaxvals = new double[m];
+      for ( auto i = 0; i < m; ++i )
+         relaxvals[i] = vars_localub[i];
 
+      const auto objval = compute_objval( relaxvals );
+      SOLUTION solution;
 
-   double*  subQ = nullptr;
-   double*  subu = nullptr;
-   double*  subl = nullptr;
-   double*  subw = nullptr;
-   double*  p = nullptr;
-   double   c_term = 0.0;
-   double*  d_l = nullptr;
-   double*  d_u = nullptr;
+      solution.set_sol( m, relaxvals, objval );
+      SVPStrySol( solution, true, true, nullptr );
+
+      delete[] relaxvals;
+
+      return GETINTEGER;
+   }
+
+   double* subQ = nullptr;
+   double* subu = nullptr;
+   double* subl = nullptr;
+   double* subw = nullptr;
+   double* p = nullptr;
+   double c_term = 0.0;
 
    QPsolver  qps;
 
@@ -141,27 +105,19 @@ RelaxResult SVPsolver::SVPSsolveRelaxationINT(
 
    if( n == m )
    {
-      d_l = new double[m];
-      d_u = new double[m];
-      for ( int i = 0; i < m; i++ )
-      {
-         d_l[i] = l[i];
-         d_u[i] = u[i];
-      }
-      qps.set_obj_quad( m, Q);
-      qps.set_lb( m, d_l);
-      qps.set_ub( m, d_u);
-      qps.set_warm( m, warm);
+      qps.set_obj_quad( m, Q );
+      qps.set_lb( m, vars_locallb );
+      qps.set_ub( m, vars_localub );
+      qps.set_warm( m, warm );
    }
    else
    {
       assert( m - 1 >= n );
 
-      if( qpdata.check_allocation() == false )
-         qpdata.alloc( m - 1 );
+      if( qd.check_allocation() == false )
+         qd.alloc( m - 1 );
 
-
-      subQ = qpdata.get_Qmat();
+      subQ = qd.get_Qmat();
       assert( subQ != nullptr );
 
       ct = 0;
@@ -180,7 +136,7 @@ RelaxResult SVPsolver::SVPSsolveRelaxationINT(
 
       if( node.get_sumfixed() != nullptr )
       {
-         p = qpdata.get_pvec();
+         p = qd.get_pvec();
          assert( p != nullptr );
 
          ct = 0;
@@ -197,12 +153,12 @@ RelaxResult SVPsolver::SVPSsolveRelaxationINT(
       }
       else
       {
-         qps.set_obj_quad( n, subQ);
+         qps.set_obj_quad( n, subQ );
       }
 
-      subu = qpdata.get_uvec();
-      subl = qpdata.get_lvec();
-      subw = qpdata.get_wvec();
+      subu = qd.get_uvec();
+      subl = qd.get_lvec();
+      subw = qd.get_wvec();
 
       assert( subu != nullptr );
       assert( subl != nullptr );
@@ -212,56 +168,61 @@ RelaxResult SVPsolver::SVPSsolveRelaxationINT(
 
       for ( auto i : nofixed_index )
       {
-         subu[ct] = u[i];
-         subl[ct] = l[i];
-         subw[ct] = warm[i];
+         subu[ct] = vars_localub[i];
+         subl[ct] = vars_locallb[i];
          ct++;
       }
 
       assert( ct == n );
 
-      qps.set_ub( n, subu);
-      qps.set_lb( n, subl);
+      ct = 0;
+
+      for ( auto i : nofixed_index )
+      {
+         subw[ct] = warm[i];
+         ct++;
+      }
+
+      qps.set_ub( n, subu );
+      qps.set_lb( n, subl );
       qps.set_warm( n, subw );
-
-
    }
 
    // using oa_cut{{
    double   *A = nullptr;
    double   *b = nullptr;
-   if( CUT_OA == true ){
-      assert( oa_cpool.get_size() > 0 );
-      cout << "stop!!!!!!!" << endl;
-      exit(1);
+   //if( CUT_OA == true ){
+   //   assert( oa_cpool.get_size() > 0 );
+   //   cout << "stop!!!!!!!" << endl;
+   //   exit(1);
 
-      int   k  = oa_cpool.get_size() * 2;
-      A = new double[k*m];
-      b = new double[k];
+   //   int   k  = oa_cpool.get_size() * 2;
+   //   A = new double[k*m];
+   //   b = new double[k];
 
-      CUT_PLANE *cut;
-      ct = 0;
-      for(int i=0; i<oa_cpool.get_size(); i++){
-         cut = oa_cpool.get_cut( i );
+   //   CUT_PLANE *cut;
+   //   ct = 0;
+   //   for(int i=0; i<oa_cpool.get_size(); i++){
+   //      cut = oa_cpool.get_cut( i );
 
-         assert( cut->get_coef() != nullptr );
-         assert( cut->get_lb() != nullptr );
-         assert( cut->get_ub() != nullptr );
-         assert( cut->get_ub() > cut->get_lb() );
+   //      assert( cut->get_coef() != nullptr );
+   //      assert( cut->get_lb() != nullptr );
+   //      assert( cut->get_ub() != nullptr );
+   //      assert( cut->get_ub() > cut->get_lb() );
 
-         Copy_vec( cut->get_coef(), &A[ct*m], m);
-         for(int j=0; j<m; j++){
-            A[(ct*m)+m+j] = - A[(ct*m)+j];
-         }
-         b[ct] = *(cut->get_ub());
-         b[ct+1] = - *(cut->get_lb());
+   //      Copy_vec( cut->get_coef(), &A[ct*m], m);
+   //      for(int j=0; j<m; j++){
+   //         A[(ct*m)+m+j] = - A[(ct*m)+j];
+   //      }
+   //      b[ct] = *(cut->get_ub());
+   //      b[ct+1] = - *(cut->get_lb());
 
-         ct += 2;
-      }
-      assert( ct == k );
+   //      ct += 2;
+   //   }
+   //   assert( ct == k );
 
-      qps.set_ineq( m, k, A, b);
-   }
+   //   qps.set_ineq( m, k, A, b);
+   //}
    // }} using oa_cut
 
    //qps.disp_prob();
@@ -271,16 +232,16 @@ RelaxResult SVPsolver::SVPSsolveRelaxationINT(
    qps.solve( nullptr );
    //qps.solve( &testwatch );
 
-   double *relaxvals = new double[m];
-   double *qpbestvals = qps.get_bestsol();
+   auto qpbestvals = qps.get_bestsol();
    ct = 0;
 
-   for ( int i = 0; i < m; i++ )
+   relaxvals = new double[m];
+   for ( int i = 0; i < m; ++i )
    {
-      if( l[i] != u[i] )
+      if( !Equal( vars_localub[i], vars_locallb[i], ep ) )
          relaxvals[i] = qpbestvals[ct++];
       else
-         relaxvals[i] = l[i];
+         relaxvals[i] = vars_locallb[i];
    }
 
    assert( ct == n );
@@ -307,19 +268,12 @@ RelaxResult SVPsolver::SVPSsolveRelaxationINT(
 
       double objval = compute_objval( relaxvals );
 
-      if( objval == qpbestval )
+      if( Equal( objval, qpbestval, ep ) )
          result = GETINTEGER;
 
       SOLUTION solution;
       solution.set_sol( m, relaxvals, objval);
-      pool.add_solution( solution );
-
-      if( bestval > objval ){
-         bestval = objval;
-         bestsol = solution;
-         result = UPDATE;
-         Appfac = sqrt( bestval ) / _Appfac;
-      }
+      SVPStrySol( solution, true, true, nullptr );
 
       // Do not use relaxvals after here
    }
@@ -327,8 +281,6 @@ RelaxResult SVPsolver::SVPSsolveRelaxationINT(
    delete[] A;
    delete[] b;
    delete[] relaxvals;
-   delete[] d_l;
-   delete[] d_u;
 
    return result;
 }

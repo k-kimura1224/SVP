@@ -3,7 +3,7 @@ $(OBJDIR)/main.o: $(SRCDIR)/main.cpp \
  $(SRCDIR)/svpsolver.h
 $(OBJDIR)/Schmidt_manager.o: $(SRCDIR)/Schmidt_manager.h $(SRCDIR)/Schmidt_manager.cpp \
  $(SRCDIR)/vector.h
-$(OBJDIR)/branch.o: $(SRCDIR)/svpsolver.h \
+$(OBJDIR)/branch.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/branch.cpp \
  $(SRCDIR)/node.h \
  $(SRCDIR)/probdata.h \
  $(SRCDIR)/qpsolver.h \

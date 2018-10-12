@@ -5,20 +5,21 @@ using namespace std;
 
 
 class SOLUTION{
-	int		m;
-	double	*val;
-	double	objval;
-	
-	public:
+   int      m;
+   double   *val;
+   double   objval;
 
-		SOLUTION();											// default constructor	
-		SOLUTION( const SOLUTION &source );			// copy constructor
-		SOLUTION& operator=( const SOLUTION& );		// assignment operator
-		~SOLUTION();											// destructor
+   public:
 
-		void set_sol(int s_m, double *s_val, double s_objval);
+      SOLUTION();                               // default constructor
+      SOLUTION( const SOLUTION &source );       // copy constructor
+      SOLUTION& operator=( const SOLUTION& );      // assignment operator
+      ~SOLUTION();                                 // destructor
 
-		double* get_solval(){ return val; }
+      void set_sol(int s_m, double *s_val, double s_objval);
+
+      auto get_solval(){ return val; }
+      auto get_objval(){ return objval; }
 };
 
 #endif

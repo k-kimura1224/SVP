@@ -85,7 +85,8 @@ NODELIST::~NODELIST()
 // setup
 void NODELIST::setup(
       const TYPE_NODELIST  s_type,
-      const double         bestval
+      const double         bestval,
+      const double         gap
       )
 {
    type = s_type;
@@ -94,7 +95,7 @@ void NODELIST::setup(
    {
       case TWO_DEQUE:
       {
-         standardgap = 0.9;
+         standardgap = gap;
          standardvalue = ( 1.0 - standardgap ) * bestval;
 
          break;
@@ -196,6 +197,7 @@ NODE& NODELIST::nodeselection_TDEQUE(
    if ( !node_deque_1.empty() )
       return node_deque_1.front();
 
+
    assert( standardvalue > 0.0 );
    assert( standardgap > 0.0 && standardgap < 1.0 );
 
@@ -205,6 +207,9 @@ NODE& NODELIST::nodeselection_TDEQUE(
    *globallowerbound = standardvalue;
    standardgap -= 0.1;
    standardvalue = ( 1.0 - standardgap ) * bestval;
+
+   if ( (int) node_deque_2.size() == 1 )
+      return node_deque_2.front();
 
    //cout << "node_selection - start" << endl;
    do {
@@ -221,7 +226,10 @@ NODE& NODELIST::nodeselection_TDEQUE(
          if ( node_deque_2[i].get_lowerbound() < standardvalue )
          {
             node_deque_1.push_back( move( node_deque_2[i] ) );
-            node_deque_2[i] = move( node_deque_2.back() );
+
+            if ( (int) node_deque_2.size() > 1 )
+               node_deque_2[i] = move( node_deque_2.back() );
+
             node_deque_2.pop_back();
             --size;
             assert( size == 0 || size == (int) node_deque_2.size() );
@@ -234,6 +242,8 @@ NODE& NODELIST::nodeselection_TDEQUE(
       standardvalue = ( 1.0 - standardgap ) * bestval;
    } while ( node_deque_1.empty() );
    //cout << "node_selection - end" << endl;
+
+   assert( !node_deque_1.empty() );
 
    return node_deque_1.front();
 }

@@ -122,7 +122,7 @@ int main( int argc, char** argv){
 
    SVPsolver   svps;
    svps.SVPSsetup( m, B_, nthreads, timelimit, quiet,
-         false, true, true, true, true, true, true );
+         false, true, true, true, true, true );
 
    bool run;
    if( nthreads == 1 )
@@ -131,7 +131,6 @@ int main( int argc, char** argv){
    }
    else
    {
-      //run = svps.p_solve();
       run = svps.SVPSparasolve();
    }
 
