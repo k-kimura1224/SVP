@@ -160,15 +160,15 @@ void TraMat(
 // print a vector
 template <typename Type>
 void printv(
-	int	n,
+	const int	n,
 	Type	*x
 	);
 
 // print a matrix
 template <typename Type>
 void printM(
-	int	n,
-	int	m,
+	const int	n,
+	const int	m,
 	Type	*x
 	);
 
