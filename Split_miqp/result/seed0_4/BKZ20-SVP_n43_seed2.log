@@ -1,0 +1,1851 @@
+Bounds: 
+x_0: [ -8.000, 8.000]
+x_1: [ -8.000, 8.000]
+x_2: [ -20.000, 20.000]
+x_3: [ -13.000, 13.000]
+x_4: [ -7.000, 7.000]
+x_5: [ -11.000, 11.000]
+x_6: [ -11.000, 11.000]
+x_7: [ -14.000, 14.000]
+x_8: [ -7.000, 7.000]
+x_9: [ -6.000, 6.000]
+x_10: [ -12.000, 12.000]
+x_11: [ -5.000, 5.000]
+x_12: [ -6.000, 6.000]
+x_13: [ -4.000, 4.000]
+x_14: [ -5.000, 5.000]
+x_15: [ -11.000, 11.000]
+x_16: [ -12.000, 12.000]
+x_17: [ -9.000, 9.000]
+x_18: [ -5.000, 5.000]
+x_19: [ -5.000, 5.000]
+x_20: [ -4.000, 4.000]
+x_21: [ -4.000, 4.000]
+x_22: [ -4.000, 4.000]
+x_23: [ -8.000, 8.000]
+x_24: [ -4.000, 4.000]
+x_25: [ -7.000, 7.000]
+x_26: [ -6.000, 6.000]
+x_27: [ -5.000, 5.000]
+x_28: [ -5.000, 5.000]
+x_29: [ -6.000, 6.000]
+x_30: [ -5.000, 5.000]
+x_31: [ -4.000, 4.000]
+x_32: [ -3.000, 3.000]
+x_33: [ -3.000, 3.000]
+x_34: [ -3.000, 3.000]
+x_35: [ -3.000, 3.000]
+x_36: [ -2.000, 2.000]
+x_37: [ -3.000, 3.000]
+x_38: [ -3.000, 3.000]
+x_39: [ -3.000, 3.000]
+x_40: [ -3.000, 3.000]
+x_41: [ -2.000, 2.000]
+x_42: [ -2.000, 2.000]
+-[0]--------------------------------------------
+selection: 0
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86400
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86400
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 7.8398762e+09 after 0.00 sec. (0.02 ticks)
+Found incumbent of value 7.4050039e+09 after 0.00 sec. (0.03 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 43 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 43 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1849 nonzeros.
+Presolve time = 0.00 sec. (0.17 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 43 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 43 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1849 nonzeros.
+Presolve time = 0.00 sec. (0.16 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.90 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       7.40500e+09  -5.94615e+10           902.99%
+      0     0    36547.7459    42   7.40500e+09    36547.7459        7  100.00%
+*     0+    0                       1.40857e+07    36547.7459            99.74%
+*     0+    0                      3153615.0000    36547.7459            98.84%
+      0     2    36547.7459    42  3153615.0000    76342.2672        7   97.58%
+Elapsed time = 0.29 sec. (9.16 ticks, tree = 0.01 MB, solutions = 3)
+*  3200+ 1250                      2388235.0000   111308.7752            95.34%
+  41307 18180  1644399.7482    32  2388235.0000   905675.9550    79479   62.08%
+ 105713 50137  1793914.1411    30  2388235.0000  1242295.8038   204879   47.98%
+ 178774 82859  1867676.6934    27  2388235.0000  1462941.9680   363639   38.74%
+ 252646 110735  2127596.3463    29  2388235.0000  1614377.0275   534966   32.40%
+ 326465 127705  2021257.5547    31  2388235.0000  1724680.6278   675336   27.78%
+ 399402 140414  1908964.8341    32  2388235.0000  1819662.3580   842561   23.81%
+ 471295 144182  2176306.6393    31  2388235.0000  1902424.9392  1006668   20.34%
+ 540973 139631  2071616.9328    33  2388235.0000  1979307.0398  1158763   17.12%
+ 608520 128214  2382111.6648    33  2388235.0000  2052354.2505  1297165   14.06%
+
+Root node processing (before b&c):
+  Real time             =    0.27 sec. (9.02 ticks)
+Parallel b&c, 32 threads:
+  Real time             =   22.70 sec. (3034.86 ticks)
+  Sync time (average)   =   18.15 sec.
+  Wait time (average)   =    0.05 sec.
+                          ------------
+Total (root+branch&cut) =   22.97 sec. (3043.88 ticks)
+
+Solution pool: 5 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  2.3882350000e+06
+Solution time =   22.98 sec.  Iterations = 1765484  Nodes = 828809
+Deterministic time = 3043.88 ticks  (132.46 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 2388235.000, lowerbound(P): 301191.893
+bestval: 2388235.000
+-[1]--------------------------------------------
+selection: 1
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86377
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86377
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 8.3152803e+09 after 0.00 sec. (0.02 ticks)
+Found incumbent of value 7.7724511e+09 after 0.00 sec. (0.03 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 1 columns.
+Reduced MIQP has 0 rows, 42 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 42 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1764 nonzeros.
+Presolve time = 0.00 sec. (0.17 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 42 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 42 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1764 nonzeros.
+Presolve time = 0.00 sec. (0.15 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.00 sec. (0.87 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       7.77245e+09  -5.68177e+10           831.01%
+      0     0    65119.2286    41   7.77245e+09    65119.2286        7  100.00%
+*     0+    0                       1.15924e+07    65119.2286            99.44%
+*     0+    0                      5693359.0000    65119.2286            98.86%
+*     0+    0                      4972589.0000    65119.2286            98.69%
+*     0+    0                      4811143.0000    82036.0234            98.29%
+      0     2    65119.2286    41  4811143.0000    95043.0256        7   98.02%
+Elapsed time = 0.21 sec. (9.65 ticks, tree = 0.01 MB, solutions = 5)
+*  1006+  520                      4395975.0000    95043.0256            97.84%
+*  2659+ 1293                      4264378.0000   147131.9167            96.55%
+*  3175+ 1602                      4219774.0000   209521.0659            95.03%
+*  4938+ 1456                      3528762.0000   209521.0659            94.06%
+*  8297+   19                      2922033.0000   265307.8659            90.92%
+  52326 25297  2652790.5074    21  2922033.0000  1151902.5554    97307   60.58%
+ 122362 67550  2115940.3288    28  2922033.0000  1467380.5310   254461   49.78%
+ 201835 102335  2260409.9825    31  2922033.0000  1688356.2787   402619   42.22%
+ 282303 136786  2066206.1041    29  2922033.0000  1832571.0202   566323   37.28%
+ 363389 170347  2453475.1847    28  2922033.0000  1949392.9302   749264   33.29%
+ 444780 195385  2315477.9966    28  2922033.0000  2039997.7853   909152   30.19%
+ 525389 220743  2867017.2113    29  2922033.0000  2122324.2321  1111629   27.37%
+ 606171 236010  2290287.1999    31  2922033.0000  2190513.8533  1273657   25.03%
+ 686069 246632  2611495.5648    28  2922033.0000  2258930.2544  1436910   22.69%
+ 990203 237359  2905284.8283    27  2922033.0000  2488797.2614  2082809   14.83%
+Elapsed time = 11.50 sec. (3109.12 ticks, tree = 56.81 MB, solutions = 12)
+ 1263231 129784  2848272.0925    26  2922033.0000  2715394.5161  2700348    7.07%
+
+Root node processing (before b&c):
+  Real time             =    0.21 sec. (9.62 ticks)
+Parallel b&c, 32 threads:
+  Real time             =   33.56 sec. (4702.85 ticks)
+  Sync time (average)   =   26.16 sec.
+  Wait time (average)   =    0.11 sec.
+                          ------------
+Total (root+branch&cut) =   33.77 sec. (4712.48 ticks)
+
+Solution pool: 13 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  2.9220330000e+06
+Solution time =   33.78 sec.  Iterations = 3014060  Nodes = 1424049
+Deterministic time = 4712.48 ticks  (139.51 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 2922033.000, lowerbound(P): 308879.171
+bestval: 2388235.000
+-[2]--------------------------------------------
+selection: 2
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86343
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86343
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 8.9495304e+09 after 0.00 sec. (0.02 ticks)
+Found incumbent of value 8.2315897e+09 after 0.00 sec. (0.03 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 2 columns.
+Reduced MIQP has 0 rows, 41 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 41 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1681 nonzeros.
+Presolve time = 0.00 sec. (0.17 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 41 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 41 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1681 nonzeros.
+Presolve time = 0.00 sec. (0.14 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.93 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       8.23159e+09  -5.31680e+10           745.90%
+      0     0     8031.6055    40   8.23159e+09     8031.6055       10  100.00%
+*     0+    0                      3397964.0000     8031.6055            99.76%
+*     0+    0                      2964210.0000     8031.6055            99.73%
+      0     2     8031.6055    40  2964210.0000    20540.9400       10   99.31%
+Elapsed time = 0.33 sec. (8.54 ticks, tree = 0.01 MB, solutions = 3)
+  49623 19578  1703585.0133    30  2964210.0000  1296046.8196    82795   56.28%
+ 124121 58147  2594076.3861    26  2964210.0000  1778162.5502   243294   40.01%
+ 206905 85674  2515278.6855    29  2964210.0000  2046101.1107   406721   30.97%
+ 289581 103469  2948535.1059    27  2964210.0000  2237820.3120   589117   24.51%
+ 370734 106973  2827108.1960    29  2964210.0000  2394274.5408   766759   19.23%
+ 448883 96489        cutoff        2964210.0000  2536628.1254   929851   14.42%
+ 521915 72500  2851113.7897    27  2964210.0000  2674374.8469  1079795    9.78%
+ 587739 31699  2853117.1792    29  2964210.0000  2837611.1790  1217375    4.27%
+
+Root node processing (before b&c):
+  Real time             =    0.27 sec. (8.39 ticks)
+Parallel b&c, 32 threads:
+  Real time             =   19.29 sec. (2046.11 ticks)
+  Sync time (average)   =   15.65 sec.
+  Wait time (average)   =    0.04 sec.
+                          ------------
+Total (root+branch&cut) =   19.56 sec. (2054.50 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  2.9642100000e+06
+Solution time =   19.58 sec.  Iterations = 1279466  Nodes = 621780
+Deterministic time = 2054.50 ticks  (104.95 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 2964210.000, lowerbound(P): 373767.512
+bestval: 2388235.000
+-[3]--------------------------------------------
+selection: 3
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86323
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86323
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 8.2285535e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 3 columns.
+Reduced MIQP has 0 rows, 40 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 40 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1600 nonzeros.
+Presolve time = 0.00 sec. (0.17 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 40 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 40 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1600 nonzeros.
+Presolve time = 0.00 sec. (0.14 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.79 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       8.22855e+09  -4.54604e+10           652.47%
+      0     0    28049.2331    39   8.22855e+09    28049.2331        7  100.00%
+*     0+    0                      8611952.0000    28049.2331            99.67%
+*     0+    0                      3197024.0000    28049.2331            99.12%
+      0     2    28049.2331    39  3197024.0000    57166.3182        7   98.21%
+Elapsed time = 0.29 sec. (7.94 ticks, tree = 0.01 MB, solutions = 3)
+  56313 21819  2573297.8497    27  3197024.0000  1998234.5202   109200   37.50%
+ 134009 30416  3004173.1850    28  3197024.0000  2666504.2445   264973   16.59%
+
+Root node processing (before b&c):
+  Real time             =    0.24 sec. (7.72 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    8.86 sec. (675.63 ticks)
+  Sync time (average)   =    7.29 sec.
+  Wait time (average)   =    0.02 sec.
+                          ------------
+Total (root+branch&cut) =    9.10 sec. (683.36 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  3.1970240000e+06
+Solution time =    9.11 sec.  Iterations = 385769  Nodes = 193658
+Deterministic time = 683.36 ticks  (75.00 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 3197024.000, lowerbound(P): 396875.577
+bestval: 2388235.000
+-[4]--------------------------------------------
+selection: 4
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86314
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86314
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 8.0628489e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 4 columns.
+Reduced MIQP has 0 rows, 39 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 39 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1521 nonzeros.
+Presolve time = 0.00 sec. (0.17 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 39 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 39 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1521 nonzeros.
+Presolve time = 0.00 sec. (0.13 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.75 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       8.06285e+09  -4.17334e+10           617.60%
+      0     0   161093.9614    38   8.06285e+09   161093.9614        7  100.00%
+*     0+    0                      9182437.0000   161093.9614            98.25%
+*     0+    0                      6086594.0000   161093.9614            97.35%
+*     0+    0                      5953372.0000   161093.9614            97.29%
+*     0+    0                      4982834.0000   161093.9614            96.77%
+      0     2   161093.9614    38  4982834.0000   196059.7828        7   96.07%
+Elapsed time = 0.46 sec. (7.65 ticks, tree = 0.01 MB, solutions = 5)
+*   450+   68                      4837031.0000   279131.7024            94.23%
+*  1329+  420                      3190370.0000   279131.7024            91.25%
+
+Root node processing (before b&c):
+  Real time             =    0.42 sec. (7.43 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    1.48 sec. (151.16 ticks)
+  Sync time (average)   =    1.01 sec.
+  Wait time (average)   =    0.01 sec.
+                          ------------
+Total (root+branch&cut) =    1.90 sec. (158.59 ticks)
+
+Solution pool: 11 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  3.1903700000e+06
+Solution time =    1.91 sec.  Iterations = 81938  Nodes = 44114
+Deterministic time = 158.59 ticks  (83.20 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 3190370.000, lowerbound(P): 482125.323
+bestval: 2388235.000
+-[5]--------------------------------------------
+selection: 5
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86312
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86312
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 6.9260097e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 5 columns.
+Reduced MIQP has 0 rows, 38 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 38 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1444 nonzeros.
+Presolve time = 0.00 sec. (0.17 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 38 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 38 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1444 nonzeros.
+Presolve time = 0.00 sec. (0.12 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.72 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       6.92601e+09  -3.91915e+10           665.86%
+      0     0    70573.9406    36   6.92601e+09    70573.9406        7  100.00%
+*     0+    0                      7873157.0000    70573.9406            99.10%
+*     0+    0                      3867133.0000    70573.9406            98.18%
+      0     2    70573.9406    36  3867133.0000   185252.7334        7   95.21%
+Elapsed time = 0.33 sec. (6.81 ticks, tree = 0.01 MB, solutions = 3)
+  65550 10427        cutoff        3867133.0000  3298741.0632   119185   14.70%
+
+Root node processing (before b&c):
+  Real time             =    0.30 sec. (6.61 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    3.15 sec. (299.55 ticks)
+  Sync time (average)   =    2.40 sec.
+  Wait time (average)   =    0.01 sec.
+                          ------------
+Total (root+branch&cut) =    3.45 sec. (306.16 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  3.8671330000e+06
+Solution time =    3.46 sec.  Iterations = 151772  Nodes = 83545
+Deterministic time = 306.16 ticks  (88.49 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 3867133.000, lowerbound(P): 553820.256
+bestval: 2388235.000
+-[6]--------------------------------------------
+selection: 6
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86309
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86309
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 5.7271211e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 6 columns.
+Reduced MIQP has 0 rows, 37 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 37 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1369 nonzeros.
+Presolve time = 0.00 sec. (0.17 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 37 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 37 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1369 nonzeros.
+Presolve time = 0.00 sec. (0.12 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.69 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       5.72712e+09  -3.48606e+10           708.69%
+      0     0   194133.6503    36   5.72712e+09   194133.6503        7  100.00%
+*     0+    0                       1.02918e+07   194133.6503            98.11%
+*     0+    0                      3753743.0000   194133.6503            94.83%
+      0     2   194133.6503    36  3753743.0000   250684.1271        7   93.32%
+Elapsed time = 0.33 sec. (6.44 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.28 sec. (6.24 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.84 sec. (124.27 ticks)
+  Sync time (average)   =    0.51 sec.
+  Wait time (average)   =    0.01 sec.
+                          ------------
+Total (root+branch&cut) =    1.11 sec. (130.51 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  3.7537430000e+06
+Solution time =    1.12 sec.  Iterations = 44099  Nodes = 24206
+Deterministic time = 130.51 ticks  (116.37 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 3753743.000, lowerbound(P): 604487.507
+bestval: 2388235.000
+-[7]--------------------------------------------
+selection: 7
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86308
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86308
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 4.9115860e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 7 columns.
+Reduced MIQP has 0 rows, 36 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 36 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1296 nonzeros.
+Presolve time = 0.00 sec. (0.16 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 36 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 36 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1296 nonzeros.
+Presolve time = 0.00 sec. (0.11 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.65 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       4.91159e+09  -3.07816e+10           726.71%
+      0     0   200210.9040    35   4.91159e+09   200210.9040        7  100.00%
+*     0+    0                      4617905.0000   200210.9040            95.66%
+*     0+    0                      3555133.0000   200210.9040            94.37%
+      0     2   200210.9040    35  3555133.0000   491419.9060        7   86.18%
+Elapsed time = 0.22 sec. (6.18 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.18 sec. (5.99 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.45 sec. (69.97 ticks)
+  Sync time (average)   =    0.27 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.63 sec. (75.96 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  3.5551330000e+06
+Solution time =    0.64 sec.  Iterations = 16168  Nodes = 9067
+Deterministic time = 75.96 ticks  (119.39 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 3555133.000, lowerbound(P): 647423.578
+bestval: 2388235.000
+-[8]--------------------------------------------
+selection: 8
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86307
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86307
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 4.8772932e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 8 columns.
+Reduced MIQP has 0 rows, 35 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 35 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1225 nonzeros.
+Presolve time = 0.00 sec. (0.16 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 35 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 35 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1225 nonzeros.
+Presolve time = 0.00 sec. (0.11 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.62 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       4.87729e+09  -2.59311e+10           631.67%
+      0     0   139752.2350    34   4.87729e+09   139752.2350        7  100.00%
+*     0+    0                      8927972.0000   139752.2350            98.43%
+*     0+    0                      3383093.0000   139752.2350            95.87%
+      0     2   139752.2350    34  3383093.0000   334290.2389        7   90.12%
+Elapsed time = 0.23 sec. (5.70 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.19 sec. (5.52 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.22 sec. (55.50 ticks)
+  Sync time (average)   =    0.08 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.41 sec. (61.02 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  3.3830930000e+06
+Solution time =    0.42 sec.  Iterations = 8660  Nodes = 4923
+Deterministic time = 61.02 ticks  (144.95 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 3383093.000, lowerbound(P): 673604.545
+bestval: 2388235.000
+-[9]--------------------------------------------
+selection: 9
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86306
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86306
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 4.2716832e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 9 columns.
+Reduced MIQP has 0 rows, 34 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 34 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1156 nonzeros.
+Presolve time = 0.00 sec. (0.16 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 34 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 34 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1156 nonzeros.
+Presolve time = 0.00 sec. (0.10 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.59 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       4.27168e+09  -2.42398e+10           667.45%
+      0     0   407315.3620    33   4.27168e+09   407315.3620        7   99.99%
+*     0+    0                       1.12204e+07   407315.3620            96.37%
+*     0+    0                      3806104.0000   407315.3620            89.30%
+      0     2   407315.3620    33  3806104.0000   654629.4594        7   82.80%
+Elapsed time = 0.27 sec. (5.45 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.24 sec. (5.28 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.43 sec. (87.03 ticks)
+  Sync time (average)   =    0.33 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.67 sec. (92.31 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  3.8061040000e+06
+Solution time =    0.68 sec.  Iterations = 5548  Nodes = 3452
+Deterministic time = 92.31 ticks  (135.96 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 3806104.000, lowerbound(P): 808122.423
+bestval: 2388235.000
+-[10]--------------------------------------------
+selection: 10
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86306
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86306
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 4.1913421e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 10 columns.
+Reduced MIQP has 0 rows, 33 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 33 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1089 nonzeros.
+Presolve time = 0.00 sec. (0.16 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 33 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 33 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1089 nonzeros.
+Presolve time = 0.00 sec. (0.09 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.58 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       4.19134e+09  -2.24802e+10           636.35%
+      0     0   452325.0566    32   4.19134e+09   452325.0566        8   99.99%
+*     0+    0                      7525222.0000   452325.0566            93.99%
+*     0+    0                      3643795.0000   452325.0566            87.59%
+      0     2   452325.0566    32  3643795.0000   607809.4765        8   83.32%
+Elapsed time = 0.26 sec. (5.04 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.24 sec. (4.88 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.11 sec. (44.99 ticks)
+  Sync time (average)   =    0.08 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.36 sec. (49.87 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  3.6437950000e+06
+Solution time =    0.36 sec.  Iterations = 3230  Nodes = 2059
+Deterministic time = 49.87 ticks  (136.65 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 3643795.000, lowerbound(P): 808478.382
+bestval: 2388235.000
+-[11]--------------------------------------------
+selection: 11
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86305
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86305
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 4.0146557e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 11 columns.
+Reduced MIQP has 0 rows, 32 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 32 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1024 nonzeros.
+Presolve time = 0.00 sec. (0.16 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 32 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 32 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 1024 nonzeros.
+Presolve time = 0.00 sec. (0.09 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.53 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       4.01466e+09  -2.04095e+10           608.38%
+      0     0   925536.2114    31   4.01466e+09   925536.2114        7   99.98%
+*     0+    0                      4190658.0000   925536.2114            77.91%
+*     0+    0                      4110178.0000   925536.2114            77.48%
+      0     2   925536.2114    31  4110178.0000  1206631.9532        7   70.64%
+Elapsed time = 0.23 sec. (4.82 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.21 sec. (4.67 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.15 sec. (8.58 ticks)
+  Sync time (average)   =    0.13 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.37 sec. (13.25 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  4.1101780000e+06
+Solution time =    0.37 sec.  Iterations = 1828  Nodes = 1236
+Deterministic time = 13.25 ticks  (35.36 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 4110178.000, lowerbound(P): 846125.797
+bestval: 2388235.000
+-[12]--------------------------------------------
+selection: 12
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86305
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86305
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 3.7260961e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 12 columns.
+Reduced MIQP has 0 rows, 31 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 31 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 961 nonzeros.
+Presolve time = 0.00 sec. (0.16 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 31 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 31 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 961 nonzeros.
+Presolve time = 0.00 sec. (0.08 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.50 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       3.72610e+09  -1.91529e+10           614.02%
+      0     0   798186.6605    30   3.72610e+09   798186.6605        7   99.98%
+*     0+    0                      4189704.0000   798186.6605            80.95%
+      0     2   798186.6605    30  4189704.0000  1804771.9015        7   56.92%
+Elapsed time = 0.35 sec. (4.35 ticks, tree = 0.01 MB, solutions = 2)
+
+Root node processing (before b&c):
+  Real time             =    0.32 sec. (4.21 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.19 sec. (5.18 ticks)
+  Sync time (average)   =    0.14 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.50 sec. (9.39 ticks)
+
+Solution pool: 3 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  4.1897040000e+06
+Solution time =    0.51 sec.  Iterations = 999  Nodes = 726
+Deterministic time = 9.39 ticks  (18.37 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 4189704.000, lowerbound(P): 865437.842
+bestval: 2388235.000
+-[13]--------------------------------------------
+selection: 13
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86304
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86304
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 3.6547923e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 13 columns.
+Reduced MIQP has 0 rows, 30 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 30 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 900 nonzeros.
+Presolve time = 0.00 sec. (0.16 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 30 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 30 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 900 nonzeros.
+Presolve time = 0.00 sec. (0.08 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.47 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       3.65479e+09  -1.79937e+10           592.33%
+      0     0   696928.7804    29   3.65479e+09   696928.7804        7   99.98%
+*     0+    0                      6480595.0000   696928.7804            89.25%
+*     0+    0                      3221046.0000   696928.7804            78.36%
+      0     2   696928.7804    29  3221046.0000   696928.7804        7   78.36%
+Elapsed time = 0.25 sec. (3.90 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.19 sec. (3.76 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.10 sec. (2.96 ticks)
+  Sync time (average)   =    0.04 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.30 sec. (6.72 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  3.2210460000e+06
+Solution time =    0.31 sec.  Iterations = 410  Nodes = 308
+Deterministic time = 6.72 ticks  (22.00 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 3221046.000, lowerbound(P): 920698.618
+bestval: 2388235.000
+-[14]--------------------------------------------
+selection: 14
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86304
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86304
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 3.6862357e+09 after 0.00 sec. (0.02 ticks)
+Found incumbent of value 3.6594836e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 14 columns.
+Reduced MIQP has 0 rows, 29 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 29 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 841 nonzeros.
+Presolve time = 0.00 sec. (0.16 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 29 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 29 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 841 nonzeros.
+Presolve time = 0.00 sec. (0.07 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.00 sec. (0.47 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       3.65948e+09  -1.72048e+10           570.14%
+      0     0  1431134.0213    28   3.65948e+09  1431134.0213        8   99.96%
+*     0+    0                      9732945.0000  1431134.0213            85.30%
+*     0+    0                      4391758.0000  1431134.0213            67.41%
+      0     2  1431134.0213    28  4391758.0000  1757554.7054        8   59.98%
+Elapsed time = 0.31 sec. (3.72 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.29 sec. (3.59 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.06 sec. (3.23 ticks)
+  Sync time (average)   =    0.03 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.35 sec. (6.82 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  4.3917580000e+06
+Solution time =    0.35 sec.  Iterations = 722  Nodes = 531
+Deterministic time = 6.82 ticks  (19.28 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 4391758.000, lowerbound(P): 1108823.577
+bestval: 2388235.000
+-[15]--------------------------------------------
+selection: 15
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86304
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86304
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 3.1252271e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 15 columns.
+Reduced MIQP has 0 rows, 28 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 28 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 784 nonzeros.
+Presolve time = 0.00 sec. (0.16 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 28 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 28 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 784 nonzeros.
+Presolve time = 0.00 sec. (0.07 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.00 sec. (0.44 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       3.12523e+09  -1.58028e+10           605.65%
+      0     0   892912.2044    27   3.12523e+09   892912.2044        8   99.97%
+*     0+    0                      9243161.0000   892912.2044            90.34%
+*     0+    0                      4522042.0000   892912.2044            80.25%
+      0     2   892912.2044    27  4522042.0000  1537609.5185        8   66.00%
+Elapsed time = 0.32 sec. (3.52 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.29 sec. (3.40 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.15 sec. (4.89 ticks)
+  Sync time (average)   =    0.11 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.44 sec. (8.29 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  4.5220420000e+06
+Solution time =    0.44 sec.  Iterations = 1248  Nodes = 847
+Deterministic time = 8.29 ticks  (18.80 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 4522042.000, lowerbound(P): 1125306.355
+bestval: 2388235.000
+-[16]--------------------------------------------
+selection: 16
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86303
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86303
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 2.2760728e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 16 columns.
+Reduced MIQP has 0 rows, 27 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 27 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 729 nonzeros.
+Presolve time = 0.00 sec. (0.15 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 27 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 27 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 729 nonzeros.
+Presolve time = 0.00 sec. (0.06 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.00 sec. (0.41 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       2.27607e+09  -1.30653e+10           674.03%
+      0     0  1156520.9326    26   2.27607e+09  1156520.9326        8   99.95%
+*     0+    0                      8362673.0000  1156520.9326            86.17%
+*     0+    0                      5803605.0000  1156520.9326            80.07%
+*     0+    0                      5101301.0000  1156520.9326            77.33%
+      0     2  1156520.9326    26  5101301.0000  1894606.3438        8   62.86%
+Elapsed time = 0.26 sec. (3.33 ticks, tree = 0.01 MB, solutions = 4)
+
+Root node processing (before b&c):
+  Real time             =    0.18 sec. (3.22 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.12 sec. (2.71 ticks)
+  Sync time (average)   =    0.03 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.30 sec. (5.93 ticks)
+
+Solution pool: 5 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  5.1013010000e+06
+Solution time =    0.31 sec.  Iterations = 998  Nodes = 697
+Deterministic time = 5.93 ticks  (19.08 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 5101301.000, lowerbound(P): 1125850.961
+bestval: 2388235.000
+-[17]--------------------------------------------
+selection: 17
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86303
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86303
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 1.7735375e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 17 columns.
+Reduced MIQP has 0 rows, 26 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 26 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 676 nonzeros.
+Presolve time = 0.00 sec. (0.15 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 26 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 26 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 676 nonzeros.
+Presolve time = 0.00 sec. (0.06 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.41 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       1.77354e+09  -1.06718e+10           701.72%
+      0     0  1657963.6191    25   1.77354e+09  1657963.6191        9   99.91%
+*     0+    0                      6473562.0000  1657963.6191            74.39%
+*     0+    0                      4857245.0000  1657963.6191            65.87%
+      0     2  1657963.6191    25  4857245.0000  2259149.7884        9   53.49%
+Elapsed time = 0.20 sec. (2.92 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.16 sec. (2.82 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.17 sec. (1.59 ticks)
+  Sync time (average)   =    0.13 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.33 sec. (4.41 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  4.8572450000e+06
+Solution time =    0.34 sec.  Iterations = 385  Nodes = 312
+Deterministic time = 4.41 ticks  (13.04 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 4857245.000, lowerbound(P): 1126390.938
+bestval: 2388235.000
+-[18]--------------------------------------------
+selection: 18
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86303
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86303
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 1.6303653e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 18 columns.
+Reduced MIQP has 0 rows, 25 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 25 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 625 nonzeros.
+Presolve time = 0.00 sec. (0.15 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 25 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 25 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 625 nonzeros.
+Presolve time = 0.00 sec. (0.06 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.00 sec. (0.36 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       1.63037e+09  -9.15925e+09           661.79%
+      0     0  1087061.1528    24   1.63037e+09  1087061.1528        8   99.93%
+*     0+    0                      3873944.0000  1087061.1528            71.94%
+      0     2  1087061.1528    24  3873944.0000  1462932.9337        8   62.24%
+Elapsed time = 0.30 sec. (2.73 ticks, tree = 0.01 MB, solutions = 2)
+
+Root node processing (before b&c):
+  Real time             =    0.27 sec. (2.63 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.12 sec. (1.33 ticks)
+  Sync time (average)   =    0.09 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.39 sec. (3.96 ticks)
+
+Solution pool: 3 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  3.8739440000e+06
+Solution time =    0.39 sec.  Iterations = 229  Nodes = 163
+Deterministic time = 3.96 ticks  (10.10 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 3873944.000, lowerbound(P): 1134029.338
+bestval: 2388235.000
+-[19]--------------------------------------------
+selection: 19
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86302
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86302
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 1.8374299e+09 after 0.00 sec. (0.02 ticks)
+Found incumbent of value 1.6344475e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 19 columns.
+Reduced MIQP has 0 rows, 24 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 24 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 576 nonzeros.
+Presolve time = 0.00 sec. (0.15 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 24 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 24 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 576 nonzeros.
+Presolve time = 0.00 sec. (0.05 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.36 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       1.63445e+09  -8.44797e+09           616.87%
+      0     0  1463998.7080    23   1.63445e+09  1463998.7080        9   99.91%
+*     0+    0                      4274242.0000  1463998.7080            65.75%
+      0     2  1463998.7080    23  4274242.0000  1856048.8335        9   56.58%
+Elapsed time = 0.33 sec. (2.37 ticks, tree = 0.01 MB, solutions = 2)
+
+Root node processing (before b&c):
+  Real time             =    0.29 sec. (2.28 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.13 sec. (1.15 ticks)
+  Sync time (average)   =    0.09 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.42 sec. (3.43 ticks)
+
+Solution pool: 3 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  4.2742420000e+06
+Solution time =    0.43 sec.  Iterations = 150  Nodes = 116
+Deterministic time = 3.43 ticks  (8.01 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 4274242.000, lowerbound(P): 1312543.385
+bestval: 2388235.000
+-[20]--------------------------------------------
+selection: 20
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86302
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86302
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 1.8883688e+09 after 0.00 sec. (0.02 ticks)
+Found incumbent of value 1.7822283e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 20 columns.
+Reduced MIQP has 0 rows, 23 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 23 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 529 nonzeros.
+Presolve time = 0.00 sec. (0.15 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 23 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 23 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 529 nonzeros.
+Presolve time = 0.00 sec. (0.05 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.32 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       1.78223e+09  -7.63318e+09           528.29%
+      0     0  1605952.2604    22   1.78223e+09  1605952.2604        8   99.91%
+*     0+    0                      9214922.0000  1605952.2604            82.57%
+*     0+    0                      5685993.0000  1605952.2604            71.76%
+      0     2  1605952.2604    22  5685993.0000  2152630.5351        8   62.14%
+Elapsed time = 0.21 sec. (2.38 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.16 sec. (2.30 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.15 sec. (1.64 ticks)
+  Sync time (average)   =    0.09 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.31 sec. (3.94 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  5.6859930000e+06
+Solution time =    0.32 sec.  Iterations = 339  Nodes = 282
+Deterministic time = 3.94 ticks  (12.49 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 5685993.000, lowerbound(P): 1506353.652
+bestval: 2388235.000
+-[21]--------------------------------------------
+selection: 21
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86301
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86301
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 1.7466832e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 21 columns.
+Reduced MIQP has 0 rows, 22 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 22 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 484 nonzeros.
+Presolve time = 0.00 sec. (0.15 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 22 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 22 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 484 nonzeros.
+Presolve time = 0.00 sec. (0.04 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.00 sec. (0.28 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       1.74668e+09  -6.98568e+09           499.94%
+      0     0  2232042.1807    21   1.74668e+09  2232042.1807        7   99.87%
+*     0+    0                      5288483.0000  2232042.1807            57.79%
+      0     2  2232042.1807    21  5288483.0000  3485901.2070        7   34.09%
+Elapsed time = 0.25 sec. (2.07 ticks, tree = 0.01 MB, solutions = 2)
+
+Root node processing (before b&c):
+  Real time             =    0.22 sec. (2.00 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.09 sec. (1.06 ticks)
+  Sync time (average)   =    0.05 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.31 sec. (3.06 ticks)
+
+Solution pool: 3 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  5.2884830000e+06
+Solution time =    0.32 sec.  Iterations = 114  Nodes = 102
+Deterministic time = 3.06 ticks  (9.67 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 5288483.000, lowerbound(P): 1714574.187
+bestval: 2388235.000
+-[22]--------------------------------------------
+selection: 22
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86301
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86301
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 1.5995649e+09 after 0.00 sec. (0.01 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 22 columns.
+Reduced MIQP has 0 rows, 21 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 21 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 441 nonzeros.
+Presolve time = 0.00 sec. (0.14 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 21 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 21 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 441 nonzeros.
+Presolve time = 0.00 sec. (0.04 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.27 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       1.59956e+09  -6.45123e+09           503.31%
+      0     0  2490993.0693    20   1.59956e+09  2490993.0693        8   99.84%
+*     0+    0                      5845915.0000  2490993.0693            57.39%
+      0     2  2490993.0693    20  5845915.0000  3067945.0552        8   47.52%
+Elapsed time = 0.23 sec. (1.95 ticks, tree = 0.01 MB, solutions = 2)
+
+Root node processing (before b&c):
+  Real time             =    0.22 sec. (1.88 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.07 sec. (1.11 ticks)
+  Sync time (average)   =    0.06 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.29 sec. (2.99 ticks)
+
+Solution pool: 3 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  5.8459150000e+06
+Solution time =    0.30 sec.  Iterations = 180  Nodes = 131
+Deterministic time = 2.99 ticks  (10.05 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 5845915.000, lowerbound(P): 1963603.996
+bestval: 2388235.000
+-[23]--------------------------------------------
+selection: 23
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86301
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86301
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 1.9169632e+09 after 0.00 sec. (0.01 ticks)
+Found incumbent of value 1.6038972e+09 after 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 23 columns.
+Reduced MIQP has 0 rows, 20 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 20 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 400 nonzeros.
+Presolve time = 0.00 sec. (0.14 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 20 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 20 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 400 nonzeros.
+Presolve time = 0.00 sec. (0.04 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.00 sec. (0.24 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       1.60390e+09  -5.57615e+09           447.66%
+      0     0  1938365.1035    19   1.60390e+09  1938365.1035        7   99.88%
+*     0+    0                      7314969.0000  1938365.1035            73.50%
+*     0+    0                      3959012.0000  1938365.1035            51.04%
+      0     2  1938365.1035    19  3959012.0000  3099953.2103        7   21.70%
+Elapsed time = 0.33 sec. (1.73 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.29 sec. (1.67 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.05 sec. (0.78 ticks)
+  Sync time (average)   =    0.01 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.35 sec. (2.44 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  3.9590120000e+06
+Solution time =    0.35 sec.  Iterations = 42  Nodes = 31
+Deterministic time = 2.44 ticks  (6.96 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 3959012.000, lowerbound(P): 2078816.580
+bestval: 2388235.000
+-[24]--------------------------------------------
+selection: 24
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86300
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86300
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 1.6551476e+09 after 0.00 sec. (0.01 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 24 columns.
+Reduced MIQP has 0 rows, 19 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 19 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 361 nonzeros.
+Presolve time = 0.00 sec. (0.14 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 19 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 19 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 361 nonzeros.
+Presolve time = 0.00 sec. (0.03 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.23 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       1.65515e+09  -4.91431e+09           396.91%
+      0     0  2982649.1659    18   1.65515e+09  2982649.1659        8   99.82%
+*     0+    0                      5903021.0000  2982649.1659            49.47%
+      0     2  2986864.3360    17  5903021.0000  4016233.1972        9   31.96%
+Elapsed time = 0.19 sec. (1.70 ticks, tree = 0.01 MB, solutions = 2)
+
+Root node processing (before b&c):
+  Real time             =    0.17 sec. (1.65 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.04 sec. (0.71 ticks)
+  Sync time (average)   =    0.02 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.21 sec. (2.37 ticks)
+
+Solution pool: 3 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  5.9030210000e+06
+Solution time =    0.22 sec.  Iterations = 114  Nodes = 75
+Deterministic time = 2.37 ticks  (10.73 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 5903021.000, lowerbound(P): 2216543.087
+bestval: 2388235.000
+-[25]--------------------------------------------
+selection: 25
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86300
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86300
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 1.6099709e+09 after 0.00 sec. (0.01 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 25 columns.
+Reduced MIQP has 0 rows, 18 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 18 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 324 nonzeros.
+Presolve time = 0.00 sec. (0.14 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 18 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 18 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 324 nonzeros.
+Presolve time = 0.00 sec. (0.03 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.00 sec. (0.24 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       1.60997e+09  -4.29664e+09           366.88%
+      0     0  2912422.2337    17   1.60997e+09  2912422.2337       10   99.82%
+*     0+    0                      4700367.0000  2912422.2337            38.04%
+      0     0        cutoff        4700367.0000                     28    0.00%
+Elapsed time = 0.38 sec. (1.08 ticks, tree = 0.01 MB, solutions = 2)
+
+Root node processing (before b&c):
+  Real time             =    0.38 sec. (1.08 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.38 sec. (1.08 ticks)
+
+Solution pool: 3 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  4.7003670000e+06
+Solution time =    0.38 sec.  Iterations = 28  Nodes = 0
+Deterministic time = 1.08 ticks  (2.81 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 4700367.000, lowerbound(P): 2376163.929
+bestval: 2388235.000
+-[26]--------------------------------------------
+selection: 26
+
+Welcome to IBM(R) ILOG(R) CPLEX(R) Interactive Optimizer 12.8.0.0
+  with Simplex, Mixed Integer & Barrier Optimizers
+5725-A06 5725-A29 5724-Y48 5724-Y49 5724-Y54 5724-Y55 5655-Y21
+Copyright IBM Corp. 1988, 2017.  All Rights Reserved.
+
+Type 'help' for a list of available commands.
+Type 'help' followed by a command name for more
+information on commands.
+
+CPLEX> Problem 'cplex.lp' read.
+Read time = 0.00 sec. (0.10 ticks)
+CPLEX> New value for time limit in seconds: 86300
+CPLEX> New value for mixed integer optimality gap tolerance: 1e-10
+CPLEX> CPXPARAM_TimeLimit                               86300
+CPXPARAM_MIP_Tolerances_MIPGap                   1e-10
+Found incumbent of value 1.3805185e+09 after 0.00 sec. (0.01 ticks)
+Tried aggregator 1 time.
+MIQP Presolve eliminated 0 rows and 26 columns.
+Reduced MIQP has 0 rows, 17 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 17 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 289 nonzeros.
+Presolve time = 0.00 sec. (0.14 ticks)
+Tried aggregator 1 time.
+Reduced MIQP has 0 rows, 17 columns, and 0 nonzeros.
+Reduced MIQP has 0 binaries, 17 generals, 0 SOSs, and 0 indicators.
+Reduced MIQP objective Q matrix has 289 nonzeros.
+Presolve time = 0.00 sec. (0.03 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 32 threads.
+Root relaxation solution time = 0.01 sec. (0.21 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                       1.38052e+09  -3.55800e+09           357.73%
+      0     0  2333582.4369    16   1.38052e+09  2333582.4369        9   99.83%
+*     0+    0                      6492524.0000  2333582.4369            64.06%
+*     0+    0                      5199661.0000  2333582.4369            55.12%
+      0     2  2333582.4369    16  5199661.0000  3020774.0316        9   41.90%
+Elapsed time = 0.26 sec. (1.30 ticks, tree = 0.01 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.23 sec. (1.26 ticks)
+Parallel b&c, 32 threads:
+  Real time             =    0.10 sec. (0.63 ticks)
+  Sync time (average)   =    0.08 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.33 sec. (1.89 ticks)
+
+Solution pool: 4 solutions saved.
+
+MIP - Integer optimal solution:  Objective =  5.1996610000e+06
+Solution time =    0.34 sec.  Iterations = 65  Nodes = 56
+Deterministic time = 1.89 ticks  (5.56 ticks/sec)
+
+CPLEX> Incumbent solution written to file 'cplex.sol'.
+CPLEX> 
+
+optval(Q): 5199661.000, lowerbound(P): 2391848.576
+CUT-OFF!!
+
+time: 101s
+best value: 2388235.000
+norm: 1545.392
+AF: 0.899
+Nodes: 0
+best solution:
+ 0: 1.000
