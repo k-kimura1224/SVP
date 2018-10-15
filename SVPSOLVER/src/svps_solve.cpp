@@ -124,7 +124,7 @@ bool SVPsolver::SVPSrunBranchandBound()
       auto& node = (NL.*nodeselection)( &GLB, bestval, nodeindex, disp );
 
       // get local bounds of variable
-      if ( relaxresult == INFEASIBLE || relaxresult == GETINTEGER )
+      if ( relaxresult == INFEASIBLE || relaxresult == GETINTEGER || NL.getListsize() > 500000 )
          SVPSgetVarsLocalBound( node, vars_localub, vars_locallb );
 
       //for ( auto i = 0; i < m; ++i )
