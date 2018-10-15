@@ -194,6 +194,14 @@ NODE& NODELIST::nodeselection_TDEQUE(
    assert( listsize > 0 );
    assert( !node_deque_1.empty() || !node_deque_2.empty() );
 
+   if ( listsize > 500000 )
+   {
+      if ( !node_deque_2.empty() )
+         return node_deque_2.front();
+      else
+         return node_deque_1.front();
+   }
+
    if ( !node_deque_1.empty() )
       return node_deque_1.front();
 
