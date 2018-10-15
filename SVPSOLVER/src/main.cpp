@@ -163,16 +163,16 @@ int main( int argc, char** argv){
       com += "%";
    }
 
-   struct rusage r;
-   if (getrusage(RUSAGE_SELF, &r) != 0) {
-         /*Failure*/
-   }
+   //struct rusage r;
+   //if (getrusage(RUSAGE_SELF, &r) != 0) {
+   //      /*Failure*/
+   //}
 
-   int mem = floor( (1.0e-6)*r.ru_maxrss );
+   //int mem = floor( (1.0e-6)*r.ru_maxrss );
 
-   com += " MAXMEM: ";
-   com += to_string( mem );
-   com += "MB";
+   //com += " MAXMEM: ";
+   //com += to_string( mem );
+   //com += "MB";
 
    com += " >> result.txt";
 
