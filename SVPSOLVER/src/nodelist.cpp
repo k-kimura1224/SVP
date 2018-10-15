@@ -146,7 +146,7 @@ void NODELIST::setup(
          division = bestval * 0.1;
 
          double buf = s_memory;
-         buf /= 3;
+         buf /= 2;
          buf /= 21 * m + 24;
          buf *= 1024;
          buf *= 1024;
