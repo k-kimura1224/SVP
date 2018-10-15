@@ -110,6 +110,7 @@ bool SVPsolver::SVPSrunBranchandBound()
    RelaxResult relaxresult = INFEASIBLE;
    double* vars_localub;
    double* vars_locallb;
+   NODE* node = nullptr;
 
    vars_localub = new double[m];
    vars_locallb = new double[m];
@@ -121,27 +122,29 @@ bool SVPsolver::SVPSrunBranchandBound()
       //testwatch.stop();
 
       // select a node from the list
-      auto& node = (NL.*nodeselection)( &GLB, bestval, nodeindex, disp );
-
       // get local bounds of variable
-      if ( relaxresult == INFEASIBLE || relaxresult == GETINTEGER || NL.getListsize() > 500000 )
-         SVPSgetVarsLocalBound( node, vars_localub, vars_locallb );
+      if ( node == nullptr )
+      {
+         node = (NL.*nodeselection)( &GLB, bestval, nodeindex, disp );
+         SVPSgetVarsLocalBound( *node, vars_localub, vars_locallb );
+      }
+      assert( node != nullptr );
 
       //for ( auto i = 0; i < m; ++i )
       //   printf("%d:[%f,%f]\n", i, vars_locallb[i], vars_localub[i]);
 
       // solve a relaxation problem
-      relaxresult = SVPSsolveRelaxation( node, vars_localub, vars_locallb );
+      relaxresult = SVPSsolveRelaxation( *node, vars_localub, vars_locallb );
 
       // run heuristics
       if( relaxresult == FEASIBLE && HEUR_APP < Appfac )
-         SVPSheur( node, vars_localub, vars_locallb );
+         SVPSheur( *node, vars_localub, vars_locallb );
 
       // branch
       if( relaxresult == UPDATE || relaxresult == FEASIBLE )
       {
          //cout << "branch-start";
-         SVPSbranch( node, nodeindex, vars_localub, vars_locallb );
+         SVPSbranch( *node, nodeindex, vars_localub, vars_locallb );
          nodeindex += 2;
          //cout << "-end-";
       }
@@ -149,6 +152,7 @@ bool SVPsolver::SVPSrunBranchandBound()
       {
          // remove
          //cout << "remove-start";
+         node = nullptr;
          (NL.*cut_off)();
          //cout << "-end-";
          cutoff++;
@@ -172,7 +176,7 @@ bool SVPsolver::SVPSrunBranchandBound()
             if( subsol == true )
                cout << this_thread::get_id() << ":";
 
-            disp_log( node, relaxresult, nodeindex, cutoff );
+            disp_log( *node, relaxresult, nodeindex, cutoff );
             disp = nodeindex;
             cutoff = 0;
          }

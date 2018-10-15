@@ -69,8 +69,9 @@ int main( int argc, char** argv){
    int   nthreads = 1;
    int   timelimit = 5000;
    bool  quiet = false;
+   int   memory = 8;
 
-   while ( (opt = getopt(argc, argv, "f:p:t:qh")) != -1)
+   while ( (opt = getopt(argc, argv, "f:p:t:qhm:")) != -1)
    {
       switch ( opt )
       {
@@ -94,6 +95,10 @@ int main( int argc, char** argv){
             cout << "Usage: " << argv[0] << " [-f filename] [-p nthreads] [-t timelimit]" << endl;
             break;
 
+         case 'm':
+            memory = atoi ( optarg );
+            break;
+
          default: /* '?' */
             cout << "Usage: " << argv[0] << " [-f filename] [-p nthreads] [-t timelimit]" << endl;
             break;
@@ -108,6 +113,9 @@ int main( int argc, char** argv){
    }
 
    assert( nthreads > 0 );
+   assert( memory > 0 );
+
+   memory /= nthreads;
 
    int      m;
 
@@ -121,7 +129,7 @@ int main( int argc, char** argv){
    ReadData( filename, m, B_);
 
    SVPsolver   svps;
-   svps.SVPSsetup( m, B_, nthreads, timelimit, quiet,
+   svps.SVPSsetup( m, B_, nthreads, timelimit, memory, quiet,
          false, true, true, true, true, true );
 
    bool run;
@@ -168,7 +176,7 @@ int main( int argc, char** argv){
          /*Failure*/
    }
 
-   int mem = floor( (1.0e-6)*r.ru_maxrss );
+   int mem = floor( (r.ru_maxrss/1024)/1024 );
 
    com += " MAXMEM: ";
    com += to_string( mem );

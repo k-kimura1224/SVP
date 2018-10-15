@@ -66,7 +66,7 @@ class SVPsolver{
 
    void     (NODELIST::*push_back)( const NODE& );
    void     (NODELIST::*move_back)( NODE& );
-   NODE&    (NODELIST::*nodeselection)( double* globallowerbound, const double bestval, const int index, const int disp );
+   NODE*    (NODELIST::*nodeselection)( double* globallowerbound, const double bestval, const int index, const int disp );
    void     (NODELIST::*cut_off)();
    double   (NODELIST::*get_GLB)() const;
    bool     (NODELIST::*check_size)() const;
@@ -91,6 +91,7 @@ class SVPsolver{
    int   TIMELIMIT;
    int   LEFTNODELIMIT;
    int   NODELIMIT;
+   int   MEMORY;
    bool  quiet;
 
    Status status;
@@ -112,7 +113,8 @@ class SVPsolver{
 
       // setup {
       void  SVPSsetup(  const int s_m, const double* s_B_, const int s_nthreads,
-                        const int s_timelimit, const bool s_quiet,
+                        const int s_timelimit, const int s_memory,
+                        const bool s_quiet,
                         const bool w_subsolver, const bool w_bounds,
                         const bool w_heur, const bool w_app, const bool w_gn,
                         const bool w_nl );
@@ -123,7 +125,8 @@ class SVPsolver{
       void  SVPSgenerateNodes();
       void  SVPStightenBounds( const int memo );
       void  SVPSsetupNodelist() {
-         nodelist.setup( type, bestval );
+         assert( probdata.get_m() > 0 );
+         nodelist.setup( type, bestval, MEMORY, probdata.get_m() );
          switch ( type )
          {
             case TWO_DEQUE:
@@ -138,6 +141,20 @@ class SVPsolver{
                para_selection = &NODELIST::para_selection_TDEQUE;
                pop_front = &NODELIST::pop_front_TDEQUE;
                getSubsize = &NODELIST::getSubsize_TDEQUE;
+               break;
+            }
+            case TEN_DEQUE:
+            {
+               push_back = &NODELIST::push_back_TENDEQUE;
+               move_back = &NODELIST::move_back_TENDEQUE;
+               nodeselection = &NODELIST::nodeselection_TENDEQUE;
+               cut_off = &NODELIST::cutoff_TENDEQUE;
+               get_GLB = &NODELIST::get_GLB_TENDEQUE;
+               check_size = &NODELIST::check_size_TENDEQUE;
+               setup_para_selection = &NODELIST::setup_para_selection_TENDEQUE;
+               para_selection = &NODELIST::para_selection_TENDEQUE;
+               pop_front = &NODELIST::pop_front_TENDEQUE;
+               getSubsize = &NODELIST::getSubsize_TENDEQUE;
                break;
             }
             default:

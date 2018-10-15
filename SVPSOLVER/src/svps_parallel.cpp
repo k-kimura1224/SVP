@@ -40,7 +40,7 @@ void SVPsolver::SVPSsolveSubprob(
       const auto B_ = probdata.get_B_();
       sub_timelimit = TIMELIMIT - stopwatch.get_time();
 
-      sub.SVPSsetup( m, B_, 1, sub_timelimit, true,
+      sub.SVPSsetup( m, B_, 1, sub_timelimit, MEMORY, true,
                true, false, false, false, false, false );
       sub.SVPSsetBounds( bounds );
       sub.SVPSsetNorm( norm );
@@ -319,7 +319,7 @@ bool SVPsolver::SVPSparasolve()
       nodelist.sort();
 
    if ( type == TWO_DEQUE )
-      nodelist.setup( type, bestval, 0.3 );
+      nodelist.setup( type, bestval, MEMORY, -1, 0.3 );
 
    // parallel {{
 

@@ -33,8 +33,9 @@ SVPsolver::SVPsolver(){ // default constructor
    bestval = -1.0;
    GLB = 0.0;
 
-   type = LIST;
-   type = TWO_DEQUE;
+   //type = LIST;
+   //type = TWO_DEQUE;
+   type = TEN_DEQUE;
 
    push_back = nullptr;
    move_back = nullptr;
@@ -60,6 +61,7 @@ SVPsolver::SVPsolver(){ // default constructor
    TIMELIMIT = 86400;
    LEFTNODELIMIT = 2000000000;
    NODELIMIT = 2000000000;
+   MEMORY = 8;
 
    epsilon = 1.0e-12;
 
@@ -102,6 +104,7 @@ SVPsolver::SVPsolver( const SVPsolver &source )
    TIMELIMIT = source.TIMELIMIT;
    LEFTNODELIMIT = source.LEFTNODELIMIT;
    NODELIMIT = source.NODELIMIT;
+   MEMORY = source.MEMORY;
    epsilon = source.epsilon;
    subsolver = source.subsolver;
    status = source.status;
@@ -158,6 +161,7 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
       TIMELIMIT = source.TIMELIMIT;
       LEFTNODELIMIT = source.LEFTNODELIMIT;
       NODELIMIT = source.NODELIMIT;
+      MEMORY = source.MEMORY;
       epsilon = source.epsilon;
       subsolver = source.subsolver;
       status = source.status;
@@ -217,6 +221,7 @@ void SVPsolver::SVPSsetup(
       const double*  s_B_,
       const int      s_nthreads,
       const int      s_timelimit,
+      const int      s_memory,
       const bool     s_quiet,
       const bool     w_subsolver,   // wheter this is subsolver
       const bool     w_bounds,      // wheter bounds are computed
@@ -250,6 +255,8 @@ void SVPsolver::SVPSsetup(
    // subsolver
    subsolver = w_subsolver;
 
+   // memory
+   MEMORY = s_memory;
 
    // nthreads
    assert( s_nthreads > 0 );
