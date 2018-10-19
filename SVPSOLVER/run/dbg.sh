@@ -10,10 +10,11 @@ run()
 
    thread=4
    time=86400
+   memory=8
 
 	export OMP_NUM_THREADS=1
-   echo "../bin/SVPSOLVER.dbg -f $file -p $thread -t $time > ${name}.log"
-   ../bin/SVPSOLVER.dbg -f $file -p $thread -t $time > ${name}.log
+   echo "../bin/SVPSOLVER.dbg -f $file -p $thread -t $time -m $memory > ${name}.log"
+   ../bin/SVPSOLVER.dbg -f $file -p $thread -t $time -m $memory > ${name}.log
 }
 
 dirname=$1
