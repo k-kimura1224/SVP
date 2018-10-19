@@ -50,7 +50,9 @@ void SVPsolver::SVPSsolveSubprob(
       sub.SVPSsetupNodelist();
       sub.SVPSsetAppfac( Appfac, _Appfac );
 
-      const auto setup = (nodelist.*setup_para_selection)();
+      const auto setup = (nodelist.*setup_parapush_selection)();
+      assert( setup >= 0 && setup < 10 );
+
       sub.SVPSmoveNode( (nodelist.*para_selection)(setup) );
       SVPSpopNode( setup );
    }
@@ -116,6 +118,8 @@ void SVPsolver::SVPSsolveSubprob(
                      cout << "break (SOLVED)" << endl;
                   }
 
+                  assert( nnode > totalpop );
+                  nnode -= totalpop;
                   result = true;
                   status = SOLVED;
                   cv.notify_all();
@@ -157,12 +161,18 @@ void SVPsolver::SVPSsolveSubprob(
             sub.SVPSresetIndex();
             sub.SVPSsetupNodelist();
 
-            const auto setup = (nodelist.*setup_para_selection)();
+            const auto setup = (nodelist.*setup_parapush_selection)();
             const auto nodelistsize = nodelist.getListsize();
             const auto maxsize = (nodelist.*getSubsize)( setup );
             int pushsize = nodelistsize * 0.1;
 
-            if ( maxsize <= 100 )
+            assert( setup >= 0 && setup < 10 );
+            assert( nodelistsize > 0 );
+            assert( maxsize > 0 );
+            assert( pushsize >= 0 );
+            assert( nodelistsize >= maxsize );
+
+            if ( maxsize < pushsize || maxsize <= 100 )
                pushsize = maxsize;
             else if ( pushsize <= 100 )
                pushsize = 100;
@@ -212,10 +222,13 @@ void SVPsolver::SVPSsolveSubprob(
                if ( sub_listsize > nodelist.getListsize() )
                {
                   int popsize = 0;
-                  const auto setup = sub.SVPSgetSetupParaSelection();
+                  const auto setup = sub.SVPSgetSetuppopParaSelection( nthreads - n_running_threads );
                   const auto maxsize = sub.SVPSgetSubsize( setup );
 
                   assert( pop_maxrate > 0.0 && pop_maxrate <= 1.0 );
+                  assert( setup >= 0 && setup < 10 );
+                  assert( maxsize > 0 );
+                  assert( maxsize <= sub_listsize );
 
                   if ( n_running_threads > 1 )
                      popsize = sub_listsize * 0.5;

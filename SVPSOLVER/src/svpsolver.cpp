@@ -44,6 +44,8 @@ SVPsolver::SVPsolver(){ // default constructor
    get_GLB = nullptr;
    check_size = nullptr;
    setup_para_selection = nullptr;
+   setup_parapush_selection = nullptr;
+   setup_parapop_selection = nullptr;
    para_selection = nullptr;
    pop_front = nullptr;
    getSubsize = nullptr;
@@ -91,6 +93,8 @@ SVPsolver::SVPsolver( const SVPsolver &source )
    get_GLB = source.get_GLB;
    check_size = source.check_size;
    setup_para_selection = source.setup_para_selection;
+   setup_parapush_selection = source.setup_parapush_selection;
+   setup_parapop_selection = source.setup_parapop_selection;
    para_selection = source.para_selection;
    pop_front = source.pop_front;
    getSubsize = source.getSubsize;
@@ -147,6 +151,8 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
       get_GLB = source.get_GLB;
       check_size = source.check_size;
       setup_para_selection = source.setup_para_selection;
+      setup_parapush_selection = source.setup_parapush_selection;
+      setup_parapop_selection = source.setup_parapop_selection;
       para_selection = source.para_selection;
       pop_front = source.pop_front;
       getSubsize = source.getSubsize;
@@ -211,6 +217,8 @@ SVPsolver::~SVPsolver()
    get_GLB = nullptr;
    check_size = nullptr;
    setup_para_selection = nullptr;
+   setup_parapush_selection = nullptr;
+   setup_parapop_selection = nullptr;
    para_selection = nullptr;
    pop_front = nullptr;
    getSubsize = nullptr;

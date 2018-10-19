@@ -187,6 +187,55 @@ class NODELIST{
          return maxindex;
       }
 
+      int      setup_parapush_selection_TENDEQUE() const {
+         assert( listsize > 0 );
+         assert( type == TEN_DEQUE );
+         assert( !node_deque.empty() );
+         assert( (int)node_deque.size() == 10 );
+         assert( maxnode > 0 );
+
+         if ( maxnode > listsize )
+         {
+            for ( int i = 0; i < 10; ++i)
+            {
+               if ( !node_deque[i].empty() )
+                  return i;
+            }
+         }
+         else
+         {
+            for ( int i = 9; i >= 0; --i )
+               if ( !node_deque[i].empty() )
+                  return i;
+         }
+         return -1;
+      }
+      int      setup_parapop_selection_TENDEQUE( const bool sleep ) const {
+         assert( listsize > 0 );
+         assert( type == TEN_DEQUE );
+         assert( !node_deque.empty() );
+         assert( (int)node_deque.size() == 10 );
+         assert( maxnode > 0 );
+
+         if ( sleep || maxnode < listsize )
+         {
+            for ( int i = 0; i < 10; ++i)
+            {
+               if ( !node_deque[i].empty() )
+                  return i;
+            }
+         }
+         else
+         {
+            for ( int i = 9; i >= 0; --i )
+            {
+               if ( !node_deque[i].empty() )
+                  return i;
+            }
+         }
+         return -1;
+      }
+
       NODE&    para_selection_LIST( const int setup ) {
          assert( listsize > 0 && !node_list.empty() );
          return node_list.front(); }

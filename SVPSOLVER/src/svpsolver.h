@@ -71,6 +71,8 @@ class SVPsolver{
    double   (NODELIST::*get_GLB)() const;
    bool     (NODELIST::*check_size)() const;
    int      (NODELIST::*setup_para_selection)() const;
+   int      (NODELIST::*setup_parapush_selection)() const;
+   int      (NODELIST::*setup_parapop_selection)( const bool sleep ) const;
    NODE&    (NODELIST::*para_selection)( const int );
    void     (NODELIST::*pop_front)( const int );
    int      (NODELIST::*getSubsize)( const int ) const;
@@ -152,6 +154,8 @@ class SVPsolver{
                get_GLB = &NODELIST::get_GLB_TENDEQUE;
                check_size = &NODELIST::check_size_TENDEQUE;
                setup_para_selection = &NODELIST::setup_para_selection_TENDEQUE;
+               setup_parapush_selection = &NODELIST::setup_parapush_selection_TENDEQUE;
+               setup_parapop_selection = &NODELIST::setup_parapop_selection_TENDEQUE;
                para_selection = &NODELIST::para_selection_TENDEQUE;
                pop_front = &NODELIST::pop_front_TENDEQUE;
                getSubsize = &NODELIST::getSubsize_TENDEQUE;
@@ -232,6 +236,10 @@ class SVPsolver{
       auto        SVPSgetListsize() const { return nodelist.getListsize(); }
       auto        SVPSgetSubsize( const int sub ) const { return (nodelist.*getSubsize)(sub); }
       auto        SVPSgetSetupParaSelection() const { return (nodelist.*setup_para_selection)(); }
+      auto        SVPSgetSetuppopParaSelection( const int numsleep ) const {
+         assert( numsleep >= 0 );
+         return (nodelist.*setup_parapop_selection)( (bool) numsleep );
+      }
       // } nodelist
       //
       // get
