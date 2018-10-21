@@ -170,7 +170,6 @@ void SCHMIDT_M::compute_GS(){
 
          nrm[i] = 0.0;
       }
-
    }
 }
 

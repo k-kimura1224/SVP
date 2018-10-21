@@ -64,6 +64,7 @@ SVPsolver::SVPsolver(){ // default constructor
    LEFTNODELIMIT = 2000000000;
    NODELIMIT = 2000000000;
    MEMORY = 8;
+   CUTMODE = false;
 
    epsilon = 1.0e-12;
 
@@ -104,15 +105,16 @@ SVPsolver::SVPsolver( const SVPsolver &source )
    nnode = source.nnode;
    quiet = source.quiet;
    nthreads = source.nthreads;
-   oa_cpool = source.oa_cpool;
    TIMELIMIT = source.TIMELIMIT;
    LEFTNODELIMIT = source.LEFTNODELIMIT;
    NODELIMIT = source.NODELIMIT;
    MEMORY = source.MEMORY;
+   CUTMODE = source.CUTMODE;
    epsilon = source.epsilon;
    subsolver = source.subsolver;
    status = source.status;
    bounds = source.bounds;
+   oa_cuts = source.oa_cuts;
 
    if ( probdata.get_m() > 0 )
    {
@@ -163,15 +165,16 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
       nnode = source.nnode;
       quiet = source.quiet;
       nthreads = source.nthreads;
-      oa_cpool = source.oa_cpool;
       TIMELIMIT = source.TIMELIMIT;
       LEFTNODELIMIT = source.LEFTNODELIMIT;
       NODELIMIT = source.NODELIMIT;
       MEMORY = source.MEMORY;
+      CUTMODE = source.CUTMODE;
       epsilon = source.epsilon;
       subsolver = source.subsolver;
       status = source.status;
       bounds = source.bounds;
+      oa_cuts = source.oa_cuts;
 
       if( probdata.get_m() > 0 ){
          int m = probdata.get_m();
@@ -209,6 +212,16 @@ SVPsolver::~SVPsolver()
    bounds.shrink_to_fit();
 
    assert( bounds.empty() );
+
+   for ( auto& c : oa_cuts )
+   {
+      c.clear();
+      c.shrink_to_fit();
+   }
+   oa_cuts.clear();
+   oa_cuts.shrink_to_fit();
+
+   assert( oa_cuts.empty() );
 
    push_back = nullptr;
    move_back = nullptr;
@@ -521,13 +534,14 @@ void SVPsolver::disp_bestsol()
 
 void  SVPsolver::SVPScomputeBounds()
 {
-   const auto  m = probdata.get_m();
-   const auto  B = probdata.get_B();
+   const auto& pd = probdata;
+   const auto m = pd.get_m();
+   const auto B = pd.get_B();
 
    double *e;
    double *a;
 
-   int   r;
+   int r;
    auto  sqrt_bestval = sqrt( bestval );
 
    assert( bounds.empty() );
@@ -558,6 +572,64 @@ void  SVPsolver::SVPScomputeBounds()
       bounds[0][i] = floor( sqrt_bestval * Com_nrm( a, m ) );
 
       e[i] = 0.0;
+   }
+
+   if ( CUTMODE )
+   {
+      const auto Q = pd.get_Q();
+      double* eigenvectors = new double[m*m]; // unit
+      double* eigenvalues = new double[m];
+      int ct = 0;
+      double coef;
+      double U;
+      double L;
+
+      Gen_ZeroVec( m, eigenvalues );
+
+      r = Com_eigen( Q, m, eigenvalues, eigenvectors );
+      if ( r != 0 )
+      {
+         cout << "error(cut): r = " << r << endl;
+         exit(-1);
+      }
+
+      oa_cuts.reserve( m );
+      oa_cuts.resize( 1 );
+      oa_cuts[0].reserve( m );
+
+      ct = 0;
+      for ( auto i = 0; i < m; ++i )
+      {
+         coef = sqrt( eigenvalues[i] * bestval );
+         for ( auto j = 0; j < m; ++j )
+         {
+            e[j] = round( coef * eigenvectors[ct++] );
+         }
+
+         assert( ct == (i+1) * m );
+         r = Com_LS_dgesv( B, e, m, a );
+         if ( r != 0 )
+         {
+            cout << "error: r = " << r << endl;
+            exit(-1);
+         }
+
+         U = floor( sqrt_bestval * Com_nrm( a, m ) );
+         L = - U;
+
+         oa_cuts[0].emplace_back( m, e, &L, &U );
+         //for ( auto j = 0; j < m; ++j )
+         //{
+         //   e[j] = eigenvectors[ct++];
+         //}
+         //assert( ct == (i+1) * m );
+         //U = sqrt( bestval/eigenvalues[i] );
+         //L = - U;
+         //oa_cuts[0].emplace_back( m, e, &L, &U );
+      }
+
+      delete[] eigenvectors;
+      delete[] eigenvalues;
    }
 
    delete[] e;

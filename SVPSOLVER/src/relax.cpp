@@ -17,7 +17,6 @@
 #include "solution.h"
 #include "vector.h"
 #include "Schmidt_manager.h"
-#include "cut_pool.h"
 #include "cut.h"
 
 using namespace std;

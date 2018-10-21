@@ -14,10 +14,8 @@
 #include "stopwatch.h"
 #include "testwatch.h"
 #include "Schmidt_manager.h"
-#include "cut_pool.h"
+#include "cut.h"
 #include "nodelist.h"
-
-#define  CUT_OA   false
 
 #define  HEUR_APP    0.95
 
@@ -83,6 +81,9 @@ class SVPsolver{
    // for relaxation
    QP_DATA  qpdata;
 
+   // for cutting plane
+   vector<vector<CUT>> oa_cuts;
+
    // for parallel
    int   nthreads;
    bool  subsolver;
@@ -95,11 +96,9 @@ class SVPsolver{
    int   NODELIMIT;
    int   MEMORY;
    bool  quiet;
+   bool  CUTMODE;
 
    Status status;
-
-   CUT_POOL    oa_cpool;   //a pool of cutting planes by using
-                           //outer approximation
 
    STOPWATCH      stopwatch;
    TESTWATCH      testwatch;
@@ -268,6 +267,7 @@ class SVPsolver{
                      assert( nlimit > 0 && nlimit <= 2000000000 );
                      NODELIMIT = nlimit;
                   }
+      void  SVPSsetCutMode( const bool cutmode ) { CUTMODE = cutmode; }
 
       int         get_runtime(){ return stopwatch.get_result(); }
       double      get_gap(){ return 100*(bestval - GLB)/bestval; }

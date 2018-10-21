@@ -70,8 +70,9 @@ int main( int argc, char** argv){
    int   timelimit = 5000;
    bool  quiet = false;
    int   memory = 8;
+   bool  cutmode = false;
 
-   while ( (opt = getopt(argc, argv, "f:p:t:qhm:")) != -1)
+   while ( (opt = getopt(argc, argv, "f:p:t:qhm:c")) != -1)
    {
       switch ( opt )
       {
@@ -97,6 +98,10 @@ int main( int argc, char** argv){
 
          case 'm':
             memory = atoi ( optarg );
+            break;
+
+         case 'c':
+            cutmode = true;
             break;
 
          default: /* '?' */
@@ -129,6 +134,7 @@ int main( int argc, char** argv){
    ReadData( filename, m, B_);
 
    SVPsolver   svps;
+   svps.SVPSsetCutMode( cutmode );
    svps.SVPSsetup( m, B_, nthreads, timelimit, memory, quiet,
          false, true, true, true, true, true );
 
