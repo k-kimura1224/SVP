@@ -81,6 +81,9 @@ class SVPsolver{
    // for relaxation
    QP_DATA  qpdata;
 
+   // for Gram-Schmidt
+   SCHMIDT_M sch_manager;
+
    // for cutting plane
    vector<vector<CUT>> oa_cuts;
 

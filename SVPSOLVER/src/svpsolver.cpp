@@ -115,6 +115,7 @@ SVPsolver::SVPsolver( const SVPsolver &source )
    status = source.status;
    bounds = source.bounds;
    oa_cuts = source.oa_cuts;
+   sch_manager = source.sch_manager;
 
    if ( probdata.get_m() > 0 )
    {
@@ -175,6 +176,7 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
       status = source.status;
       bounds = source.bounds;
       oa_cuts = source.oa_cuts;
+      sch_manager = source.sch_manager;
 
       if( probdata.get_m() > 0 ){
          int m = probdata.get_m();
@@ -367,7 +369,7 @@ void SVPsolver::SVPSgenerateNodes()
    constexpr int branchvalue_zero = 0;
 
    //  Schmidt_manager
-   SCHMIDT_M sch;
+   auto& sch = sch_manager;
    double schmin;
 
    //
