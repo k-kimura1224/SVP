@@ -31,12 +31,11 @@ SVPsolver::SVPsolver(){ // default constructor
    cout << "SVPsolver: default constructor" << endl;
 #endif
    bestval = -1.0;
-   ub = nullptr;
-   lb = nullptr;
    GLB = 0.0;
 
-   type = LIST;
-   type = TWO_DEQUE;
+   //type = LIST;
+   //type = TWO_DEQUE;
+   type = TEN_DEQUE;
 
    push_back = nullptr;
    move_back = nullptr;
@@ -45,6 +44,8 @@ SVPsolver::SVPsolver(){ // default constructor
    get_GLB = nullptr;
    check_size = nullptr;
    setup_para_selection = nullptr;
+   setup_parapush_selection = nullptr;
+   setup_parapop_selection = nullptr;
    para_selection = nullptr;
    pop_front = nullptr;
    getSubsize = nullptr;
@@ -52,8 +53,6 @@ SVPsolver::SVPsolver(){ // default constructor
    index = 0;
    nnode = 0;
    nthreads = -1;
-
-   order = nullptr;
 
    _Appfac = 0.0;
    Appfac = 0.0;
@@ -64,6 +63,8 @@ SVPsolver::SVPsolver(){ // default constructor
    TIMELIMIT = 86400;
    LEFTNODELIMIT = 2000000000;
    NODELIMIT = 2000000000;
+   MEMORY = 8;
+   CUTMODE = false;
 
    epsilon = 1.0e-12;
 
@@ -93,6 +94,8 @@ SVPsolver::SVPsolver( const SVPsolver &source )
    get_GLB = source.get_GLB;
    check_size = source.check_size;
    setup_para_selection = source.setup_para_selection;
+   setup_parapush_selection = source.setup_parapush_selection;
+   setup_parapop_selection = source.setup_parapop_selection;
    para_selection = source.para_selection;
    pop_front = source.pop_front;
    getSubsize = source.getSubsize;
@@ -100,40 +103,22 @@ SVPsolver::SVPsolver( const SVPsolver &source )
    stopwatch = source.stopwatch;
    testwatch = source.testwatch;
    nnode = source.nnode;
-   sch = source.sch;
    quiet = source.quiet;
    nthreads = source.nthreads;
-   oa_cpool = source.oa_cpool;
    TIMELIMIT = source.TIMELIMIT;
    LEFTNODELIMIT = source.LEFTNODELIMIT;
    NODELIMIT = source.NODELIMIT;
+   MEMORY = source.MEMORY;
+   CUTMODE = source.CUTMODE;
    epsilon = source.epsilon;
    subsolver = source.subsolver;
    status = source.status;
+   bounds = source.bounds;
+   oa_cuts = source.oa_cuts;
 
    if ( probdata.get_m() > 0 )
    {
-      assert( source.ub != nullptr );
-      assert( source.lb != nullptr );
-
       int m = probdata.get_m();
-
-      ub = new double[m];
-      lb = new double[m];
-
-      Copy_vec( source.ub, ub, m );
-      Copy_vec( source.lb, lb, m );
-
-      if( source.order != nullptr )
-      {
-         order = new int[m];
-         for (int i = 0; i < m; i++ ){
-            order[i] = source.order[i];
-         }
-      }else{
-         order = nullptr;
-      }
-
       if( source.norm != nullptr ){
          norm = new double[m];
          Copy_vec( source.norm, norm, m);
@@ -141,9 +126,6 @@ SVPsolver::SVPsolver( const SVPsolver &source )
          norm = nullptr;
       }
    }else{
-      ub = nullptr;
-      lb = nullptr;
-      order = nullptr;
       norm = nullptr;
    }
 }
@@ -171,6 +153,8 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
       get_GLB = source.get_GLB;
       check_size = source.check_size;
       setup_para_selection = source.setup_para_selection;
+      setup_parapush_selection = source.setup_parapush_selection;
+      setup_parapop_selection = source.setup_parapop_selection;
       para_selection = source.para_selection;
       pop_front = source.pop_front;
       getSubsize = source.getSubsize;
@@ -179,40 +163,21 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
       stopwatch = source.stopwatch;
       testwatch = source.testwatch;
       nnode = source.nnode;
-      sch = source.sch;
       quiet = source.quiet;
       nthreads = source.nthreads;
-      oa_cpool = source.oa_cpool;
       TIMELIMIT = source.TIMELIMIT;
       LEFTNODELIMIT = source.LEFTNODELIMIT;
       NODELIMIT = source.NODELIMIT;
+      MEMORY = source.MEMORY;
+      CUTMODE = source.CUTMODE;
       epsilon = source.epsilon;
       subsolver = source.subsolver;
       status = source.status;
+      bounds = source.bounds;
+      oa_cuts = source.oa_cuts;
 
       if( probdata.get_m() > 0 ){
-         assert( source.ub != nullptr );
-         assert( source.lb != nullptr );
-
          int m = probdata.get_m();
-
-         delete[] ub;
-         delete[] lb;
-         ub = new double[m];
-         lb = new double[m];
-
-         Copy_vec( source.ub, ub, m);
-         Copy_vec( source.lb, lb, m);
-
-         if( source.order != nullptr ){
-            delete[] order;
-            order = new int[m];
-            for(int i=0; i<m; i++){
-               order[i] = source.order[i];
-            }
-         }else{
-            order = nullptr;
-         }
 
          if( source.norm != nullptr ){
             delete[] norm;
@@ -222,9 +187,6 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
             norm = nullptr;
          }
       }else{
-         ub = nullptr;
-         lb = nullptr;
-         order = nullptr;
          norm = nullptr;
       }
    }
@@ -238,14 +200,28 @@ SVPsolver::~SVPsolver()
 #if debug_class
    cout << "SVPsolver: destructor" << endl;
 #endif
-   delete[] ub;
-   delete[] lb;
-   delete[] order;
    delete[] norm;
-   ub = nullptr;
-   lb = nullptr;
-   order = nullptr;
    norm = nullptr;
+
+   for ( auto& b : bounds )
+   {
+      b.clear();
+      b.shrink_to_fit();
+   }
+   bounds.clear();
+   bounds.shrink_to_fit();
+
+   assert( bounds.empty() );
+
+   for ( auto& c : oa_cuts )
+   {
+      c.clear();
+      c.shrink_to_fit();
+   }
+   oa_cuts.clear();
+   oa_cuts.shrink_to_fit();
+
+   assert( oa_cuts.empty() );
 
    push_back = nullptr;
    move_back = nullptr;
@@ -254,6 +230,8 @@ SVPsolver::~SVPsolver()
    get_GLB = nullptr;
    check_size = nullptr;
    setup_para_selection = nullptr;
+   setup_parapush_selection = nullptr;
+   setup_parapop_selection = nullptr;
    para_selection = nullptr;
    pop_front = nullptr;
    getSubsize = nullptr;
@@ -264,13 +242,13 @@ void SVPsolver::SVPSsetup(
       const double*  s_B_,
       const int      s_nthreads,
       const int      s_timelimit,
+      const int      s_memory,
       const bool     s_quiet,
       const bool     w_subsolver,   // wheter this is subsolver
-      const bool     w_sch,         // wheter sch is initialized
       const bool     w_bounds,      // wheter bounds are computed
       const bool     w_heur,        // wheter heuristic is executed
       const bool     w_app,         // wheter Appfac is initialized
-      const bool     w_grn,         // wheter root node is generated
+      const bool     w_gn,          // wheter node is generated
       const bool     w_nl           // wheter nodelist is set
       )
 {
@@ -278,17 +256,7 @@ void SVPsolver::SVPSsetup(
    auto B_ = s_B_;
 
    // probdata
-	SVPScreateProbdata( m, B_ );
-
-   // allocation of bounds
-   ub = new double[m];
-   lb = new double[m];
-
-   for ( int i = 0; i < m; i++ )
-   {
-      ub[i] = 1.0e+10;
-      lb[i] = - 1.0e+10;
-   }
+   SVPScreateProbdata( m, B_ );
 
    // Appfac
    if ( w_app )
@@ -308,9 +276,8 @@ void SVPsolver::SVPSsetup(
    // subsolver
    subsolver = w_subsolver;
 
-   // sch
-   if ( w_sch )
-      sch.setup( m, B_);
+   // memory
+   MEMORY = s_memory;
 
    // nthreads
    assert( s_nthreads > 0 );
@@ -336,10 +303,9 @@ void SVPsolver::SVPSsetup(
    // quiet
    quiet = s_quiet;
 
-   // generate a root node
-   if ( w_grn )
-      SVPSgenerateRootNode( w_sch );
-
+   // generate nodes
+   if ( w_gn )
+      SVPSgenerateNodes();
 }
 
 
@@ -351,7 +317,7 @@ void SVPsolver::SVPScreateProbdata(
    assert( m > 0 );
    assert( B_ != nullptr );
 
-   int      mm = m * m;
+   const int mm = m * m;
 
    double   *B;      // [m*m],
    double   *Q;      // [m*m],
@@ -371,51 +337,105 @@ void SVPsolver::SVPScreateProbdata(
 
 }
 
-void SVPsolver::SVPSgenerateRootNode(
-      bool  w_sch
-      )
+void SVPsolver::SVPSgenerateNodes()
 {
-	int m = probdata.get_m();
-	assert( m > 0 );
+   assert( subsolver == false );
+   assert( (int)bounds.size() == 1 );
 
-	NODE	root;
+   // copy
+   const auto& pd = probdata;
+   const auto m = pd.get_m();
+   const auto B_ = pd.get_B_();
+   auto& vars_globalbounds = bounds;
+   const auto best = bestval;
+   auto& nodeindex = index;
+   auto& NL = nodelist;
+   const auto ep = epsilon;
 
-	double	*init_warm = nullptr;
+   assert( m > 0 );
+   assert( B_ != nullptr );
+   assert( !vars_globalbounds.empty() );
+   assert( best > 0 );
+   assert( nodeindex == 0 );
+   assert( push_back != nullptr );
 
-	if( subsolver == false )
+   // node
+   double* init_warm = new double [m];
+   int dpt = 0;
+   int type = 0;
+   constexpr int branchvalue_one = 1;
+   constexpr int branchvalue_zero = 0;
+
+   //  Schmidt_manager
+   SCHMIDT_M sch;
+   double schmin;
+
+   //
+   auto m1 = m - 1;
+   auto m2 = m - 2;
+
+   Gen_ZeroVec( m, init_warm );
+   sch.setup( m, B_ );
+
+   assert( sch.get_n() > 0 );
+
+   ++index;
+   ++dpt;
+
+   for ( int i = 0; i < m1; ++i )
    {
-		init_warm = bestsol.get_solval();
-	}
-   else
-   {
-		init_warm = new double[m];
-		for( int i = 0; i < m; i++ )
-			init_warm[i] = (ub[i] + lb[i])/2.0;
-	}
+      auto& vgb = vars_globalbounds[type];
+      assert( (int) vgb.size() == m );
 
-   assert( init_warm != nullptr );
+      if ( !(vgb[i]) )
+         continue;
 
-	root.set_vals( m, ub, lb, init_warm, GLB, 0, w_sch, index );
+      for ( int j = 0; j < m; ++j )
+         sch.set_z_i( j, (bool) vgb[j] );
 
-   double l_i;
+      // compute lower bound
+      sch.compute_GS();
+      schmin = sch.get_min();
 
-	for( int i = 0; i < m; i++ )
-   {
-      l_i = lb[i];
-		if ( Equal( l_i, ub[i], epsilon ) && !Equal( l_i, 0.0, epsilon ) )
+      // test
+      if ( schmin > best )
+         break;
+
+      // branch 1 =< x_i and x_i = 0
+      NODE node;
+      init_warm[i] = 1.0;
+      node.set_vals( m, init_warm, schmin, dpt, nodeindex, type );
+      init_warm[i] = 0.0;
+      ++dpt;
+      nodeindex += 2;
+      ++type;
+      for ( auto j = 0; j < i; ++j )
+         node.set_branchinfo( j, branchvalue_zero, 'e' );
+      node.set_branchinfo( i, branchvalue_one, 'l' );
+
+      if( Equal( branchvalue_one, vgb[i], ep ) )
       {
-			if ( root.alloc_sumfixed() == true )
-				root.set_sumfixed( l_i, probdata.get_bvec(i) );
-			else
-				root.add_sumfixed( l_i, probdata.get_bvec(i) );
-		}
-	}
+         if( node.alloc_sumfixed() )
+            node.set_sumfixed( branchvalue_one, pd.get_bvec( i ) );
+         else
+            node.add_sumfixed( branchvalue_one, pd.get_bvec( i ) );
+      }
 
-	(nodelist.*move_back)( root );
-   // Do not use root after here
+      (NL.*move_back)( node );
 
-	if ( subsolver == true )
-		delete[] init_warm;
+      // compute bounds of variables
+      if ( i < m2 )
+      {
+         assert( type == (int) vars_globalbounds.size() );
+
+         SVPStightenBounds( i );
+
+         assert( type + 1 == (int) vars_globalbounds.size() );
+      }
+   }
+
+   delete[] init_warm;
+
 }
 
 void SVPsolver::SVPSmoveNode(
@@ -448,25 +468,16 @@ string SVPsolver::SVPSgetStringStatus() const
 {
    switch ( status )
    {
-	   case TIMEOVER:
-	   	return "TIMEOVER";
-	   case FULL_OF_LEFTNODES:
-	   	return "FULL_OF_LEFTNODES";
-	   case FULL_OF_NODES:
-	   	return "FULL_OF_NODES";
-	   default:
-	   	return "";
+      case TIMEOVER:
+         return "TIMEOVER";
+      case FULL_OF_LEFTNODES:
+         return "FULL_OF_LEFTNODES";
+      case FULL_OF_NODES:
+         return "FULL_OF_NODES";
+      default:
+         return "";
    }
 }
-
-void SVPsolver::SVPScreateSch(
-   int      m,
-   double   *B_
-   )
-{
-   sch.setup( m, B_);
-}
-
 
 void SVPsolver::disp_bestsol()
 {
@@ -523,59 +534,121 @@ void SVPsolver::disp_bestsol()
 
 void  SVPsolver::SVPScomputeBounds()
 {
-
-   int      m = probdata.get_m();
-   double   *B = probdata.get_B();
-
-   assert( bestval > 0.0 );
-   assert( m > 0 );
+   const auto& pd = probdata;
+   const auto m = pd.get_m();
+   const auto B = pd.get_B();
 
    double *e;
    double *a;
-   e = new double[m];
-   a = new double[m];
-   Gen_ZeroVec( m, e);
 
    int r;
-   auto sqrt_bestval = sqrt( bestval );
+   auto  sqrt_bestval = sqrt( bestval );
 
-   for ( int i = 0; i < m; i++ )
+   assert( bounds.empty() );
+   assert( bestval > 0.0 );
+   assert( m > 0 );
+
+   e = new double[m];
+   a = new double[m];
+
+   Gen_ZeroVec( m, e );
+
+   bounds.reserve( m );
+   bounds.resize( 1 );
+   bounds[0].resize( m );
+
+   for ( int i = 0; i < m; ++i )
    {
       assert( e[i] == 0.0 );
       e[i] = 1.0;
 
-      r = Com_LS_dgesv( B, e, m, a);
+      r = Com_LS_dgesv( B, e, m, a );
       if ( r != 0 )
       {
          cout << "error: r = " << r << endl;
          exit(-1);
       }
-      ub[i] =  floor( sqrt_bestval * Com_nrm( a, m) );
-      lb[i] =  -ub[i];
+
+      bounds[0][i] = floor( sqrt_bestval * Com_nrm( a, m ) );
 
       e[i] = 0.0;
    }
 
+   if ( CUTMODE )
+   {
+      const auto Q = pd.get_Q();
+      double* eigenvectors = new double[m*m]; // unit
+      double* eigenvalues = new double[m];
+      int ct = 0;
+      double coef;
+      double U;
+      double L;
+
+      Gen_ZeroVec( m, eigenvalues );
+
+      r = Com_eigen( Q, m, eigenvalues, eigenvectors );
+      if ( r != 0 )
+      {
+         cout << "error(cut): r = " << r << endl;
+         exit(-1);
+      }
+
+      oa_cuts.reserve( m );
+      oa_cuts.resize( 1 );
+      oa_cuts[0].reserve( m );
+
+      ct = 0;
+      for ( auto i = 0; i < m; ++i )
+      {
+         coef = sqrt( eigenvalues[i] * bestval );
+         for ( auto j = 0; j < m; ++j )
+         {
+            e[j] = round( coef * eigenvectors[ct++] );
+         }
+
+         assert( ct == (i+1) * m );
+         r = Com_LS_dgesv( B, e, m, a );
+         if ( r != 0 )
+         {
+            cout << "error: r = " << r << endl;
+            exit(-1);
+         }
+
+         U = floor( sqrt_bestval * Com_nrm( a, m ) );
+         L = - U;
+
+         oa_cuts[0].emplace_back( m, e, &L, &U );
+         //for ( auto j = 0; j < m; ++j )
+         //{
+         //   e[j] = eigenvectors[ct++];
+         //}
+         //assert( ct == (i+1) * m );
+         //U = sqrt( bestval/eigenvalues[i] );
+         //L = - U;
+         //oa_cuts[0].emplace_back( m, e, &L, &U );
+      }
+
+      delete[] eigenvectors;
+      delete[] eigenvalues;
+   }
+
    delete[] e;
    delete[] a;
-
 }
 
 
-void  SVPsolver::tighten_bounds(
-      int      memo,
-      double*  set_lb,
-      double*  set_ub
+void  SVPsolver::SVPStightenBounds(
+      const int      memo
       )
 {
-   int      m = probdata.get_m();
+   const auto& pd = probdata;
+   const auto m = pd.get_m();
+   const auto B_ = pd.get_B_();
+   const auto Q = pd.get_Q();
 
-   double*  B_ = probdata.get_B_();
-   double*  Q = probdata.get_Q();
-
-   auto     dim = m - ( memo + 1 );
-   auto     mdim = m * dim;
-   auto     dimdim = dim * dim;
+   auto dim = m - ( memo + 1 );
+   auto mdim = m * dim;
+   auto dimdim = dim * dim;
 
    double*  subB = new double[mdim];
    double*  subBB = new double[dimdim];
@@ -583,51 +656,60 @@ void  SVPsolver::tighten_bounds(
    double*  buf_a = new double[dim];
    double*  buf_b = new double[m];
 
+   int ct ;
+
    Gen_ZeroVec( dim, e );
 
    auto constant = m * ( memo + 1 );
    for ( auto i = 0; i < mdim; i++ )
       subB[i] = B_[constant + i];
 
-   int ct = 0;
-
-   for ( auto i = memo + 1; i < m; i++ )
+   ct = 0;
+   for ( int i = memo + 1, im; i < m; i++ )
    {
+      im = i * m;
       for ( auto j = memo + 1; j < m; j++ )
       {
-         subBB[ct] = Q[i*m + j];
+         subBB[ct] = Q[im + j];
          assert( subBB[ct] == Com_dot( &subB[(i-(memo+1))*m], &subB[(j-(memo+1))*m], m));
          ct++;
       }
    }
 
    int r;
-   auto sqrt_bestval = sqrt( bestval );
+   const auto sqrt_bestval = sqrt( bestval );
 
-   double buf;
    constant = memo + 1;
+
+   vector<int> tightendbounds;
+   tightendbounds.reserve( m );
+
+   for ( auto i = 0; i <= memo; i++ )
+      tightendbounds.push_back( 0 );
 
    for ( auto i = 0; i < dim; i++ )
    {
       assert( e[i] == 0.0 );
       e[i] = 1.0;
 
-      r = Com_LS_dgesv( subBB, e, dim, buf_a);
+      r = Com_LS_dgesv( subBB, e, dim, buf_a );
       if ( r != 0 )
       {
          cout << "error: r = " << r << endl;
          exit(-1);
       }
 
-      Com_mat_Ax( subB, m, dim, buf_a, buf_b);
+      Com_mat_Ax( subB, m, dim, buf_a, buf_b );
 
-      buf =  floor( sqrt_bestval * Com_nrm( buf_b, m) );
-      set_ub[constant+i] =  buf;
-      set_lb[constant+i] =  - buf;
+      tightendbounds.push_back( floor( sqrt_bestval * Com_nrm( buf_b, m ) ) );
 
       e[i] = 0.0;
 
    }
+
+   assert( (int)tightendbounds.size() == m );
+
+   bounds.push_back( move ( tightendbounds ) );
 
    delete[] subB;
    delete[] subBB;
@@ -688,3 +770,50 @@ double SVPsolver::compute_objval(
 
    return obj;
 }
+
+void SVPsolver::SVPStrySol(
+      SOLUTION&   sol,
+      const bool  check_lb,
+      const bool  check_vbs,
+      bool*       result
+      )
+{
+   assert( sol.get_solval() != nullptr );
+
+   // copy
+   auto& solpool = pool;
+   auto* currentbestval = &bestval;
+
+   auto objval = sol.get_objval();
+   auto update = false;
+
+   assert( objval > 0.0 );
+
+   solpool.add_solution( sol );
+
+   if ( *currentbestval > objval )
+   {
+      *currentbestval = objval;
+      bestsol = sol;
+      Appfac = sqrt( *currentbestval ) / _Appfac;
+      update = true;
+   }
+
+   if ( result != nullptr )
+      *result = update;
+
+   if ( update )
+   {
+      // update global bounds on variables
+      if ( check_vbs )
+      {
+         //
+      }
+
+      if ( check_lb || check_vbs )
+      {
+         //
+      }
+   }
+}
+

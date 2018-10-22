@@ -21,18 +21,18 @@ using namespace std;
 *********************************************/
 
 class QPsolver{
-   double   *Q;   // [n*n]
-   double   *p;   // [n]
-   double   *A;   // [m*n]
-   double   *b;   // [m]
-   double   *C;   // [k*n]
-   double   *d;   // [k]
-   double   *l;   // [n]
-   double   *u;   // [n]
+   const double   *Q;   // [n*n]
+   const double   *p;   // [n]
+   const double   *A;   // [m*n]
+   const double   *b;   // [m]
+   const double   *C;   // [k*n]
+   const double   *d;   // [k]
+   const double   *l;   // [n]
+   const double   *u;   // [n]
    int      n;
    int      m;
    int      k;
-   double   *warm;
+   const double   *warm;
    double   *bestsol;
    double   bestval;
 
@@ -56,46 +56,46 @@ class QPsolver{
    ~QPsolver();                              // destructor
 
    // set
-   void  set_dim( int s_n ){ n = s_n; }
-   void  set_obj( int s_n, double *s_Q, double *s_p ){
+   void  set_dim( const int s_n ) { n = s_n; }
+   void  set_obj( const int s_n, const double* s_Q, const double* s_p ){
       assert( n == s_n );
       Q = s_Q;
       p = s_p;
    }
-   void  set_obj_quad( int s_n, double *s_Q ){
+   void  set_obj_quad( const int s_n, const double* s_Q ){
       assert( n == s_n );
       Q = s_Q;
    }
-   void  set_obj_line( int s_n, double *s_p ){
+   void  set_obj_line( const int s_n, const double *s_p ){
       assert( n == s_n );
       p = s_p;
    }
-   void  set_ineq( int s_n, int s_m, double *s_A, double *s_b ){
+   void  set_ineq( const int s_n, const int s_m, const double* s_A, const double *s_b ){
       assert( n == s_n );
       m = s_m;
       A = s_A;
       b = s_b;
    }
-   void  set_equ( int s_n, int s_k, double *s_C, double *s_d ){
+   void  set_equ( const int s_n, const int s_k, const double* s_C, const double* s_d ){
       assert( n == s_n );
       k = s_k;
       C = s_C;
       d = s_d;
    }
-   void  set_lb( int s_n, double *s_l ){
+   void  set_lb( const int s_n, const double* s_l ){
       assert( n == s_n );
       l = s_l;
    }
-   void  set_ub( int s_n, double *s_u ){
+   void  set_ub( const int s_n, const double* s_u ){
       assert( n == s_n );
       u = s_u;
    }
-   void  set_warm( int s_n, double *s_warm ){
+   void  set_warm( const int s_n, const double* s_warm ){
       assert( n == s_n );
       warm = s_warm;
    }
 
-   void  disp_prob();
+   void  disp_prob() const;
    void  solve( TESTWATCH* testwatch );
    int   solve_activeset( double *x_new, bool *W_ineq, bool *W_u, bool *W_l);
    int   solve_activeset_onlybounds( double *x_new, bool *W_u, bool *W_l);

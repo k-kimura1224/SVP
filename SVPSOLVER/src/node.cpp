@@ -14,271 +14,252 @@
 
 using namespace std;
 
-#define debug_class	0
-#define debug	0
+#define debug_class  0
+#define debug  0
 
-NODE::NODE(){	// default constructor
+NODE::NODE(){  // default constructor
 #if debug_class
-	cout << "NODE: default constructor" << endl;
+   cout << "NODE: default constructor" << endl;
 #endif
-	m = -1;
-	ub = nullptr;
-	lb = nullptr;
-	warm = nullptr;
-	relax_objval = - 1.0e+10;
-	relax_solval = nullptr;
-	dpt = -1;
-	zero = true;
-	index = -1;
-	solved = false;
-	sumfixed = nullptr;
+   m = -1;
+   relax_objval = - 1.0e+10;
+   relax_solval = nullptr;
+   dpt = -1;
+   index = -1;
+   sumfixed = nullptr;
+   type = -1;
 }
 
 NODE::NODE( const NODE &source )
-{	// copy constructor
+{  // copy constructor
 #if debug_class
-	cout << "NODE: copy constructor" << endl;
+   cout << "NODE: copy constructor" << endl;
 #endif
-	m = source.m;
-	relax_objval = source.relax_objval;
-	zero = source.zero;
-	dpt = source.dpt;
-	index = source.index;
-	solved = source.solved;
+   assert( source.m > 0 );
+   assert( source.dpt >= 0 );
+   assert( source.index >= 0 );
+   assert( source.type >= 0 );
+   assert( source.relax_objval >= 0.0 );
+   assert( source.relax_solval != nullptr );
 
-	if( m > 0 ){
-		assert( source.ub != nullptr );
-		assert( source.lb != nullptr );
-		assert( source.warm != nullptr );
+   m = source.m;
+   dpt = source.dpt;
+   index = source.index;
+   type = source.type;
+   relax_objval = source.relax_objval;
+   branchinfo = source.branchinfo;
 
-		ub = new double[m];
-		lb = new double[m];
-		warm = new double[m];
+   relax_solval = new double[m];
+   Copy_vec( source.relax_solval, relax_solval, m);
 
-		Copy_vec( source.ub, ub, m);
-		Copy_vec( source.lb, lb, m);
-		Copy_vec( source.warm, warm, m);
-
-		if( source.relax_solval != nullptr ){
-			relax_solval = new double[m];
-			Copy_vec( source.relax_solval, relax_solval, m);
-		}else{
-			relax_solval = nullptr;
-		}
-		if( source.sumfixed != nullptr ){
-			sumfixed = new double[m];
-			Copy_vec( source.sumfixed, sumfixed, m);
-		}else{
-			sumfixed = nullptr;
-		}
-	}else{
-		ub = nullptr;
-		lb = nullptr;
-		warm = nullptr;
-		relax_solval = nullptr;
-		sumfixed = nullptr;
-	}
-
+   if( source.sumfixed != nullptr )
+   {
+      sumfixed = new double[m];
+      Copy_vec( source.sumfixed, sumfixed, m);
+   }
+   else
+   {
+      sumfixed = nullptr;
+   }
 }
 
 // assignment operator
 NODE& NODE::operator=( const NODE& source )
 {
 #if debug_class
-	cout << "NODE: assignment operator" << endl;
+   cout << "NODE: assignment operator" << endl;
 #endif
 
-	if( this != &source ){
-		m = source.m;
-		relax_objval = source.relax_objval;
-		zero = source.zero;
-		index = source.index;
-		dpt = source.dpt;
-		solved = source.solved;
+   if( this != &source )
+   {
+      assert( source.m > 0 );
+      assert( source.dpt >= 0 );
+      assert( source.index >= 0 );
+      assert( source.type >= 0 );
+      assert( source.relax_objval >= 0.0 );
+      assert( source.relax_solval != nullptr );
 
-		if( m > 0 ){
-			assert( source.ub != nullptr );
-			assert( source.lb != nullptr );
-			assert( source.warm != nullptr );
+      m = source.m;
+      dpt = source.dpt;
+      index = source.index;
+      type = source.type;
+      relax_objval = source.relax_objval;
+      branchinfo = source.branchinfo;
 
-			delete[] ub;
-			delete[] lb;
-			delete[] warm;
-			ub = new double[m];
-			lb = new double[m];
-			warm = new double[m];
+      delete[] relax_solval;
+      relax_solval = new double[m];
+      Copy_vec( source.relax_solval, relax_solval, m);
 
-			Copy_vec( source.ub, ub, m);
-			Copy_vec( source.lb, lb, m);
-			Copy_vec( source.warm, warm, m);
+      if( source.sumfixed != nullptr )
+      {
+         delete[] sumfixed;
+         sumfixed = new double[m];
+         Copy_vec( source.sumfixed, sumfixed, m);
+      }
+      else
+      {
+         sumfixed = nullptr;
+      }
+   }
 
-			if( source.relax_solval != nullptr ){
-				delete[] relax_solval;
-				relax_solval = new double[m];
-				Copy_vec( source.relax_solval, relax_solval, m);
-			}else{
-				relax_solval = nullptr;
-			}
-			if( source.sumfixed != nullptr ){
-				delete[] sumfixed;
-				sumfixed = new double[m];
-				Copy_vec( source.sumfixed, sumfixed, m);
-			}else{
-				sumfixed = nullptr;
-			}
-		}else{
-			ub = nullptr;
-			lb = nullptr;
-			warm = nullptr;
-			relax_solval = nullptr;
-			sumfixed = nullptr;
-		}
-	}
-
-	return *this;
+   return *this;
 }
 
 NODE::NODE( NODE &&source ) noexcept
-{	// move constructor
+{  // move constructor
 #if debug_class
-	cout << "NODE: move constructor" << endl;
+   cout << "NODE: move constructor" << endl;
 #endif
    m = source.m;
-   ub = source.ub;
-   lb = source.lb;
-   warm = source.warm;
    sumfixed = source.sumfixed;
    relax_objval = source.relax_objval;
    relax_solval = source.relax_solval;
    dpt = source.dpt;
-   zero = source.zero;
    index = source.index;
-   solved = source.solved;
-	source.ub = nullptr;
-	source.lb = nullptr;
-	source.relax_solval = nullptr;
-	source.warm = nullptr;
-	source.sumfixed = nullptr;
+   branchinfo = source.branchinfo;
+   type = source.type;
+
+   source.relax_solval = nullptr;
+   source.sumfixed = nullptr;
+   source.branchinfo.clear();
+   source.branchinfo.shrink_to_fit();
+   source.type = -1;
 }
 
+NODE& NODE::operator=( NODE&& source ) noexcept
+{
+#if debug_class
+   cout << "NODE: move assignment operator" << endl;
+#endif
+   if ( this != &source )
+   {
+      m = source.m;
+      dpt = source.dpt;
+      index = source.index;
+      type = source.type;
+      sumfixed = source.sumfixed;
+      relax_objval = source.relax_objval;
+      relax_solval = source.relax_solval;
+      branchinfo = source.branchinfo;
+
+      source.relax_solval = nullptr;
+      source.sumfixed = nullptr;
+      source.branchinfo.clear();
+      source.branchinfo.shrink_to_fit();
+      source.type = -1;
+   }
+   return *this;
+}
 // destructor
 NODE::~NODE()
 {
 #if debug_class
-	cout << "NODE: destructor" << endl;
+   cout << "NODE: destructor" << endl;
 #endif
-	delete[] ub;
-	delete[] lb;
-	delete[] warm;
-	delete[] relax_solval;
-	delete[] sumfixed;
-	ub = nullptr;
-	lb = nullptr;
-	relax_solval = nullptr;
-	warm = nullptr;
-	sumfixed = nullptr;
+   delete[] relax_solval;
+   delete[] sumfixed;
+   relax_solval = nullptr;
+   sumfixed = nullptr;
+   branchinfo.clear();
+   branchinfo.shrink_to_fit();
 }
 
 void NODE::set_vals(
-	int		s_m,
-	double	*s_ub,
-	double	*s_lb,
-	double	*s_warm,
-	double	s_relax_objval,
-	int		s_dpt,
-	bool 		s_zero,
-	int		s_index
-	)
+   const int      s_m,
+   const double   *s_relaxsolval,
+   const double   s_relax_objval,
+   const int      s_dpt,
+   const int      s_index,
+   const int      s_type
+   )
 {
-	assert( s_m > 0 );
-	assert( ub == nullptr );
-	assert( lb == nullptr );
-	assert( warm == nullptr );
+   assert( s_m > 0 );
+   assert( s_relaxsolval != nullptr );
+   assert( s_relax_objval >= 0.0 );
+   assert( s_dpt >= 0 );
+   assert( s_index >= 0 );
+   assert( s_type >= 0 );
 
-	m = s_m;
-	relax_objval = s_relax_objval;
-	dpt = s_dpt;
-	zero = s_zero;
-	index = s_index;
+   m = s_m;
+   relax_objval = s_relax_objval;
+   dpt = s_dpt;
+   index = s_index;
+   type = s_type;
 
-	ub = new double[m];
-	lb = new double[m];
-	warm = new double[m];
+   if ( relax_solval == nullptr )
+   {
+      relax_solval = new double[m];
+   }
 
-	Copy_vec( s_ub, ub, m);
-	Copy_vec( s_lb, lb, m);
-	Copy_vec( s_warm, warm, m);
-
+   Copy_vec( s_relaxsolval, relax_solval, m);
 }
 
 void NODE::set_relaxsolval(
-	double	*solval
-	)
+   double   *solval
+   )
 {
-	assert( solval != nullptr );
-	assert( m > 0 );
+   assert( solval != nullptr );
+   assert( relax_solval != nullptr );
+   assert( m > 0 );
 
-	delete[] relax_solval;
-	relax_solval = new double[m];
-
-	//Copy_vec( solval, relax_solval, m);
-	double ep = 1e-10;
-	for(int i=0; i<m ; i++){
-		if( ceil(solval[i]) - solval[i] < ep ){
-			relax_solval[i] = ceil(solval[i]);
-		}else if(solval[i] - floor(solval[i]) <ep ){
-			relax_solval[i] = floor(solval[i]);
-		}else{
-			relax_solval[i] = solval[i];
-		}
-	}
+   //Copy_vec( solval, relax_solval, m);
+   double ep = 1e-10;
+   for(int i=0; i<m ; i++){
+      if( ceil(solval[i]) - solval[i] < ep ){
+         relax_solval[i] = ceil(solval[i]);
+      }else if(solval[i] - floor(solval[i]) <ep ){
+         relax_solval[i] = floor(solval[i]);
+      }else{
+         relax_solval[i] = solval[i];
+      }
+   }
 }
 
 bool NODE::alloc_sumfixed()
 {
-	assert( m > 0 );
+   assert( m > 0 );
 
-	bool result = true;
+   bool result = true;
 
-	if ( sumfixed == nullptr )
+   if ( sumfixed == nullptr )
    {
-		sumfixed = new double[m];
-		result = true;
-	}
+      sumfixed = new double[m];
+      result = true;
+   }
    else
    {
-		result = false;
-	}
+      result = false;
+   }
 
-	return result;
+   return result;
 }
 
 void NODE::set_sumfixed(
-	double	c,
-	double	*s_sumfixed
-	)
+   const int      c,
+   const double*  s_sumfixed
+   )
 {
-	assert( s_sumfixed != nullptr );
-	assert( sumfixed != nullptr );
-	assert( m > 0 );
-	assert( c != 0.0 );
+   assert( s_sumfixed != nullptr );
+   assert( sumfixed != nullptr );
+   assert( m > 0 );
+   assert( c != 0.0 );
 
-	Com_scal( s_sumfixed, m, c, sumfixed);
+   for (int i = 0; i < m; ++i )
+      sumfixed[i] = c * s_sumfixed[i];
 }
 
 void NODE::add_sumfixed(
-	double	c,
-	double	*s_sumfixed
-	)
+   const int      c,
+   const double*  s_sumfixed
+   )
 {
-	assert( s_sumfixed != nullptr );
-	assert( sumfixed != nullptr );
-	assert( m > 0 );
-	assert( c != 0.0 );
+   assert( s_sumfixed != nullptr );
+   assert( sumfixed != nullptr );
+   assert( m > 0 );
+   assert( c != 0.0 );
 
-	for(int i=0; i<m; i++){
-		sumfixed[i] += c*s_sumfixed[i];
-	}
+   for (int i = 0; i < m; ++i )
+      sumfixed[i] += c * s_sumfixed[i];
 }
 
 void NODE::NODEdispInformation()
@@ -286,11 +267,6 @@ void NODE::NODEdispInformation()
    cout << "[index:" << index << "]----------------------------" << endl;
    cout << "m: " << m << endl;
    cout << "dpt: " << dpt << endl;
-   cout << "zero: " << zero << endl;
-   cout << "solved: " << solved << endl;
-   cout << "bounds&warm: " << endl;
-   for ( int i = 0; i < m; i++ )
-      cout << i << ": [ " << lb[i] << ", " << ub[i] << "], " << warm[i] << endl;
+   cout << "type: " << type << endl;
    cout << "relax_objval: " << relax_objval << endl;
-
 }

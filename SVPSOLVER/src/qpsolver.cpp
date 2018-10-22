@@ -142,7 +142,8 @@ QPsolver::~QPsolver()
    indexes = nullptr;
 }
 
-void  QPsolver::disp_prob(){
+void  QPsolver::disp_prob() const
+{
 
    if( n > 0 ){
       cout << "dim: " << n << endl;

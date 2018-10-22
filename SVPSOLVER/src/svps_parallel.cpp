@@ -36,13 +36,13 @@ void SVPsolver::SVPSsolveSubprob(
    {
       lock_guard<mutex> lock(mtx);
 
-      auto  m = probdata.get_m();
-      auto  B_ = probdata.get_B_();
+      const auto m = probdata.get_m();
+      const auto B_ = probdata.get_B_();
       sub_timelimit = TIMELIMIT - stopwatch.get_time();
 
-      sub.SVPSsetup( m, B_, 1, sub_timelimit, true,
-               true, true, false, false, false, false, false );
-      sub.SVPSsetBounds( ub, lb );
+      sub.SVPSsetup( m, B_, 1, sub_timelimit, MEMORY, true,
+               true, false, false, false, false, false );
+      sub.SVPSsetBounds( bounds );
       sub.SVPSsetNorm( norm );
 
       sub.SVPSsetGlobalLowerBound( GLB );
@@ -50,21 +50,23 @@ void SVPsolver::SVPSsolveSubprob(
       sub.SVPSsetupNodelist();
       sub.SVPSsetAppfac( Appfac, _Appfac );
 
-      const auto setup = (nodelist.*setup_para_selection)();
+      const auto setup = (nodelist.*setup_parapush_selection)();
+      assert( setup >= 0 && setup < 10 );
+
       sub.SVPSmoveNode( (nodelist.*para_selection)(setup) );
       SVPSpopNode( setup );
    }
    // } lock
 
-   constexpr int  init_sub_nodelimit = 100000;
-   constexpr int  max_sub_nodelimit = init_sub_nodelimit * 20;
+   constexpr int init_sub_nodelimit = 100000;
+   constexpr int max_sub_nodelimit = init_sub_nodelimit * 20;
 
    unsigned long int totalpop = 0;
 
-   bool     result;
-   int      sub_nodelimit = init_sub_nodelimit;
-   const bool     disp = !quiet;
-   const double   pop_maxrate = 1.0 - ( 1.0 / (double) nthreads );
+   bool result;
+   int sub_nodelimit = init_sub_nodelimit;
+   const bool disp = !quiet;
+   const double pop_maxrate = 1.0 - ( 1.0 / (double) nthreads );
    assert( pop_maxrate > 0.0 && pop_maxrate <= 1.0 );
 
    while ( 1 )
@@ -116,6 +118,8 @@ void SVPsolver::SVPSsolveSubprob(
                      cout << "break (SOLVED)" << endl;
                   }
 
+                  assert( nnode > totalpop );
+                  nnode -= totalpop;
                   result = true;
                   status = SOLVED;
                   cv.notify_all();
@@ -157,12 +161,18 @@ void SVPsolver::SVPSsolveSubprob(
             sub.SVPSresetIndex();
             sub.SVPSsetupNodelist();
 
-            const auto setup = (nodelist.*setup_para_selection)();
+            const auto setup = (nodelist.*setup_parapush_selection)();
             const auto nodelistsize = nodelist.getListsize();
             const auto maxsize = (nodelist.*getSubsize)( setup );
             int pushsize = nodelistsize * 0.1;
 
-            if ( maxsize <= 100 )
+            assert( setup >= 0 && setup < 10 );
+            assert( nodelistsize > 0 );
+            assert( maxsize > 0 );
+            assert( pushsize >= 0 );
+            assert( nodelistsize >= maxsize );
+
+            if ( maxsize < pushsize || maxsize <= 100 )
                pushsize = maxsize;
             else if ( pushsize <= 100 )
                pushsize = 100;
@@ -212,10 +222,13 @@ void SVPsolver::SVPSsolveSubprob(
                if ( sub_listsize > nodelist.getListsize() )
                {
                   int popsize = 0;
-                  const auto setup = sub.SVPSgetSetupParaSelection();
+                  const auto setup = sub.SVPSgetSetuppopParaSelection( nthreads - n_running_threads );
                   const auto maxsize = sub.SVPSgetSubsize( setup );
 
                   assert( pop_maxrate > 0.0 && pop_maxrate <= 1.0 );
+                  assert( setup >= 0 && setup < 10 );
+                  assert( maxsize > 0 );
+                  assert( maxsize <= sub_listsize );
 
                   if ( n_running_threads > 1 )
                      popsize = sub_listsize * 0.5;
@@ -292,11 +305,11 @@ bool SVPsolver::SVPSparasolve()
    SVPSoutputBounds();
 
    // generate oa_cpool
-   if( CUT_OA == true )
-   {
-      exit(-1);
-      gene_OAcuts( ub, lb, probdata.get_Q(), bestval);
-   }
+   //if( CUT_OA == true )
+   //{
+   //   exit(-1);
+   //   gene_OAcuts( ub, lb, probdata.get_Q(), bestval);
+   //}
 
    assert( probdata.get_m() >= 40 );
    // branch-and-bound algorithm
@@ -317,6 +330,9 @@ bool SVPsolver::SVPSparasolve()
 
    if ( type == LIST )
       nodelist.sort();
+
+   if ( type == TWO_DEQUE )
+      nodelist.setup( type, bestval, MEMORY, -1, 0.3 );
 
    // parallel {{
 
@@ -342,7 +358,7 @@ bool SVPsolver::SVPSparasolve()
    for ( auto &th: threads )
       th.join();
 
-   assert( status != SOLVING );
+      assert( status != SOLVING );
 
    if ( status == SOLVED )
       result = true;
