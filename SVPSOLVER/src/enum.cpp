@@ -353,101 +353,101 @@ static void setVsTB1(
    delete[] buf_b;
 }
 
-static void setVsTB2(
-      // input
-      const int            m,
-      const PROB_DATA&     pd,
-      const vector<int>&   unfixedindexes,
-      const int            subdim,
-      // output
-      vector<vector<double>>&    VsTB
-      )
-{
-   assert( !unfixedindexes.empty() );
-   assert( m > 0 );
-   assert( subdim > 0 && subdim < m );
-   assert( subdim == (int) VsTB.size() );
-   assert( subdim == (int) unfixedindexes.size() );
-
-   const auto B_ = pd.get_B_();
-   const auto Q = pd.get_Q();
-
-   auto dim = subdim;
-   auto mdim = m * dim;
-   auto dimdim = dim * dim;
-   auto dim_1 = dim - 1;
-
-   double*  subB = new double[mdim];
-   double*  subBB = new double[dimdim];
-   double*  e = new double[dim];
-   double*  buf_a = new double[dim];
-   double*  buf_b = new double[m];
-
-   int ct;
-   int k = 0;
-
-   while ( dim >= 1 )
-   {
-      mdim = m * dim;
-      dimdim = dim * dim;
-      dim_1 = dim - 1;
-
-      // set subB
-      for( int i = 0, im = 0, t, tm; i < dim; ++i, im += m )
-      {
-         assert( unfixedindexes[i] < m && unfixedindexes[i] >= 0 );
-         assert( i * m == im );
-
-         t = unfixedindexes[i];
-         tm = t * m;
-
-         Copy_vec( &B_[tm], &subB[im], m );
-      }
-
-      // set subBB
-      ct = 0;
-      for ( int i = 0, t, tm; i < dim; ++i )
-      {
-         t = unfixedindexes[i];
-         tm = t * m;
-         for ( int j = 0, s; j < dim; ++j )
-         {
-            s = unfixedindexes[j];
-            subBB[ct] = Q[tm + s];
-            assert( subBB[ct] == Com_dot( &subB[i*m], &subB[j*m], m ) );
-            ++ct;
-         }
-      }
-      assert( ct == dimdim );
-
-      Gen_ZeroVec( dim, e );
-      e[dim_1] = 1.0;
-
-      if ( Com_LS_dposv( subBB, e, dim, buf_a ) != 0 )
-      {
-         cout << "error: enum" <<endl;
-         assert(0);
-         exit(-1);
-      }
-
-      Com_mat_Ax( subB, m, dim, buf_a, buf_b );
-
-      VsTB[k].resize( m );
-      for ( auto i = 0; i < m; ++i )
-         VsTB[k][i] = buf_b[i];
-
-      dim--;
-      k++;
-   }
-
-   assert( k == subdim );
-
-   delete[] subB;
-   delete[] subBB;
-   delete[] e;
-   delete[] buf_a;
-   delete[] buf_b;
-}
+//static void setVsTB2(
+//      // input
+//      const int            m,
+//      const PROB_DATA&     pd,
+//      const vector<int>&   unfixedindexes,
+//      const int            subdim,
+//      // output
+//      vector<vector<double>>&    VsTB
+//      )
+//{
+//   assert( !unfixedindexes.empty() );
+//   assert( m > 0 );
+//   assert( subdim > 0 && subdim < m );
+//   assert( subdim == (int) VsTB.size() );
+//   assert( subdim == (int) unfixedindexes.size() );
+//
+//   const auto B_ = pd.get_B_();
+//   const auto Q = pd.get_Q();
+//
+//   auto dim = subdim;
+//   auto mdim = m * dim;
+//   auto dimdim = dim * dim;
+//   auto dim_1 = dim - 1;
+//
+//   double*  subB = new double[mdim];
+//   double*  subBB = new double[dimdim];
+//   double*  e = new double[dim];
+//   double*  buf_a = new double[dim];
+//   double*  buf_b = new double[m];
+//
+//   int ct;
+//   int k = 0;
+//
+//   while ( dim >= 1 )
+//   {
+//      mdim = m * dim;
+//      dimdim = dim * dim;
+//      dim_1 = dim - 1;
+//
+//      // set subB
+//      for( int i = 0, im = 0, t, tm; i < dim; ++i, im += m )
+//      {
+//         assert( unfixedindexes[i] < m && unfixedindexes[i] >= 0 );
+//         assert( i * m == im );
+//
+//         t = unfixedindexes[i];
+//         tm = t * m;
+//
+//         Copy_vec( &B_[tm], &subB[im], m );
+//      }
+//
+//      // set subBB
+//      ct = 0;
+//      for ( int i = 0, t, tm; i < dim; ++i )
+//      {
+//         t = unfixedindexes[i];
+//         tm = t * m;
+//         for ( int j = 0, s; j < dim; ++j )
+//         {
+//            s = unfixedindexes[j];
+//            subBB[ct] = Q[tm + s];
+//            assert( subBB[ct] == Com_dot( &subB[i*m], &subB[j*m], m ) );
+//            ++ct;
+//         }
+//      }
+//      assert( ct == dimdim );
+//
+//      Gen_ZeroVec( dim, e );
+//      e[dim_1] = 1.0;
+//
+//      if ( Com_LS_dposv( subBB, e, dim, buf_a ) != 0 )
+//      {
+//         cout << "error: enum" <<endl;
+//         assert(0);
+//         exit(-1);
+//      }
+//
+//      Com_mat_Ax( subB, m, dim, buf_a, buf_b );
+//
+//      VsTB[k].resize( m );
+//      for ( auto i = 0; i < m; ++i )
+//         VsTB[k][i] = buf_b[i];
+//
+//      dim--;
+//      k++;
+//   }
+//
+//   assert( k == subdim );
+//
+//   delete[] subB;
+//   delete[] subBB;
+//   delete[] e;
+//   delete[] buf_a;
+//   delete[] buf_b;
+//}
 static void computeBounds(
       const int               m,
       const double            sqrt_bestval,
@@ -539,6 +539,7 @@ RelaxResult SVPsolver::SVPSenumerate(
 
    const int subdim = (int) unfixedindexes.size();
    const int numfixed = (int) nonzero_fixedindexes.size();
+   const int sdnf = subdim + numfixed;
    vector<double> SNOVs( subdim + numfixed );           // square norm of orthogonal vectors
    vector<vector<double>> CMGSO( subdim + numfixed );   // coefficient matrix for Gram-Schmidt orthogonalization
    vector<vector<double>> VsTB( subdim );               // vectors for tightening bounds
@@ -596,7 +597,7 @@ RelaxResult SVPsolver::SVPSenumerate(
    index = subdim - 1;
    origindex = unfixedindexes[index];
 
-   solution = new int[m];
+   solution = new int[sdnf];
    sumfixed = new double[m];
    assert( node.get_sumfixed() != nullptr );
    Copy_vec( node.get_sumfixed(), sumfixed, m );
@@ -710,7 +711,7 @@ RelaxResult SVPsolver::SVPSenumerate(
             {
                upper = upper_new;
                double* solvals = new double[m];
-               for ( int i = m - 1, j = 0; j < subdim; --i, ++j )
+               for ( int i = sdnf - 1, j = 0; j < subdim; --i, ++j )
                   solvals[unfixedindexes[j]] = solution[i];
                for ( int i = 0; i < m; ++i )
                {
