@@ -65,6 +65,7 @@ SVPsolver::SVPsolver(){ // default constructor
    NODELIMIT = 2000000000;
    MEMORY = 8;
    CUTMODE = false;
+   ENUM = false;
 
    epsilon = 1.0e-12;
 
@@ -110,6 +111,7 @@ SVPsolver::SVPsolver( const SVPsolver &source )
    NODELIMIT = source.NODELIMIT;
    MEMORY = source.MEMORY;
    CUTMODE = source.CUTMODE;
+   ENUM = source.ENUM;
    epsilon = source.epsilon;
    subsolver = source.subsolver;
    status = source.status;
@@ -170,6 +172,7 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
       NODELIMIT = source.NODELIMIT;
       MEMORY = source.MEMORY;
       CUTMODE = source.CUTMODE;
+      ENUM = source.ENUM;
       epsilon = source.epsilon;
       subsolver = source.subsolver;
       status = source.status;
@@ -563,6 +566,7 @@ void  SVPsolver::SVPScomputeBounds()
       e[i] = 1.0;
 
       r = Com_LS_dgesv( B, e, m, a );
+      //r = Com_LS_dposv( B, e, m, a );
       if ( r != 0 )
       {
          cout << "error: r = " << r << endl;
@@ -692,10 +696,11 @@ void  SVPsolver::SVPStightenBounds(
       assert( e[i] == 0.0 );
       e[i] = 1.0;
 
-      r = Com_LS_dgesv( subBB, e, dim, buf_a );
+      //r = Com_LS_dgesv( subBB, e, dim, buf_a );
+      r = Com_LS_dposv( subBB, e, dim, buf_a );
       if ( r != 0 )
       {
-         cout << "error: r = " << r << endl;
+         cout << "error(tighten): r = " << r << endl;
          exit(-1);
       }
 

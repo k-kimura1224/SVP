@@ -97,6 +97,7 @@ class SVPsolver{
    int   MEMORY;
    bool  quiet;
    bool  CUTMODE;
+   bool  ENUM;
 
    Status status;
 
@@ -207,6 +208,10 @@ class SVPsolver{
                         const bool check_vbs, bool* result );
       // } branch-and-bound
 
+      // enumeration {
+      RelaxResult SVPSenumerate( NODE& node, const double* vars_localub, const double* vars_locallb );
+      // } enumeration
+
       // relaxation {
       RelaxResult SVPSsolveRelaxation( NODE& node, const double* vars_localub, const double* vars_locallb );
       RelaxResult SVPSsolveRelaxationINT( NODE& node, const double* vars_localub, const double* vars_locallb );
@@ -268,6 +273,7 @@ class SVPsolver{
                      NODELIMIT = nlimit;
                   }
       void  SVPSsetCutMode( const bool cutmode ) { CUTMODE = cutmode; }
+      void  SVPSsetEnum( const bool enumeration ) { ENUM = enumeration; }
 
       int         get_runtime(){ return stopwatch.get_result(); }
       double      get_gap(){ return 100*(bestval - GLB)/bestval; }

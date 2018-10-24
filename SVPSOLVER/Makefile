@@ -12,7 +12,7 @@ MAINOBJ		=	main.o read_data.o qpsolver.o vector.o \
 					relax.o branch.o svps_parallel.o \
 					heur.o heur_unitsphere.o Schmidt_manager.o \
 					heur_quadratic.o cut.o qpdata.o \
-					testwatch.o nodelist.o
+					testwatch.o nodelist.o enum.o
 MAINSRC		=	$(addprefix $(SRCDIR)/,$(MAINOBJ:.o=.cpp))
 MAINOBJFILES	=	$(addprefix $(OBJDIR)/,$(MAINOBJ))
 

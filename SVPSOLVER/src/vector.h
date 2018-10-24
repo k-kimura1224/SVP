@@ -161,7 +161,7 @@ void TraMat(
 template <typename Type>
 void printv(
 	const int	n,
-	Type	*x
+	const Type	*x
 	);
 
 // print a matrix

@@ -71,8 +71,9 @@ int main( int argc, char** argv){
    bool  quiet = false;
    int   memory = 8;
    bool  cutmode = false;
+   bool  enumeration = false;
 
-   while ( (opt = getopt(argc, argv, "f:p:t:qhm:c")) != -1)
+   while ( (opt = getopt(argc, argv, "f:p:t:qhm:ce")) != -1)
    {
       switch ( opt )
       {
@@ -102,6 +103,10 @@ int main( int argc, char** argv){
 
          case 'c':
             cutmode = true;
+            break;
+
+         case 'e':
+            enumeration = true;
             break;
 
          default: /* '?' */
@@ -135,6 +140,7 @@ int main( int argc, char** argv){
 
    SVPsolver   svps;
    svps.SVPSsetCutMode( cutmode );
+   svps.SVPSsetEnum( enumeration );
    svps.SVPSsetup( m, B_, nthreads, timelimit, memory, quiet,
          false, true, true, true, true, true );
 
