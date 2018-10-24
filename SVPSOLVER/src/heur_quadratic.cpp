@@ -190,6 +190,10 @@ void  SVPsolver::SVPSheurQuadratic(
    SOLUTION solution;
    solution.set_sol( m, solvals, val);
    SVPStrySol( solution, true, true, nullptr );
+   //bool test = false;
+   //SVPStrySol( solution, true, true, &test );
+   //if ( test )
+   //   cout << node.get_index() << endl;
 
    delete[] solvals;
    delete[] solvals_new;

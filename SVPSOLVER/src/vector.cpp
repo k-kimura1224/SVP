@@ -422,7 +422,7 @@ void TraMat(
 template <typename Type>
 void printv(
 	const int	n,
-	Type	*x
+	const Type	*x
 	)
 {
 	for(int i=0; i<n; i++){

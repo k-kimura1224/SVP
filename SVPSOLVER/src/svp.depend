@@ -11,6 +11,10 @@ $(OBJDIR)/branch.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/branch.cpp \
  $(SRCDIR)/vector.h
 $(OBJDIR)/cut.o: $(SRCDIR)/cut.h $(SRCDIR)/cut.cpp \
  $(SRCDIR)/vector.h
+$(OBJDIR)/enum.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/enum.cpp \
+ $(SRCDIR)/node.h \
+ $(SRCDIR)/probdata.h \
+ $(SRCDIR)/vector.h
 $(OBJDIR)/heur.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/heur.cpp \
  $(SRCDIR)/probdata.h \
  $(SRCDIR)/solution.h \

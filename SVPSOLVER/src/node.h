@@ -66,6 +66,7 @@ class NODE {
                         const double s_relax_objval, const int s_dpt,
                         const int s_index, const int s_type );
       double   get_lowerbound() const { return relax_objval; }
+      int      get_dimention() const { return m; }
       int      get_index() const { return index; }
       int      get_dpt() const { return dpt; }
       int      get_type() const { return type; }
