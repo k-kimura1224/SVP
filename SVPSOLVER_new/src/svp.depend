@@ -1,0 +1,97 @@
+$(OBJDIR)/main.o: $(SRCDIR)/main.cpp \
+ $(SRCDIR)/read_data.h \
+ $(SRCDIR)/svpsolver.h
+$(OBJDIR)/Schmidt_manager.o: $(SRCDIR)/Schmidt_manager.h $(SRCDIR)/Schmidt_manager.cpp \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/branch.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/branch.cpp \
+ $(SRCDIR)/node.h \
+ $(SRCDIR)/probdata.h \
+ $(SRCDIR)/qpsolver.h \
+ $(SRCDIR)/solution.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/cut.o: $(SRCDIR)/cut.h $(SRCDIR)/cut.cpp \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/enum.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/enum.cpp \
+ $(SRCDIR)/node.h \
+ $(SRCDIR)/probdata.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/heur.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/heur.cpp \
+ $(SRCDIR)/probdata.h \
+ $(SRCDIR)/solution.h \
+ $(SRCDIR)/solution_pool.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/heur_init.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/heur_init.cpp \
+ $(SRCDIR)/probdata.h \
+ $(SRCDIR)/solution.h \
+ $(SRCDIR)/solution_pool.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/heur_quadratic.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/heur_quadratic.cpp \
+ $(SRCDIR)/node.h \
+ $(SRCDIR)/probdata.h \
+ $(SRCDIR)/solution.h \
+ $(SRCDIR)/solution_pool.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/heur_unitsphere.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/heur_unitsphere.cpp \
+ $(SRCDIR)/node.h \
+ $(SRCDIR)/probdata.h \
+ $(SRCDIR)/solution.h \
+ $(SRCDIR)/solution_pool.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/node.o: $(SRCDIR)/node.h $(SRCDIR)/node.cpp \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/nodelist.o: $(SRCDIR)/nodelist.h $(SRCDIR)/nodelist.cpp \
+ $(SRCDIR)/node.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/probdata.o: $(SRCDIR)/probdata.h $(SRCDIR)/probdata.cpp \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/qpdata.o: $(SRCDIR)/qpdata.h $(SRCDIR)/qpdata.cpp \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/qpsolver.o: $(SRCDIR)/qpsolver.h $(SRCDIR)/qpsolver.cpp \
+ $(SRCDIR)/testwatch.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/read_data.o: $(SRCDIR)/read_data.h $(SRCDIR)/read_data.cpp
+$(OBJDIR)/relax.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/relax.cpp \
+ $(SRCDIR)/cut.h \
+ $(SRCDIR)/node.h \
+ $(SRCDIR)/probdata.h \
+ $(SRCDIR)/qpdata.h \
+ $(SRCDIR)/qpsolver.h \
+ $(SRCDIR)/Schmidt_manager.h \
+ $(SRCDIR)/solution.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/solution.o: $(SRCDIR)/solution.h $(SRCDIR)/solution.cpp \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/solution_pool.o: $(SRCDIR)/solution_pool.h $(SRCDIR)/solution_pool.cpp \
+ $(SRCDIR)/solution.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/stopwatch.o: $(SRCDIR)/stopwatch.h $(SRCDIR)/stopwatch.cpp
+$(OBJDIR)/svps_parallel.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/svps_parallel.cpp \
+ $(SRCDIR)/node.h \
+ $(SRCDIR)/nodelist.h \
+ $(SRCDIR)/solution.h \
+ $(SRCDIR)/solution_pool.h \
+ $(SRCDIR)/stopwatch.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/svps_solve.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/svps_solve.cpp \
+ $(SRCDIR)/node.h \
+ $(SRCDIR)/nodelist.h \
+ $(SRCDIR)/probdata.h \
+ $(SRCDIR)/solution.h \
+ $(SRCDIR)/solution_pool.h \
+ $(SRCDIR)/stopwatch.h \
+ $(SRCDIR)/testwatch.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/svpsolver.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/svpsolver.cpp \
+ $(SRCDIR)/cut.h \
+ $(SRCDIR)/node.h \
+ $(SRCDIR)/nodelist.h \
+ $(SRCDIR)/probdata.h \
+ $(SRCDIR)/qpdata.h \
+ $(SRCDIR)/Schmidt_manager.h \
+ $(SRCDIR)/solution.h \
+ $(SRCDIR)/solution_pool.h \
+ $(SRCDIR)/stopwatch.h \
+ $(SRCDIR)/testwatch.h \
+ $(SRCDIR)/vector.h
+$(OBJDIR)/testwatch.o: $(SRCDIR)/testwatch.h $(SRCDIR)/testwatch.cpp
+$(OBJDIR)/vector.o: $(SRCDIR)/vector.h $(SRCDIR)/vector.cpp
