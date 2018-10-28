@@ -42,6 +42,7 @@ void SVPsolver::SVPSsolveSubprob(
 
       sub.SVPSsetup( m, B_, 1, sub_timelimit, MEMORY, true,
                true, false, false, false, false, false );
+      sub.SVPSsetEnum( ENUM );
       sub.SVPSsetBounds( bounds );
       sub.SVPSsetNorm( norm );
 
@@ -316,6 +317,7 @@ bool SVPsolver::SVPSparasolve()
    int   ORIG_LEFTNODELIMIT = LEFTNODELIMIT;
    LEFTNODELIMIT = 1000 * nthreads;
    bool  result = SVPSrunBranchandBound();
+   //bool  result = false;
    LEFTNODELIMIT = ORIG_LEFTNODELIMIT;
 
    nnode = (unsigned long int)index -1;

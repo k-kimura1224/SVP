@@ -134,11 +134,11 @@ static void setGS(
 {
    assert( !unfixedindexes.empty() );
    assert( m > 0 );
-   assert( subdim > 0 && subdim < m );
+   assert( subdim > 0 && subdim <= m );
    assert( subdim + numfixed == (int) SNOVs.size() );
    assert( subdim + numfixed == (int) CMGSO.size() );
    assert( subdim == (int) unfixedindexes.size() );
-   assert( numfixed == (int) nonzero_fixedindexes.size() );
+   assert( nonzero_fixedindexes.empty() || numfixed == (int) nonzero_fixedindexes.size() );
 
    const auto B_ = pd.get_B_();
    const auto sdnf = subdim + numfixed;
@@ -243,7 +243,7 @@ static void setVsTB1(
 {
    assert( !unfixedindexes.empty() );
    assert( m > 0 );
-   assert( subdim > 0 && subdim < m );
+   assert( subdim > 0 && subdim <= m );
    assert( subdim == (int) VsTB.size() );
    assert( subdim == (int) unfixedindexes.size() );
 
@@ -535,7 +535,6 @@ RelaxResult SVPsolver::SVPSenumerate(
    setIndexes( m, unfixedindexes, nonzero_fixedindexes, vars_localub, vars_locallb );
 
    assert( !unfixedindexes.empty() );
-   assert( !nonzero_fixedindexes.empty() );
 
    const int subdim = (int) unfixedindexes.size();
    const int numfixed = (int) nonzero_fixedindexes.size();
@@ -545,7 +544,7 @@ RelaxResult SVPsolver::SVPSenumerate(
    vector<vector<double>> VsTB( subdim );               // vectors for tightening bounds
    vector<double> NVsTB;                                // norm of vectors for tightening bounds
 
-   assert( subdim > 0 && subdim < m );
+   assert( subdim > 0 && subdim <= m );
 
    // set SNOVs and GSOM;
    setGS( m, pd, unfixedindexes, subdim, nonzero_fixedindexes, numfixed, SNOVs, CMGSO );
@@ -599,8 +598,12 @@ RelaxResult SVPsolver::SVPSenumerate(
 
    solution = new int[sdnf];
    sumfixed = new double[m];
-   assert( node.get_sumfixed() != nullptr );
-   Copy_vec( node.get_sumfixed(), sumfixed, m );
+   //assert( node.get_sumfixed() != nullptr );
+   //Copy_vec( node.get_sumfixed(), sumfixed, m );
+   if ( node.get_sumfixed() != nullptr )
+      Copy_vec( node.get_sumfixed(), sumfixed, m );
+   else
+      Gen_ZeroVec( m, sumfixed );
 
    reverse( SNOVs.begin(), SNOVs.end() );
 
