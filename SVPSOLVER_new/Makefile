@@ -29,15 +29,15 @@ MAINFILE	=	$(BINDIR)/$(MAIN)
 
 #Mac
 #CXX	=	/usr/local/bin/g++-4.9
-CXX	=	/usr/local/bin/g++-7
+#CXX	=	/usr/local/bin/g++-7
 
 CXXFLAGS	=	-Wall -llapack -lpthread -fopenmp -O3 -std=c++14
 
 #Mac
-CXXFLAGS	+=	-lblas
+#CXXFLAGS	+=	-lblas
 
 #Linux
-#CXXFLAGS 	+=	-lopenblas
+CXXFLAGS 	+=	-lopenblas
 
 ifeq ($(OPT),opt)
 	CXXFLAGS	+=	-DNDEBUG
@@ -48,10 +48,10 @@ ifeq ($(PG),true)
 endif
 
 #Mac
-CXXFLAGS	+=	-I/usr/local/Cellar/openblas/0.2.18_2/include
+#CXXFLAGS	+=	-I/usr/local/Cellar/openblas/0.2.18_2/include
 
 #Linux
-#CXXLDFLAGS	=	-L/usr/lib64/libopenblas.so
+CXXLDFLAGS	=	-L/usr/lib64/libopenblas.so
 
 .PHONY: all
 all: $(MAIN)
