@@ -147,7 +147,8 @@ void NODELIST::setup(
 
          double buf = s_memory;
          buf /= 2;
-         buf /= 21 * m + 24;
+         //buf /= 4;
+         buf /= 8 * m + 18;
          buf *= 1024;
          buf *= 1024;
          buf *= 1024;
@@ -160,6 +161,24 @@ void NODELIST::setup(
       {
          break;
       }
+   }
+}
+
+int   NODELIST::getSubsize_TDEQUE( const int sub ) const {
+   assert( sub == 1 || sub == 2 );
+   if ( sub == 1 )
+   {
+      if ( node_deque_1.empty() )
+         return 0;
+      else
+         return (int) node_deque_1.size();
+   }
+   else
+   {
+      if ( node_deque_2.empty() )
+         return 0;
+      else
+         return (int) node_deque_2.size();
    }
 }
 
@@ -190,23 +209,6 @@ void NODELIST::push_back_TDEQUE(
    ++listsize;
 }
 
-void NODELIST::push_back_TENDEQUE(
-      const NODE&    node
-      )
-{
-   assert( type == TEN_DEQUE );
-   assert( division > 0.0 );
-   assert( maxnode > 0 );
-
-   int index = node.get_lowerbound() / division;
-
-   assert( index >= 0 && index < 10 );
-
-   node_deque[index].push_back( node );
-
-   ++listsize;
-}
-
 // move
 void NODELIST::move_back_LIST(
       NODE&    node
@@ -230,26 +232,6 @@ void NODELIST::move_back_TDEQUE(
       node_deque_2.push_back( move( node ) );
    else
       node_deque_1.push_back( move( node ) );
-
-   ++listsize;
-}
-
-void NODELIST::move_back_TENDEQUE(
-      NODE&    node
-      )
-{
-   assert( type == TEN_DEQUE );
-   assert( division > 0.0 );
-   assert( maxnode > 0 );
-
-   int index = node.get_lowerbound() / division;
-
-   if ( index >= 10 )
-      index = 9;
-
-   assert( index >= 0 && index < 10 );
-
-   node_deque[index].push_back( move( node ) );
 
    ++listsize;
 }

@@ -70,10 +70,10 @@ int main( int argc, char** argv){
    int   timelimit = 5000;
    bool  quiet = false;
    int   memory = 8;
-   bool  cutmode = false;
+   bool  improvedrelaxation = false;
    bool  enumeration = false;
 
-   while ( (opt = getopt(argc, argv, "f:p:t:qhm:ce")) != -1)
+   while ( (opt = getopt(argc, argv, "f:p:t:qhm:re")) != -1)
    {
       switch ( opt )
       {
@@ -101,8 +101,8 @@ int main( int argc, char** argv){
             memory = atoi ( optarg );
             break;
 
-         case 'c':
-            cutmode = true;
+         case 'r':
+            improvedrelaxation = true;
             break;
 
          case 'e':
@@ -139,10 +139,14 @@ int main( int argc, char** argv){
    ReadData( filename, m, B_);
 
    SVPsolver   svps;
-   svps.SVPSsetCutMode( cutmode );
+   svps.SVPSsetImpRelax( improvedrelaxation );
    svps.SVPSsetEnum( enumeration );
    svps.SVPSsetup( m, B_, nthreads, timelimit, memory, quiet,
          false, true, true, true, true, true );
+   svps.SVPScomputeVsCB();
+   svps.SVPScomputeVsCO();
+   if ( !enumeration ) svps.SVPScomputeVCOV();
+   svps.SVPScomputeDBM();
 
    bool run;
    if( nthreads == 1 )

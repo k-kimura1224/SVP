@@ -95,5 +95,4 @@ void SOLUTION::set_sol(
    val = new double[m];
 
    Copy_vec( s_val, val, m);
-
 }

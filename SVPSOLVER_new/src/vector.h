@@ -226,8 +226,8 @@ inline void Copy_vec(
 }
 // compute a inner product
 inline double Com_dot(
-	const double	*x,	/* vector */
-	const double	*y,	/* vector */
+	const double* x,	/* vector */
+	const double* y,	/* vector */
 	const int		n		/* size */
 	)
 {

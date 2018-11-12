@@ -12,7 +12,7 @@ MAINOBJ		=	main.o read_data.o qpsolver.o vector.o \
 					relax.o branch.o svps_parallel.o \
 					heur.o heur_unitsphere.o Schmidt_manager.o \
 					heur_quadratic.o cut.o qpdata.o \
-					testwatch.o nodelist.o enum.o
+					testwatch.o nodelist.o enum.o preprocess.o
 MAINSRC		=	$(addprefix $(SRCDIR)/,$(MAINOBJ:.o=.cpp))
 MAINOBJFILES	=	$(addprefix $(OBJDIR)/,$(MAINOBJ))
 
@@ -31,7 +31,7 @@ MAINFILE	=	$(BINDIR)/$(MAIN)
 #CXX	=	/usr/local/bin/g++-4.9
 CXX	=	/usr/local/bin/g++-7
 
-CXXFLAGS	=	-Wall -llapack -lpthread -fopenmp -O2 -std=c++14
+CXXFLAGS	=	-Wall -llapack -lpthread -fopenmp -O3 -std=c++14
 
 #Mac
 CXXFLAGS	+=	-lblas

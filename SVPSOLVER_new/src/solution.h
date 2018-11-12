@@ -18,6 +18,7 @@ class SOLUTION{
 
       void set_sol(int s_m, double *s_val, double s_objval);
 
+      auto get_dim(){ return m; }
       auto get_solval(){ return val; }
       auto get_objval(){ return objval; }
 };

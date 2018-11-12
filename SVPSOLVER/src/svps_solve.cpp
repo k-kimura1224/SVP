@@ -136,7 +136,9 @@ bool SVPsolver::SVPSrunBranchandBound()
       //   printf("%d:[%f,%f]\n", i, vars_locallb[i], vars_localub[i]);
 
       // solve a relaxation problem
+      //testwatch.start();
       relaxresult = SVPSsolveRelaxation( *node, vars_localub, vars_locallb );
+      //testwatch.stop();
 
       if ( relaxresult == FEASIBLE && enumeration )
          relaxresult = SVPSenumerate( *node, vars_localub, vars_locallb );

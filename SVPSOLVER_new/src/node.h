@@ -42,18 +42,34 @@ class BRANCH_INFO {
 
 
 class NODE {
-   int      m;
-   int      dpt;
-   int      index;
-   int      type;
-   double   *sumfixed;
-   double   relax_objval;
-   double   *relax_solval;
-   vector<BRANCH_INFO>  branchinfo;
+   int            dpt;
+   int            index;
+   double         relax_objval;
+   vector<int>    fixedvalues; // descending order
+   vector<double> rsol;
+
+   // after presolving
+   //bool           presolved;
+   //vector<int> ub;
+   //vector<int> lb;
+   //vector<int>    sum_fixed;
+
+   //double*     relax_solval;
+   //double*  sumfixed;
+   //int      m;
+   //int      type;
+   //vector<BRANCH_INFO>  branchinfo;
 
    public:
 
       NODE();                                      // default constructor
+      NODE(
+      //const bool              s_presolve,
+      const int               s_dpt,
+      const int               s_index,
+      const int               s_relax_objval,
+      const vector<int>&      s_fixedavalues
+      );
       NODE( const NODE &source );                  // copy constructor
       NODE& operator=( const NODE& );              // assignment operator
       NODE( NODE &&source ) noexcept;              // move constructor
@@ -62,27 +78,49 @@ class NODE {
       bool operator<(const NODE &rhs) const
       { return relax_objval < rhs.relax_objval; }
 
-      void  set_vals(   const int s_m, const double *s_relaxsolval,
-                        const double s_relax_objval, const int s_dpt,
-                        const int s_index, const int s_type );
+      //void  set_vals(   const int s_m, const double *s_relaxsolval,
+      //                  const double s_relax_objval, const int s_dpt,
+      //                  const int s_index, const int s_type );
+      //void set_presolved( bool done ) { presolved = done; }
+      //void set_ub_i( const int i, const int val )
+      //{ assert( !ub.empty() ); assert( i >= 0 && i < (int) ub.size() ); ub[i] = val; }
+      //void set_lb_i( const int i, const int val )
+      //{ assert( !lb.empty() ); assert( i >= 0 && i < (int) lb.size() ); lb[i] = val; }
+      //void set_sumfixed( const vector<int>& s_sum )
+      //{ assert( sum_fixed.empty() ); sum_fixed = s_sum; }
+      //void add_sumfixed( const int index, const int coef, const int b_i )
+      //{ assert( !sum_fixed.empty() ); sum_fixed[index] += coef * b_i; }
+      //void alloc_sumfixed( const int size )
+      //{ assert( sum_fixed.empty() ); sum_fixed.resize( size ); }
+
       double   get_lowerbound() const { return relax_objval; }
-      int      get_dimention() const { return m; }
+      //int      get_dimention() const { return m; }
       int      get_index() const { return index; }
       int      get_dpt() const { return dpt; }
-      int      get_type() const { return type; }
-      double*  get_relaxsolval() const { return relax_solval; }
-      double*  get_sumfixed() const { return sumfixed; }
-      const vector<BRANCH_INFO>& get_branchinfo() const { return branchinfo; }
+      //int      get_type() const { return type; }
+      //double*  get_relaxsolval() const { return relax_solval; }
+      //double*  get_sumfixed() const { return sumfixed; }
+      //const vector<BRANCH_INFO>& get_branchinfo() const { return branchinfo; }
+      auto& cget_fixedvalues() const { return fixedvalues; }
+      auto& get_fixedvalues()  { return fixedvalues; }
+      //auto get_presolved() const { return presolved; }
+
+      //auto& get_sum_fixed() const { return sum_fixed; }
+      //auto& geti_sum_fixed() { return sum_fixed; }
+      //auto& geti_ub() { return ub; }
+      //auto& get_ub() const { return ub; }
+      //auto& geti_lb() { return lb; }
+      //auto& get_lb() const { return lb; }
+      auto& geti_rsol() { return rsol; }
+      auto& get_rsol() const { return rsol; }
 
       void     NODEdispInformation();
 
-      void  set_lowerbound( double s_ro ){
-         if( relax_objval < s_ro ) relax_objval = s_ro;
-      }
-      void  set_relaxsolval( double *solval );
-      bool  alloc_sumfixed();
-      void  set_sumfixed( const int c, const double* s_sumfixed );
-      void  add_sumfixed( const int c, const double* s_sumfixed );
+      void  set_lowerbound( const double s_ro ) { relax_objval = s_ro; }
+      //void  set_relaxsolval( double *solval );
+      //bool  alloc_sumfixed();
+      //void  set_sumfixed( const int c, const double* s_sumfixed );
+      //void  add_sumfixed( const int c, const double* s_sumfixed );
 
       void  set_dpt( const int s_dpt )
       {
@@ -94,9 +132,11 @@ class NODE {
          assert( index >= 0 );
          index = s_index;
       }
-      void  set_branchinfo( const int index, const int value, const char type ) {
-         branchinfo.emplace_back( index, value, type );
-      }
+      //void  set_branchinfo( const int index, const int value, const char type ) {
+      //   branchinfo.emplace_back( index, value, type );
+      //}
+      void  inc_dpt() { ++dpt; }
+      void  push_back_fixedvalue( const int f ) { fixedvalues.push_back( f ); }
 };
 
 #endif

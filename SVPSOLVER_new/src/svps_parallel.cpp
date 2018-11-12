@@ -42,14 +42,20 @@ void SVPsolver::SVPSsolveSubprob(
 
       sub.SVPSsetup( m, B_, 1, sub_timelimit, MEMORY, true,
                true, false, false, false, false, false );
+      sub.SVPSsetImpRelax( IMPRELAX );
       sub.SVPSsetEnum( ENUM );
-      sub.SVPSsetBounds( bounds );
+      //sub.SVPSsetBounds( bounds );
       sub.SVPSsetNorm( norm );
 
       sub.SVPSsetGlobalLowerBound( GLB );
       sub.SVPSsetBestval( bestval );
       sub.SVPSsetupNodelist();
       sub.SVPSsetAppfac( Appfac, _Appfac );
+      sub.SVPScopyGS( SNOVs, CMGSO );
+      sub.SVPScopyVsCB( VsCB, LVsCB );
+      sub.SVPScopyVsCO( VsCO );
+      sub.SVPScopyVCOV( VCOV );
+      sub.SVPScopyDBM( DBMs, RSNDBM );
 
       const auto setup = (nodelist.*setup_parapush_selection)();
       assert( setup >= 0 && setup < 10 );
@@ -83,6 +89,7 @@ void SVPsolver::SVPSsolveSubprob(
          if ( bestval > subbestval )
          {
             bestval = subbestval;
+            sq_bestval = sqrt( subbestval );
             bestsol = sub.SVPSgetBestsol();
             pool.add_solution( bestsol );
             Appfac = sqrt( bestval ) / _Appfac;
@@ -303,7 +310,7 @@ bool SVPsolver::SVPSparasolve()
    SVPSstartTime();
 
    // output bounds
-   SVPSoutputBounds();
+   //SVPSoutputBounds();
 
    // generate oa_cpool
    //if( CUT_OA == true )
@@ -315,7 +322,8 @@ bool SVPsolver::SVPSparasolve()
    assert( probdata.get_m() >= 40 );
    // branch-and-bound algorithm
    int   ORIG_LEFTNODELIMIT = LEFTNODELIMIT;
-   LEFTNODELIMIT = 1000 * nthreads;
+   LEFTNODELIMIT = 200000 * nthreads;
+
    bool  result = SVPSrunBranchandBound();
    //bool  result = false;
    LEFTNODELIMIT = ORIG_LEFTNODELIMIT;

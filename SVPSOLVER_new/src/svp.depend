@@ -42,6 +42,10 @@ $(OBJDIR)/node.o: $(SRCDIR)/node.h $(SRCDIR)/node.cpp \
 $(OBJDIR)/nodelist.o: $(SRCDIR)/nodelist.h $(SRCDIR)/nodelist.cpp \
  $(SRCDIR)/node.h \
  $(SRCDIR)/vector.h
+$(OBJDIR)/preprocess.o: $(SRCDIR)/preprocess.h $(SRCDIR)/preprocess.cpp \
+ $(SRCDIR)/solution.h \
+ $(SRCDIR)/solution_pool.h \
+ $(SRCDIR)/vector.h
 $(OBJDIR)/probdata.o: $(SRCDIR)/probdata.h $(SRCDIR)/probdata.cpp \
  $(SRCDIR)/vector.h
 $(OBJDIR)/qpdata.o: $(SRCDIR)/qpdata.h $(SRCDIR)/qpdata.cpp \
@@ -86,6 +90,7 @@ $(OBJDIR)/svpsolver.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/svpsolver.cpp \
  $(SRCDIR)/node.h \
  $(SRCDIR)/nodelist.h \
  $(SRCDIR)/probdata.h \
+ $(SRCDIR)/preprocess.h \
  $(SRCDIR)/qpdata.h \
  $(SRCDIR)/Schmidt_manager.h \
  $(SRCDIR)/solution.h \

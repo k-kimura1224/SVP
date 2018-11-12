@@ -46,23 +46,7 @@ class NODELIST{
       int   getListsize() const { return listsize; }
 
       int   getSubsize_LIST( const int sub ) const { return listsize; }
-      int   getSubsize_TDEQUE( const int sub ) const {
-         assert( sub == 1 || sub == 2 );
-         if ( sub == 1 )
-         {
-            if ( node_deque_1.empty() )
-               return 0;
-            else
-               return (int) node_deque_1.size();
-         }
-         else
-         {
-            if ( node_deque_2.empty() )
-               return 0;
-            else
-               return (int) node_deque_2.size();
-         }
-      }
+      int   getSubsize_TDEQUE( const int sub ) const;
       int   getSubsize_TENDEQUE( const int sub ) const {
          assert( sub >= 0 && sub < 10 );
          assert( !node_deque.empty() );
@@ -74,11 +58,50 @@ class NODELIST{
 
       void  push_back_LIST( const NODE& node );
       void  push_back_TDEQUE( const NODE& node );
-      void  push_back_TENDEQUE( const NODE& node );
+      void  push_back_TENDEQUE( const NODE& node )
+      {
+         assert( type == TEN_DEQUE );
+         assert( division > 0.0 );
+         assert( maxnode > 0 );
+         int index = node.get_lowerbound() / division;
+         assert( index >= 0 && index < 10 );
+         node_deque[index].push_back( node );
+         ++listsize;
+      }
 
       void  move_back_LIST( NODE& node );
       void  move_back_TDEQUE( NODE& node );
-      void  move_back_TENDEQUE( NODE& node );
+      void  move_back_TENDEQUE( NODE& node )
+      {
+         assert( type == TEN_DEQUE );
+         assert( division > 0.0 );
+         assert( maxnode > 0 );
+         int index = node.get_lowerbound() / division;
+         if ( index >= 10 )
+            index = 9;
+         assert( index >= 0 && index < 10 );
+         node_deque[index].push_back( move( node ) );
+         ++listsize;
+      }
+
+      auto&  emplace_back_TENDEQUE(
+            const int   dpt1,
+            const int   nodeindex,
+            const double lowerbound_new,
+            const vector<int>& fixedvalues
+      )
+      {
+         assert( type == TEN_DEQUE );
+         assert( division > 0.0 );
+         assert( maxnode > 0 );
+         int index = lowerbound_new / division;
+         if ( index >= 10 )
+            index = 9;
+         assert( index >= 0 && index < 10 );
+         node_deque[index].emplace_back( dpt1, nodeindex, lowerbound_new, fixedvalues );
+         ++listsize;
+         return node_deque[index].back();
+      }
 
       void  cutoff_LIST() {
          node_list.pop_front();

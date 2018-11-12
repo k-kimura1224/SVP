@@ -29,7 +29,7 @@ bool SVPsolver::SVPSsolve()
       return false;
 
    // output bounds
-   SVPSoutputBounds();
+   //SVPSoutputBounds();
 
    // generate oa_cpool
    //if ( CUT_OA == true )
@@ -96,26 +96,20 @@ bool SVPsolver::SVPSrunBranchandBound()
    status = SOLVING;
 
    // copy
-   const auto m = probdata.get_m();
+   //const auto m = probdata.get_m();
+   const auto& currentbestval = bestval;
    auto& NL = nodelist;
    const auto output = !quiet;
    const auto subsol = subsolver;
    auto& nodeindex = index;
-   const auto enumeration = ENUM;
-   //const int dpt_enum = m / 2;
-   //const int dpt_enum = 0;
 
    bool result = false;
    int disp = index;
    int cutoff = 0;
    int checktiming;
-   RelaxResult relaxresult = INFEASIBLE;
-   double* vars_localub;
-   double* vars_locallb;
+   RelaxResult relaxresult = R_INFEASIBLE;
+   BranchResult branchresult = B_INFEASIBLE;
    NODE* node = nullptr;
-
-   vars_localub = new double[m];
-   vars_locallb = new double[m];
 
    while ( 1 )
    {
@@ -124,34 +118,40 @@ bool SVPsolver::SVPSrunBranchandBound()
       //testwatch.stop();
 
       // select a node from the list
-      // get local bounds of variable
       if ( node == nullptr )
       {
-         node = (NL.*nodeselection)( &GLB, bestval, nodeindex, disp );
-         SVPSgetVarsLocalBound( *node, vars_localub, vars_locallb );
+         node = (NL.*nodeselection)( &GLB, currentbestval, nodeindex, disp );
       }
       assert( node != nullptr );
 
-      //for ( auto i = 0; i < m; ++i )
-      //   printf("%d:[%f,%f]\n", i, vars_locallb[i], vars_localub[i]);
-
       // solve a relaxation problem
-      relaxresult = SVPSsolveRelaxation( *node, vars_localub, vars_locallb );
+      relaxresult = (this->*SVPSrelax)( *node );
 
-      if ( relaxresult == FEASIBLE && enumeration )
-         relaxresult = SVPSenumerate( *node, vars_localub, vars_locallb );
-
-      // run heuristics
-      if( relaxresult == FEASIBLE && HEUR_APP < Appfac )
-         SVPSheur( *node, vars_localub, vars_locallb );
+      //if( relaxresult == FEASIBLE && HEUR_APP < Appfac )
+      //   SVPSheur( *node, vars_localub, vars_locallb );
 
       // branch
-      if( relaxresult == UPDATE || relaxresult == FEASIBLE )
+      if( relaxresult == R_UPDATE || relaxresult == R_FEASIBLE )
       {
          //cout << "branch-start";
-         SVPSbranch( *node, nodeindex, vars_localub, vars_locallb );
-         nodeindex += 2;
+         branchresult = (this->*SVPSbranch)( *node );
          //cout << "-end-";
+         if ( branchresult == B_INFEASIBLE || branchresult == B_GETINTEGER )
+         {
+            // remove
+            //cout << "remove-start";
+            node = nullptr;
+            (NL.*cut_off)();
+            //cout << "-end-";
+            cutoff++;
+
+            if( NL.getListsize() == 0 )
+            {
+               result = true;
+               status = SOLVED;
+               break;
+            }
+         }
       }
       else
       {
@@ -173,10 +173,10 @@ bool SVPsolver::SVPSrunBranchandBound()
 
       //cout << NL.getListsize() << endl;
       // output
-      if ( output )
+      if ( output && node != nullptr )
       {
          auto buf = ( nodeindex - 1 ) % 1000;
-         if ( ( buf == 0 || buf == 1 ) && disp < nodeindex )
+         if ( buf == 0 && disp < nodeindex )
          {
             if( subsol == true )
                cout << this_thread::get_id() << ":";
@@ -201,8 +201,9 @@ bool SVPsolver::SVPSrunBranchandBound()
 
    //cout << "testwatch: " << testwatch.get_result() << endl;
 
-   delete[] vars_localub;
-   delete[] vars_locallb;
+   //delete[] vars_localub;
+   //delete[] vars_locallb;
+   //
 
    return result;
 }
@@ -213,54 +214,55 @@ void SVPsolver::SVPSgetVarsLocalBound(
       double*  vars_locallb
       )
 {
-   assert( vars_localub != nullptr );
-   assert( vars_locallb != nullptr );
-   assert( !bounds.empty() );
+   assert(0);
+   //assert( vars_localub != nullptr );
+   //assert( vars_locallb != nullptr );
+   //assert( !bounds.empty() );
 
-   //cout << "get local bound - start " << endl;
-   const auto m = probdata.get_m();
-   const auto& vars_globalbounds = bounds;
+   ////cout << "get local bound - start " << endl;
+   //const auto m = probdata.get_m();
+   //const auto& vars_globalbounds = bounds;
 
-   const auto& branchinfo = node.get_branchinfo();
-   const int nodetype = node.get_type();
-   int branchindex;
-   int branchvalue;
-   char branchtype;
+   //const auto& branchinfo = node.get_branchinfo();
+   //const int nodetype = node.get_type();
+   //int branchindex;
+   //int branchvalue;
+   //char branchtype;
 
-   //node.NODEdispInformation();
-   assert( nodetype >= 0 );
-   assert( nodetype < (int)vars_globalbounds.size() );
-   assert( !vars_globalbounds[nodetype].empty() );
+   ////node.NODEdispInformation();
+   //assert( nodetype >= 0 );
+   //assert( nodetype < (int)vars_globalbounds.size() );
+   //assert( !vars_globalbounds[nodetype].empty() );
 
-   for ( int i = 0; i < m; ++i )
-   {
-      vars_localub[i] = vars_globalbounds[nodetype][i];
-      vars_locallb[i] = - vars_localub[i];
-   }
+   //for ( int i = 0; i < m; ++i )
+   //{
+   //   vars_localub[i] = vars_globalbounds[nodetype][i];
+   //   vars_locallb[i] = - vars_localub[i];
+   //}
 
-   for ( auto& bi : branchinfo )
-   {
-      branchindex = bi.get_index();
-      branchvalue = bi.get_value();
-      branchtype = bi.get_type();
-      switch ( branchtype )
-      {
-         case 'u':
-            vars_localub[branchindex] = branchvalue;
-            break;
-         case 'l':
-            vars_locallb[branchindex] = branchvalue;
-            break;
-         case 'e'://EQUAL
-            vars_localub[branchindex] = branchvalue;
-            vars_locallb[branchindex] = branchvalue;
-            break;
-         default:
-            printf("error (%c) \n", branchtype );
-            exit(-1);
-            break;
-      }
-   }
+   //for ( auto& bi : branchinfo )
+   //{
+   //   branchindex = bi.get_index();
+   //   branchvalue = bi.get_value();
+   //   branchtype = bi.get_type();
+   //   switch ( branchtype )
+   //   {
+   //      case 'u':
+   //         vars_localub[branchindex] = branchvalue;
+   //         break;
+   //      case 'l':
+   //         vars_locallb[branchindex] = branchvalue;
+   //         break;
+   //      case 'e'://EQUAL
+   //         vars_localub[branchindex] = branchvalue;
+   //         vars_locallb[branchindex] = branchvalue;
+   //         break;
+   //      default:
+   //         printf("error (%c) \n", branchtype );
+   //         exit(-1);
+   //         break;
+   //   }
+   //}
    //cout << "get local bound - end " << endl;
 }
 

@@ -5,6 +5,7 @@
 #include <list>
 #include <mutex>
 #include <condition_variable>
+#include <math.h>
 
 #include "probdata.h"
 #include "qpdata.h"
@@ -16,6 +17,7 @@
 #include "Schmidt_manager.h"
 #include "cut.h"
 #include "nodelist.h"
+#include "preprocess.h"
 
 #define  HEUR_APP    0.95
 
@@ -29,10 +31,17 @@
 using namespace std;
 
 enum RelaxResult {
-   UPDATE,
-   FEASIBLE,
-   INFEASIBLE,
-   GETINTEGER
+   R_UPDATE,
+   R_FEASIBLE,
+   R_INFEASIBLE,
+   R_GETINTEGER
+};
+
+enum BranchResult {
+   B_FEASIBLE,
+   B_INFEASIBLE,
+   B_GETINTEGER,
+   B_UNBRANCHED
 };
 
 enum Status {
@@ -52,6 +61,7 @@ class SVPsolver{
 
    double         GLB;
    double         bestval;
+   double         sq_bestval;
    SOLUTION       bestsol;
    SOLUTION_POOL  pool;
    double         _Appfac;
@@ -75,14 +85,38 @@ class SVPsolver{
    void     (NODELIST::*pop_front)( const int );
    int      (NODELIST::*getSubsize)( const int ) const;
 
+   BranchResult   (SVPsolver::*SVPSbranch) ( NODE& node );
+   RelaxResult   (SVPsolver::*SVPSrelax) ( NODE& node );
+
    // for heuristics
    double   *norm;
 
    // for relaxation
    QP_DATA  qpdata;
 
+   // square norm of orthogonal vectors
+   vector<double> SNOVs;
+   // coefficient matrix for Gram-Schmidt orthogonalization
+   // descending order
+   vector<vector<double>> CMGSO;
+
+   // vectors for computation of optimum at each node
+   vector<vector<double>> VsCO;
+
+   // vector for computation of optimal value at each node
+   vector<double> VCOV;
+
+   // column vectors for (B_m ( B_m^T B_m )^-1)
+   vector<vector<vector<double>>> VsCB;
+   // reciprocal of square norm of VsCB
+   vector<vector<double>> LVsCB;
+
+   // dual basis matrixes
+   vector<vector<vector<int>>> DBMs;
+   // reciprocal of square norm of column vector of DBMs_i
+   vector<vector<double>> RSNDBM;
    // for cutting plane
-   vector<vector<CUT>> oa_cuts;
+   //vector<vector<CUT>> oa_cuts;
 
    // for parallel
    int   nthreads;
@@ -98,6 +132,7 @@ class SVPsolver{
    bool  quiet;
    bool  CUTMODE;
    bool  ENUM;
+   bool  IMPRELAX;
 
    Status status;
 
@@ -117,14 +152,16 @@ class SVPsolver{
       void  SVPSsetup(  const int s_m, const double* s_B_, const int s_nthreads,
                         const int s_timelimit, const int s_memory,
                         const bool s_quiet,
-                        const bool w_subsolver, const bool w_bounds,
-                        const bool w_heur, const bool w_app, const bool w_gn,
+                        const bool w_subsolver,
+                        const bool w_heur, const bool w_gs,
+                        const bool w_app, const bool w_gn,
                         const bool w_nl );
       void  SVPScreateProbdata( const int m, const double *B_);
 
       void  SVPSheurFindMinColumn();
       void  SVPScomputeBounds();
       void  SVPSgenerateNodes();
+      void  SVPSgenerateRootNode();
       void  SVPStightenBounds( const int memo );
       void  SVPSsetupNodelist() {
          assert( probdata.get_m() > 0 );
@@ -213,7 +250,28 @@ class SVPsolver{
       // } enumeration
 
       // relaxation {
-      RelaxResult SVPSsolveRelaxation( NODE& node, const double* vars_localub, const double* vars_locallb );
+      RelaxResult SVPSrelaxDefault( NODE& node )
+      {
+         if ( ceil( node.get_lowerbound() ) < bestval ) return R_FEASIBLE;
+         else return R_INFEASIBLE;
+      }
+      RelaxResult SVPSrelaxIMP( NODE& node )
+      {
+         auto lowerbound = node.get_lowerbound();
+
+         if ( ceil( lowerbound ) > bestval )
+            return R_INFEASIBLE;
+
+         if ( lowerbound <= bestval * 0.8 )
+            return R_FEASIBLE;
+
+         return SVPSsolveImprovedRelaxation( node );
+         //return SVPSsolveTEST( node );
+      }
+      RelaxResult SVPSsolveImprovedRelaxation( NODE& node );
+      RelaxResult SVPSsolveTEST( NODE& node );
+
+      RelaxResult SVPSsolveRelaxation( NODE& node );
       RelaxResult SVPSsolveRelaxationINT( NODE& node, const double* vars_localub, const double* vars_locallb );
       // } relaxation
 
@@ -222,8 +280,11 @@ class SVPsolver{
       // }  node selection
 
       // branch {
-      void  SVPSbranch( NODE& node, const int index,
-                        double* vars_localub, double* vars_locallb );
+      BranchResult  SVPSbranchEnum( NODE& node );
+      BranchResult  SVPSbranchDefault( NODE& node );
+      BranchResult  SVPSfix( NODE& node );
+      BranchResult  SVPSbranchStandard( NODE& node );
+      bool SVPSpresolveNode( NODE& node );
       void  SVPSbranch_BIN( NODE& node, const int index,
                         double* vars_localub, double* vars_locallb );
       void  SVPSbranch_INT( NODE& node, const int index,
@@ -245,6 +306,12 @@ class SVPsolver{
          return (nodelist.*setup_parapop_selection)( (bool) numsleep );
       }
       // } nodelist
+
+      void  SVPSsetGS();
+      void  SVPScomputeVsCB();
+      void  SVPScomputeVsCO();
+      void  SVPScomputeDBM();
+      void  SVPScomputeVCOV();
       //
       // get
       double      SVPSgetGlobalLowerBound() const { return GLB; }
@@ -273,14 +340,18 @@ class SVPsolver{
                      NODELIMIT = nlimit;
                   }
       void  SVPSsetCutMode( const bool cutmode ) { CUTMODE = cutmode; }
-      void  SVPSsetEnum( const bool enumeration ) { ENUM = enumeration; }
+      void  SVPSsetEnum( const bool enumeration )
+      { ENUM = enumeration; if( enumeration ) SVPSbranch = &SVPsolver::SVPSbranchEnum; }
+      void  SVPSsetImpRelax( const bool improvedrelaxation )
+      { IMPRELAX = improvedrelaxation;
+         if( IMPRELAX ) SVPSrelax = &SVPsolver::SVPSrelaxIMP; }
 
       int         get_runtime(){ return stopwatch.get_result(); }
       double      get_gap(){ return 100*(bestval - GLB)/bestval; }
 
       // for parallel mode
       void        set_num_thread(int n){ nthreads = n; }
-      void        SVPSsetBestval( const double val ){ bestval = val; }
+      void        SVPSsetBestval( const double val ){ bestval = val; sq_bestval = sqrt( val ); }
       void        SVPSsetBounds( const vector<vector<int>>& s_bounds )
       {
          assert( !s_bounds.empty() );
@@ -302,6 +373,14 @@ class SVPsolver{
          Appfac = a;
          _Appfac = _a;
       }
+      void SVPScopyGS( const vector<double>& s, const vector<vector<double>>& c )
+      { SNOVs = s; CMGSO = c; }
+      void SVPScopyVsCB( const vector<vector<vector<double>>>& v, const vector<vector<double>>& l )
+      { VsCB = v; LVsCB = l; }
+      void SVPScopyDBM( const vector<vector<vector<int>>>& v, const vector<vector<double>>& l )
+      { DBMs = v; RSNDBM = l; }
+      void SVPScopyVsCO( const vector<vector<double>>& v ) { VsCO = v; }
+      void SVPScopyVCOV( const vector<double>& v ) { VCOV = v; }
       void        set_quiet( bool q )
       {
          quiet = q;

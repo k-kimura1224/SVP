@@ -22,7 +22,7 @@ SOLUTION_POOL::SOLUTION_POOL(){	// default constructor
 #endif
 	size = -1;
 	num = -1;
-	sols = NULL;
+	sols = nullptr;
 }
 
 SOLUTION_POOL::SOLUTION_POOL( const SOLUTION_POOL &source )
@@ -32,9 +32,9 @@ SOLUTION_POOL::SOLUTION_POOL( const SOLUTION_POOL &source )
 #endif
 	size = source.size;
 	num = source.num;
-	
+
 	if( size > 0 ){
-		assert( source.sols != NULL );
+		assert( source.sols != nullptr );
 		assert( num >= 0 );
 		sols = new SOLUTION[size];
 
@@ -42,7 +42,7 @@ SOLUTION_POOL::SOLUTION_POOL( const SOLUTION_POOL &source )
 			sols[i] = source.sols[i];
 		}
 	}else{
-		sols = NULL;
+		sols = nullptr;
 	}
 
 }
@@ -54,22 +54,22 @@ SOLUTION_POOL& SOLUTION_POOL::operator=( const SOLUTION_POOL& source )
 	cout << "SOLUTION_POOL: assignment operator" << endl;
 #endif
 
-	if( this != &source ){ 	
+	if( this != &source ){
 		size = source.size;
 		num = source.num;
-		
+
 		if( size > 0 ){
-			assert( source.sols != NULL );
+			assert( source.sols != nullptr );
 			assert( num >= 0 );
 
 			delete[] sols;
 			sols = new SOLUTION[size];
-	
+
 			for(int i=0; i<num; i++){
 				sols[i] = source.sols[i];
 			}
 		}else{
-			sols = NULL;
+			sols = nullptr;
 		}
 	}
 	return *this;
@@ -82,7 +82,7 @@ SOLUTION_POOL::~SOLUTION_POOL()
 	cout << "SOLUTION_POOL: destructor" << endl;
 #endif
 	delete[] sols;
-	sols = NULL;
+	sols = nullptr;
 }
 
 void	SOLUTION_POOL::alloc(
@@ -90,7 +90,7 @@ void	SOLUTION_POOL::alloc(
 	)
 {
 	assert( s > 0 );
-	assert( sols == NULL );
+	assert( sols == nullptr );
 
 	delete[] sols;
 
@@ -106,14 +106,14 @@ void SOLUTION_POOL::add_solution(
 	assert( size > 0 );
 	assert( num >= 0 );
 	assert( num <= size );
-	assert( sols != NULL );
+	assert( sols != nullptr );
 
 	if( num == 0 ){
 		sols[0] = sol;
 		num++;
 	}else if( num < size ){
 		for(int i=num-1; i>=0; i--){
-			if( sols[i].get_solval() > sol.get_solval() ){
+			if( sols[i].get_objval()  > sol.get_objval() ){
 				sols[i+1] = sols[i];
 			}else{
 				sols[i+1] = sol;
@@ -125,10 +125,10 @@ void SOLUTION_POOL::add_solution(
 		}
 		num++;
 	}else if( num == size ){
-		if( sol.get_solval() < sols[size-1].get_solval() ){
+		if( sol.get_objval() < sols[size-1].get_objval() ){
 			num--;
 			for(int i=num-1; i>=0; i--){
-				if( sols[i].get_solval() > sol.get_solval() ){
+				if( sols[i].get_objval() > sol.get_objval() ){
 					sols[i+1] = sols[i];
 				}else{
 					sols[i+1] = sol;
@@ -144,7 +144,7 @@ void SOLUTION_POOL::add_solution(
 		cout << "error: add_solution() " << endl;
 		exit(-1);
 	}
-	
+
 }
 
 

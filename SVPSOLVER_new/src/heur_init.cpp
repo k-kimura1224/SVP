@@ -61,6 +61,7 @@ void	SVPsolver::SVPSheurFindMinColumn()
 	}
 
 	bestval = min*min;
+   sq_bestval = sqrt( bestval );
 	bestsol.set_sol( m, nrm, min*min);
 	pool.add_solution( bestsol );
 
