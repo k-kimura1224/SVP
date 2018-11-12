@@ -42,6 +42,7 @@ class SCHMIDT_M{
    }
 
    int   get_n(){ return n; }
+   double get_norm_i( const int i ) const { assert( nrm != nullptr ); return nrm[i]; }
 
 };
 

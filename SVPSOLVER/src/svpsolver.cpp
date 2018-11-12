@@ -267,10 +267,20 @@ void SVPsolver::SVPSsetup(
       _Appfac = tgamma( ((double)m/2.0) + 1 );
       _Appfac = pow( _Appfac, 1.0/(double)m );
 
-      double absdet = fabs( determinant( B_, m) );
-      absdet = pow( absdet, 1.0/(double)m );
-      _Appfac *= absdet;
+      SCHMIDT_M sch;
+      sch.setup( m, B_ );
+
+      //double absdet = fabs( determinant( B_, m) );
+      //absdet = pow( absdet, 1.0/(double)m );
+      //_Appfac *= absdet;
       _Appfac /= sqrt( M_PI );
+
+      for ( int j = 0; j < m; ++j )
+         sch.set_z_i( j, true );
+
+      sch.compute_GS();
+      for ( int j = 0; j < m; ++j )
+         _Appfac *= pow( sqrt( sch.get_norm_i( j ) ), 1.0/(double)m);
    }
 
    // pool
