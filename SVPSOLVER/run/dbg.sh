@@ -8,13 +8,13 @@ run()
    buf=${1##*/}
    name=${buf%.*}
 
-   thread=4
+   thread=32
    time=86400
-   memory=8
+   memory=128
 
 	export OMP_NUM_THREADS=1
-   echo "../bin/SVPSOLVER.dbg -f $file -p $thread -t $time -m $memory > ${name}.log"
-   ../bin/SVPSOLVER.dbg -f $file -p $thread -t $time -m $memory > ${name}.log
+   echo "../bin/SVPSOLVER.dbg -f $file -p $thread -t $time -m $memory -e > ${name}.log"
+   ../bin/SVPSOLVER.dbg -f $file -p $thread -t $time -m $memory -e > ${name}.log
 }
 
 dirname=$1
