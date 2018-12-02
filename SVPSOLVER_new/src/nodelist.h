@@ -29,6 +29,7 @@ class NODELIST{
    double               division;
    int                  maxnode;
    int                  currentdeq;
+   int                  focusdeq;
 
    int            listsize;
 
@@ -131,27 +132,71 @@ class NODELIST{
          assert( !node_deque.empty() );
          assert( (int)node_deque.size() == 10 );
          assert( currentdeq >= 0 && currentdeq < 10 );
-         if ( maxnode > listsize ) {
-            for ( auto i = currentdeq; i < 10; ++i ) {
-               if ( !node_deque[i].empty() ) {
-                  node_deque[i].pop_front();
-                  break;
-               }
-            }
-         } else {
-            for ( auto i = 9; i >= currentdeq; --i ) {
-               if ( !node_deque[i].empty() ) {
-                  node_deque[i].pop_front();
-                  break;
-               }
-            }
-         }
+         //if ( maxnode > listsize ) {
+         //   for ( auto i = currentdeq; i < 10; ++i ) {
+         //      if ( !node_deque[i].empty() ) {
+         //         node_deque[i].pop_front();
+         //         break;
+         //      }
+         //   }
+         //} else {
+         //   for ( auto i = 9; i >= currentdeq; --i ) {
+         //      if ( !node_deque[i].empty() ) {
+         //         node_deque[i].pop_front();
+         //         break;
+         //      }
+         //   }
+         //}
+         assert( !node_deque[focusdeq].empty() );
+         node_deque[focusdeq].pop_front();
          --listsize;
       }
 
       NODE*    nodeselection_LIST( double* globallowerbound, const double bestval, const int index, const int disp );
       NODE*    nodeselection_TDEQUE( double* globallowerbound, const double bestval, const int index, const int disp );
-      NODE*    nodeselection_TENDEQUE( double* globallowerbound, const double bestval, const int index, const int disp );
+      NODE*    nodeselection_TENDEQUE( double* globallowerbound, const double bestval, const int index, const int disp )
+      {
+         assert( listsize > 0 );
+         assert( type == TEN_DEQUE );
+         assert( division > 0.0 );
+         assert( maxnode > 0 );
+         assert( !node_deque.empty() );
+         assert( (int)node_deque.size() == 10 );
+         if ( maxnode > listsize )
+         {
+            for ( auto i = currentdeq; i < 10; ++i )
+            {
+               if ( !node_deque[i].empty() )
+               {
+                  focusdeq = i;
+                  return &node_deque[i].front();
+               }
+               else
+               {
+                  currentdeq = i + 1;
+                  *globallowerbound =  division * ( 1 + i );
+                  node_deque[i].shrink_to_fit();
+               }
+            }
+         }
+         else
+         {
+            for ( auto i = 9; i >= currentdeq; --i )
+            {
+               if ( !node_deque[i].empty() )
+               {
+                  focusdeq = i;
+                  return &node_deque[i].front();
+               }
+            }
+         }
+
+         printf("error!\n");
+         assert(0);
+         exit(-1);
+
+         return &node_deque[0].front();
+      }
 
       double   get_GLB_LIST() const;
       double   get_GLB_TDEQUE() const;

@@ -31,6 +31,7 @@ NODELIST::NODELIST(){   // default constructor
    division = -1.0;
    maxnode = -1;
    currentdeq = -1;
+   focusdeq = -1;
 }
 
 NODELIST::NODELIST( const NODELIST &source )
@@ -46,6 +47,7 @@ NODELIST::NODELIST( const NODELIST &source )
    division = source.division;
    maxnode = source.maxnode;
    currentdeq = source.currentdeq;
+   focusdeq = source.focusdeq;
 
    copy( source.node_list.begin(), source.node_list.end(), back_inserter(node_list) );
    copy( source.node_deque_1.begin(), source.node_deque_1.end(), back_inserter(node_deque_1) );
@@ -70,6 +72,7 @@ NODELIST& NODELIST::operator=( const NODELIST& source )
       division = source.division;
       maxnode = source.maxnode;
       currentdeq = source.currentdeq;
+      focusdeq = source.focusdeq;
 
       copy( source.node_list.begin(), source.node_list.end(), back_inserter(node_list) );
       copy( source.node_deque_1.begin(), source.node_deque_1.end(), back_inserter(node_deque_1) );
@@ -333,51 +336,51 @@ NODE* NODELIST::nodeselection_TDEQUE(
    return nullptr;
 }
 
-NODE* NODELIST::nodeselection_TENDEQUE(
-      double*        globallowerbound,
-      const double   bestval,
-      const int      index,
-      const int      disp
-      )
-{
-   assert( listsize > 0 );
-   assert( type == TEN_DEQUE );
-   assert( division > 0.0 );
-   assert( maxnode > 0 );
-   assert( !node_deque.empty() );
-   assert( (int)node_deque.size() == 10 );
-
-   if ( maxnode > listsize )
-   {
-      for ( auto i = currentdeq; i < 10; ++i )
-      {
-         if ( !node_deque[i].empty() )
-         {
-            return &node_deque[i].front();
-         }
-         else
-         {
-            currentdeq = i + 1;
-            *globallowerbound =  division * ( 1 + i );
-            node_deque[i].shrink_to_fit();
-         }
-      }
-   }
-   else
-   {
-      for ( auto i = 9; i >= currentdeq; --i )
-      {
-         if ( !node_deque[i].empty() )
-            return &node_deque[i].front();
-      }
-   }
-
-   printf("error!\n");
-   assert(0);
-   exit(-1);
-
-   return &node_deque[0].front();
-}
+//NODE* NODELIST::nodeselection_TENDEQUE(
+//      double*        globallowerbound,
+//      const double   bestval,
+//      const int      index,
+//      const int      disp
+//      )
+//{
+//   assert( listsize > 0 );
+//   assert( type == TEN_DEQUE );
+//   assert( division > 0.0 );
+//   assert( maxnode > 0 );
+//   assert( !node_deque.empty() );
+//   assert( (int)node_deque.size() == 10 );
+//
+//   if ( maxnode > listsize )
+//   {
+//      for ( auto i = currentdeq; i < 10; ++i )
+//      {
+//         if ( !node_deque[i].empty() )
+//         {
+//            return &node_deque[i].front();
+//         }
+//         else
+//         {
+//            currentdeq = i + 1;
+//            *globallowerbound =  division * ( 1 + i );
+//            node_deque[i].shrink_to_fit();
+//         }
+//      }
+//   }
+//   else
+//   {
+//      for ( auto i = 9; i >= currentdeq; --i )
+//      {
+//         if ( !node_deque[i].empty() )
+//            return &node_deque[i].front();
+//      }
+//   }
+//
+//   printf("error!\n");
+//   assert(0);
+//   exit(-1);
+//
+//   return &node_deque[0].front();
+//}
 
 double NODELIST::get_GLB_LIST() const
 {
