@@ -1,21 +1,29 @@
-#/bin/sh
-#chmod u+x gen.sh
+#!/bin/sh
 
-thread=$1
-time=$2
+f(){
+	file=$1
+	buf=${1##*/}
+	name=${buf%.*}
 
-cd ../Split_miqp/run
-./clean.sh
-./run.sh ../../problems/TEST $time 2
+	echo "fplll -a svp $file"
+	echo "$file" >> time.txt
 
-cd ../../LPFILES/BKZ20LP_TEST
-./clean.sh
-./run.sh $time
+	(time fplll -a svp $file > ${name}.sol) >> time.txt 2>&1
 
-cd ../../SVPSOLVER/run
-./clean.sh
-./run.sh ../../problems/TEST $thread $time
+	echo  "" >> time.txt
 
-cd ../../buffer
+	mv ${name}.sol solfiles
+}
 
-echo "Done!!"
+rm -f time.txt
+rm -rf solfiles
+
+mkdir solfiles
+
+for file in `ls *.txt`
+do
+	f $file
+done
+
+cat time.txt
+mv time.txt solfiles
