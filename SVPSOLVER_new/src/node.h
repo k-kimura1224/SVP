@@ -74,7 +74,16 @@ class NODE {
       NODE& operator=( const NODE& );              // assignment operator
       NODE( NODE &&source ) noexcept;              // move constructor
       NODE& operator=( NODE&& source ) noexcept;   // move assignment operator
-      ~NODE();                                     // destructor
+      ~NODE()                                      // destructor
+      {
+      #if debug_class
+         cout << "NODE: destructor" << endl;
+      #endif
+         fixedvalues.clear();
+         fixedvalues.shrink_to_fit();
+         rsol.clear();
+         rsol.shrink_to_fit();
+      }
       bool operator<(const NODE &rhs) const
       { return relax_objval < rhs.relax_objval; }
 

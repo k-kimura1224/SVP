@@ -257,31 +257,19 @@ NODE& NODE::operator=( NODE&& source ) noexcept
    }
    return *this;
 }
+
 // destructor
-NODE::~NODE()
-{
-#if debug_class
-   cout << "NODE: destructor" << endl;
-#endif
-   fixedvalues.clear();
-   fixedvalues.shrink_to_fit();
-
-   //ub.clear();
-   //ub.shrink_to_fit();
-   //lb.clear();
-   //lb.shrink_to_fit();
-   //sum_fixed.clear();
-   //sum_fixed.shrink_to_fit();
-   rsol.clear();
-   rsol.shrink_to_fit();
-
-   //delete[] relax_solval;
-   //delete[] sumfixed;
-   //relax_solval = nullptr;
-   //sumfixed = nullptr;
-   //branchinfo.clear();
-   //branchinfo.shrink_to_fit();
-}
+//NODE::~NODE()
+//{
+//#if debug_class
+//   cout << "NODE: destructor" << endl;
+//#endif
+//   fixedvalues.clear();
+//   fixedvalues.shrink_to_fit();
+//
+//   rsol.clear();
+//   rsol.shrink_to_fit();
+//}
 
 //void NODE::set_vals(
 //   const int      s_m,

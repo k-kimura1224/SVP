@@ -145,7 +145,7 @@ bool SVPsolver::SVPSrunBranchandBound()
             //cout << "-end-";
             cutoff++;
 
-            if( NL.getListsize() == 0 )
+            if( !NL.getListsize() )
             {
                result = true;
                status = SOLVED;
@@ -162,7 +162,7 @@ bool SVPsolver::SVPSrunBranchandBound()
          //cout << "-end-";
          cutoff++;
 
-         if( NL.getListsize() == 0 )
+         if( !NL.getListsize() )
          {
             result = true;
             status = SOLVED;
