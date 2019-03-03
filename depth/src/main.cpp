@@ -72,8 +72,9 @@ int main( int argc, char** argv){
    int   memory = 8;
    bool  improvedrelaxation = false;
    bool  enumeration = false;
+   bool  depthsearch = false;
 
-   while ( (opt = getopt(argc, argv, "f:p:t:qhm:re")) != -1)
+   while ( (opt = getopt(argc, argv, "f:p:t:qhm:red")) != -1)
    {
       switch ( opt )
       {
@@ -107,6 +108,10 @@ int main( int argc, char** argv){
 
          case 'e':
             enumeration = true;
+            break;
+
+         case 'd':
+            depthsearch = true;
             break;
 
          default: /* '?' */
@@ -146,10 +151,64 @@ int main( int argc, char** argv){
    svps.SVPScomputeVsCB();
    svps.SVPScomputeVsCO();
    if ( !enumeration ) svps.SVPScomputeVCOV();
-   svps.SVPScomputeDBM();
+   //svps.SVPScomputeDBM();
 
    bool run;
-   if( nthreads == 1 )
+
+   if ( depthsearch )
+   {
+      run = svps.SVPSdepthSearch();
+      char probname[100];
+      getProblemName( filename, probname, 100);
+
+      string com("echo [");
+      com += probname;
+      com += " @depth";
+      //com += to_string(nthreads);
+      //com += "threads] ";
+      //if ( svps.SVPSgetListsize() == 0 )
+      //   com += "=== OPTIMAL ===";
+      //else
+      //   com += "== LIMIT ==";
+
+      com += " TIME: ";
+      com += to_string( svps.get_runtime() );
+
+      com += " NOLM: ";
+      com += to_string( (int)sqrt(svps.SVPSgetBestval()) );
+
+      com += " AF: ";
+      com += to_string( svps.SVPSgetAppFac() );
+      //com += " NODE: ";
+      //com += to_string( svps.SVPSgetNnode() );
+
+      //if ( svps.SVPSgetListsize() != 0 )
+      //{
+      //   com += " GAP: ";
+      //   com += to_string( svps.get_gap() );
+      //   com += "%";
+      //}
+
+      //struct rusage r;
+      //if (getrusage(RUSAGE_SELF, &r) != 0) {
+      //      /*Failure*/
+      //}
+
+      //int mem = floor( (r.ru_maxrss/1024)/1024 );
+
+      //com += " MAXMEM: ";
+      //com += to_string( mem );
+      //com += "MB";
+
+      com += " >> result.txt";
+
+      //cout << com << endl;
+      system(com.c_str());
+
+      delete[] B_;
+      return 0;
+   }
+   else if ( nthreads == 1 )
    {
       run = svps.SVPSsolve();
    }

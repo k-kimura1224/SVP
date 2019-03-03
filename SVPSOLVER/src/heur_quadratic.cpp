@@ -90,6 +90,7 @@ void  SVPsolver::SVPSheurQuadratic(
    for( auto i = 0; i < m; ++i )
       normv[i] = colnorm[i] * colnorm[i];
 
+#if 1
    while(1)
    {
       Com_mat_Ax( B_, m, m, solvals, Bx );
@@ -186,6 +187,91 @@ void  SVPsolver::SVPSheurQuadratic(
          break;
       }
    }
+
+   #if log
+   cout << "val: " << val << endl;
+   #endif
+
+#else
+      for ( auto i : nofixed_index )
+      {
+         Com_mat_Ax( B_, m, m, solvals, Bx );
+
+         double buf;
+         lam = val;
+         s1 = Com_dot( &B_[i*m], Bx, m);
+         s2 = normv[i]; //norm[i] * norm[i];
+         t = - s1 / s2;
+
+         if ( t < vars_locallb[i] - solvals[i] )
+         {
+            t = vars_locallb[i] - solvals[i];
+            //lam += t * ( t * s2 + 2.0 * s1 );
+            buf = t;
+            buf *= s2;
+            buf += 2.0 * s1;
+            buf *= t;
+            lam += buf;
+         }
+         else if ( vars_localub[i] - solvals[i] < t )
+         {
+            t = vars_localub[i] - solvals[i];
+            //lam += t * ( t*s2 + 2*s1 );
+            buf = t;
+            buf *= s2;
+            buf += 2.0 * s1;
+            buf *= t;
+            lam += buf;
+         }
+         else
+         {
+            t1 = ceil( t );
+            lam1 = val;
+            //lam1 += t1 * ( t1*s2 + 2*s1 );
+            buf = t1;
+            buf *= s2;
+            buf += 2.0 * s1;
+            buf *= t1;
+            lam1 += buf;
+
+            t2 = floor( t );
+            lam2 = val;
+            //lam2 += t2 * ( t2*s2 + 2*s1 );
+            buf = t2;
+            buf *= s2;
+            buf += 2.0 * s1;
+            buf *= t2;
+            lam2 += buf;
+
+            if( lam1 > lam2 )
+            {
+               lam = lam2;
+               t = t2;
+            }
+            else
+            {
+               lam = lam1;
+               t = t1;
+            }
+         }
+
+         #if debug
+            cout << "i:" << i << "-> " << lam << endl;
+         #endif
+
+         //if( val_new > lam )
+         //{
+            val = lam;
+            solvals[i] = solvals[i] + t;
+         //}
+      }
+
+   #if log
+   cout << "val: " << val << endl;
+   #endif
+#endif
+
+   //assert(0);
 
    SOLUTION solution;
    solution.set_sol( m, solvals, val);

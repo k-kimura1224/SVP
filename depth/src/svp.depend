@@ -11,6 +11,9 @@ $(OBJDIR)/branch.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/branch.cpp \
  $(SRCDIR)/vector.h
 $(OBJDIR)/cut.o: $(SRCDIR)/cut.h $(SRCDIR)/cut.cpp \
  $(SRCDIR)/vector.h
+$(OBJDIR)/depth_search.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/depth_search.cpp \
+ $(SRCDIR)/node.h \
+ $(SRCDIR)/vector.h
 $(OBJDIR)/enum.o: $(SRCDIR)/svpsolver.h $(SRCDIR)/enum.cpp \
  $(SRCDIR)/node.h \
  $(SRCDIR)/probdata.h \

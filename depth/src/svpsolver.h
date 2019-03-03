@@ -373,6 +373,7 @@ class SVPsolver{
          Appfac = a;
          _Appfac = _a;
       }
+      auto SVPSgetAppFac() const { return Appfac; }
       void SVPScopyGS( const vector<double>& s, const vector<vector<double>>& c )
       { SNOVs = s; CMGSO = c; }
       void SVPScopyVsCB( const vector<vector<vector<double>>>& v, const vector<vector<double>>& l )
@@ -385,6 +386,8 @@ class SVPsolver{
       {
          quiet = q;
       }
+
+      bool SVPSdepthSearch();
 };
 
 #endif

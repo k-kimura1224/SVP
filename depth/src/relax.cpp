@@ -115,7 +115,6 @@ RelaxResult SVPsolver::SVPSsolveImprovedRelaxation(
       NODE&          node
       )
 {
-
    const auto m = probdata.get_m();
    const auto dim = m - node.get_dpt();
 
