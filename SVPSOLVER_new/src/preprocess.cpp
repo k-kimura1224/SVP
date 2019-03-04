@@ -224,7 +224,7 @@ void FindNShorterVec(
                      setsol.set_sol( m, vals, upper_new );
                      solpool->add_solution( setsol );
                      delete[] vals;
-                     upper_new = solpool->get_biggestval();
+                     upper = solpool->get_biggestval();
                      break;
                   }
                }
@@ -250,12 +250,14 @@ void FindNShorterVec(
       }
       else
       {
-         const auto& vec = CMGSO[dpt];
-         assert( (int) vec.size() == dpt + 1 );
-         for ( auto i = 0; i < dpt; ++i )
+         const auto& vec = CMGSO[dpt+1];
+         assert( (int) vec.size() == dpt + 2 );
+         sum = 0;
+         for ( auto i = 0; i < dpt+1; ++i )
          {
             sum += vec[i] * solvals[i];
          }
+
 
          ++dpt;
          --branchindex;
