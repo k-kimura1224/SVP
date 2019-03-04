@@ -17,8 +17,6 @@
 #include "cut.h"
 #include "nodelist.h"
 
-#define  HEUR_APP    0.95
-
 // for parallel
 #define  NUM_INITNODES     30000
 #define  PARASIZE          100
@@ -98,6 +96,7 @@ class SVPsolver{
    bool  quiet;
    bool  CUTMODE;
    bool  ENUM;
+   double  HEUR_APP;
 
    Status status;
 
@@ -274,6 +273,7 @@ class SVPsolver{
                   }
       void  SVPSsetCutMode( const bool cutmode ) { CUTMODE = cutmode; }
       void  SVPSsetEnum( const bool enumeration ) { ENUM = enumeration; }
+      void  SVPSsetHeurApp( const double heur_app ) { HEUR_APP = heur_app; }
 
       int         get_runtime(){ return stopwatch.get_result(); }
       double      get_gap(){ return 100*(bestval - GLB)/bestval; }
