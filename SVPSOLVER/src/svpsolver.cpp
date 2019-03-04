@@ -66,6 +66,7 @@ SVPsolver::SVPsolver(){ // default constructor
    MEMORY = 8;
    CUTMODE = false;
    ENUM = false;
+   HEUR_APP = 0.95;
 
    epsilon = 1.0e-12;
 
@@ -112,6 +113,7 @@ SVPsolver::SVPsolver( const SVPsolver &source )
    MEMORY = source.MEMORY;
    CUTMODE = source.CUTMODE;
    ENUM = source.ENUM;
+   HEUR_APP = source.HEUR_APP;
    epsilon = source.epsilon;
    subsolver = source.subsolver;
    status = source.status;
@@ -173,6 +175,7 @@ SVPsolver& SVPsolver::operator=( const SVPsolver& source )
       MEMORY = source.MEMORY;
       CUTMODE = source.CUTMODE;
       ENUM = source.ENUM;
+      HEUR_APP = source.HEUR_APP;
       epsilon = source.epsilon;
       subsolver = source.subsolver;
       status = source.status;

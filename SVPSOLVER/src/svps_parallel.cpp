@@ -43,6 +43,7 @@ void SVPsolver::SVPSsolveSubprob(
       sub.SVPSsetup( m, B_, 1, sub_timelimit, MEMORY, true,
                true, false, false, false, false, false );
       sub.SVPSsetEnum( ENUM );
+      sub.SVPSsetHeurApp( HEUR_APP );
       sub.SVPSsetBounds( bounds );
       sub.SVPSsetNorm( norm );
 

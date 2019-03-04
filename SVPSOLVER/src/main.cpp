@@ -72,8 +72,9 @@ int main( int argc, char** argv){
    int   memory = 8;
    bool  cutmode = false;
    bool  enumeration = false;
+   double heur_app = 0.95;
 
-   while ( (opt = getopt(argc, argv, "f:p:t:qhm:ce")) != -1)
+   while ( (opt = getopt(argc, argv, "f:p:t:qhm:ceH:")) != -1)
    {
       switch ( opt )
       {
@@ -109,6 +110,10 @@ int main( int argc, char** argv){
             enumeration = true;
             break;
 
+         case 'H':
+            heur_app = atof ( optarg );
+            break;
+
          default: /* '?' */
             cout << "Usage: " << argv[0] << " [-f filename] [-p nthreads] [-t timelimit]" << endl;
             break;
@@ -141,6 +146,7 @@ int main( int argc, char** argv){
    SVPsolver   svps;
    svps.SVPSsetCutMode( cutmode );
    svps.SVPSsetEnum( enumeration );
+   svps.SVPSsetHeurApp( heur_app );
    svps.SVPSsetup( m, B_, nthreads, timelimit, memory, quiet,
          false, true, true, true, true, true );
 
