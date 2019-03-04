@@ -8,20 +8,24 @@ run()
    buf=${1##*/}
    name=${buf%.*}
 
-   thread=$2
-   time=$3
+   opt=$2
+   thread=$3
+   time=$4
+   mem=$5
 
 	export OMP_NUM_THREADS=1
-   echo "../bin/SVPSOLVER.opt -f $file -p $thread -t $time > ${name}.log"
-   ../bin/SVPSOLVER.opt -f $file -p $thread -t $time > ${name}.log
+   echo "../bin/SVPSOLVER.${opt} -f $file -p $thread -t $time -m $mem > ${name}.log"
+   ../bin/SVPSOLVER.${opt} -f $file -p $thread -t $time -m $mem > ${name}.log
 }
 
 dirname=$1
-thread=$2
-time=$3
+opt=$2
+thread=$3
+time=$4
+mem=$5
 
 for file in `ls ${dirname}/*.dat`
 do
-   run $file $thread $3
+   run $file $opt $thread $time $mem
 done
 

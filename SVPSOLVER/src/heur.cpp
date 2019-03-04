@@ -29,13 +29,13 @@ using namespace std;
 
 // heur_quadratic.cpp
 #define  HEUR_QUADRATIC          true
-#define  HEUR_QUADRATIC_FREQ        1
+#define  HEUR_QUADRATIC_FREQ        3
 #define  HEUR_QUADRATIC_FREQOFS     0
-#define  HEUR_QUADRATIC_DPT         40
+#define  HEUR_QUADRATIC_DPT         30
 
 #define  PARA_HEUR_QUADRATIC              true
 #define  PARA_HEUR_QUADRATIC_FREQ         5
-#define  PARA_HEUR_QUADRATIC_FREQOFS      20
+#define  PARA_HEUR_QUADRATIC_FREQOFS      0
 #define  PARA_HEUR_QUADRATIC_DPT       20
 
 #define debug  0

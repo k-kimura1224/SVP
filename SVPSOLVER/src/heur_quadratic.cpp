@@ -192,6 +192,8 @@ void  SVPsolver::SVPSheurQuadratic(
    cout << "val: " << val << endl;
    #endif
 
+   //if ( val <= bestval )
+   //   cout << "!!!!!!!!!" << endl;
 #else
       for ( auto i : nofixed_index )
       {
