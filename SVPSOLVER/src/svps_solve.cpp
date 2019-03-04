@@ -101,7 +101,7 @@ bool SVPsolver::SVPSrunBranchandBound()
    const auto output = !quiet;
    const auto subsol = subsolver;
    auto& nodeindex = index;
-   const auto enumeration = ENUM;
+   //const auto enumeration = ENUM;
    //const int dpt_enum = m / 2;
    //const int dpt_enum = 0;
 
@@ -140,8 +140,8 @@ bool SVPsolver::SVPSrunBranchandBound()
       relaxresult = SVPSsolveRelaxation( *node, vars_localub, vars_locallb );
       //testwatch.stop();
 
-      if ( relaxresult == FEASIBLE && enumeration )
-         relaxresult = SVPSenumerate( *node, vars_localub, vars_locallb );
+      //if ( relaxresult == FEASIBLE && enumeration )
+      //   relaxresult = SVPSenumerate( *node, vars_localub, vars_locallb );
 
       // run heuristics
       if( relaxresult == FEASIBLE && HEUR_APP < Appfac )
