@@ -90,7 +90,7 @@ void  SVPsolver::SVPSheurQuadratic(
    for( auto i = 0; i < m; ++i )
       normv[i] = colnorm[i] * colnorm[i];
 
-#if 1
+#if 0
    while(1)
    {
       Com_mat_Ax( B_, m, m, solvals, Bx );

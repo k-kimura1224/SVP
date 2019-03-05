@@ -1,0 +1,13 @@
+End
+Parallel mode ----------------------------------------------------------------------------------------
+-- BESTVAL: 2989371.000  NORM: 1728.980  AP: 0.982 --
+
+SVPSOLVER found an optimal solution
+
+time: 109s
+best value: 2989371.000
+norm: 1728.980
+AF: 0.982
+Nodes: 21797293
+best solution:
+ 0: 1.000

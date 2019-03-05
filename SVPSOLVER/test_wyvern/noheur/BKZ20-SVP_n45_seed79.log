@@ -1,0 +1,582 @@
+Bounds: 
+x_0: [ -10, 10]
+x_1: [ -17, 17]
+x_2: [ -13, 13]
+x_3: [ -10, 10]
+x_4: [ -12, 12]
+x_5: [ -10, 10]
+x_6: [ -15, 15]
+x_7: [ -8, 8]
+x_8: [ -13, 13]
+x_9: [ -12, 12]
+x_10: [ -7, 7]
+x_11: [ -11, 11]
+x_12: [ -5, 5]
+x_13: [ -8, 8]
+x_14: [ -4, 4]
+x_15: [ -6, 6]
+x_16: [ -7, 7]
+x_17: [ -7, 7]
+x_18: [ -7, 7]
+x_19: [ -4, 4]
+x_20: [ -7, 7]
+x_21: [ -4, 4]
+x_22: [ -5, 5]
+x_23: [ -3, 3]
+x_24: [ -4, 4]
+x_25: [ -3, 3]
+x_26: [ -4, 4]
+x_27: [ -5, 5]
+x_28: [ -5, 5]
+x_29: [ -4, 4]
+x_30: [ -5, 5]
+x_31: [ -3, 3]
+x_32: [ -4, 4]
+x_33: [ -3, 3]
+x_34: [ -3, 3]
+x_35: [ -4, 4]
+x_36: [ -4, 4]
+x_37: [ -3, 3]
+x_38: [ -3, 3]
+x_39: [ -3, 3]
+x_40: [ -3, 3]
+x_41: [ -2, 2]
+x_42: [ -2, 2]
+x_43: [ -3, 3]
+x_44: [ -2, 2]
+0s [1000/445(1000)] dpt:12 [ 447776.743, 239393.300, 2393933.000, 90.000%] cutoff:55 AF:0.882
+0s [2000/890(2000)] dpt:17 [ 1576043.659, 239393.300, 2393933.000, 90.000%] cutoff:55 AF:0.882
+0s [3000/1332(3000)] dpt:15 [ 1052485.405, 239393.300, 2393933.000, 90.000%] cutoff:58 AF:0.882
+0s [4000/1745(4000)] dpt:26 [ 328898.414, 239393.300, 2393933.000, 90.000%] cutoff:87 AF:0.882
+0s [5000/2154(5000)] dpt:16 [ 1800737.412, 478786.600, 2393933.000, 80.000%] cutoff:91 AF:0.882
+0s [6000/2583(6000)] dpt:20 [ 2089478.298, 478786.600, 2393933.000, 80.000%] cutoff:71 AF:0.882
+0s [7000/3015(7000)] dpt:21 [ 1724684.072, 478786.600, 2393933.000, 80.000%] cutoff:68 AF:0.882
+0s [8000/3433(8000)] dpt:16 [ 1248419.585, 478786.600, 2393933.000, 80.000%] cutoff:82 AF:0.882
+0s [9000/3864(9000)] dpt:22 [ 1919477.815, 478786.600, 2393933.000, 80.000%] cutoff:69 AF:0.882
+0s [10000/4284(10000)] dpt:21 [ 2103144.173, 478786.600, 2393933.000, 80.000%] cutoff:80 AF:0.882
+0s [11000/4712(11000)] dpt:17 [ 1180577.890, 478786.600, 2393933.000, 80.000%] cutoff:72 AF:0.882
+0s [12000/5129(12000)] dpt:16 [ 848203.822, 478786.600, 2393933.000, 80.000%] cutoff:83 AF:0.882
+0s [13000/5542(13000)] dpt:25 [ 557497.796, 478786.600, 2393933.000, 80.000%] cutoff:87 AF:0.882
+0s [14000/5951(14000)] dpt:8 [ 827644.378, 718179.900, 2393933.000, 70.000%] cutoff:91 AF:0.882
+0s [15000/6365(15000)] dpt:18 [ 2384341.193, 718179.900, 2393933.000, 70.000%] cutoff:86 AF:0.882
+0s [16000/6771(16000)] dpt:25 [ 1979463.201, 718179.900, 2393933.000, 70.000%] cutoff:94 AF:0.882
+0s [17000/7181(17000)] dpt:14 [ 946822.114, 718179.900, 2393933.000, 70.000%] cutoff:90 AF:0.882
+0s [18000/7593(18000)] dpt:27 [ 1778270.153, 718179.900, 2393933.000, 70.000%] cutoff:88 AF:0.882
+0s [19000/7995(19000)] dpt:11 [ 1347342.127, 718179.900, 2393933.000, 70.000%] cutoff:98 AF:0.882
+0s [20000/8410(20000)] dpt:21 [ 1704645.001, 718179.900, 2393933.000, 70.000%] cutoff:85 AF:0.882
+0s [21000/8818(21000)] dpt:15 [ 1184286.564, 718179.900, 2393933.000, 70.000%] cutoff:92 AF:0.882
+0s [22000/9228(22000)] dpt:23 [ 2307798.883, 718179.900, 2393933.000, 70.000%] cutoff:90 AF:0.882
+0s [23000/9632(23000)] dpt:27 [ 1750045.164, 718179.900, 2393933.000, 70.000%] cutoff:96 AF:0.882
+0s [24000/10047(24000)] dpt:15 [ 1689599.843, 718179.900, 2393933.000, 70.000%] cutoff:85 AF:0.882
+0s [25000/10458(25000)] dpt:22 [ 2197147.321, 718179.900, 2393933.000, 70.000%] cutoff:89 AF:0.882
+0s [26000/10861(26000)] dpt:15 [ 2337325.724, 718179.900, 2393933.000, 70.000%] cutoff:97 AF:0.882
+0s [27000/11275(27000)] dpt:25 [ 1404054.340, 718179.900, 2393933.000, 70.000%] cutoff:86 AF:0.882
+0s [28000/11684(28000)] dpt:23 [ 2193284.378, 718179.900, 2393933.000, 70.000%] cutoff:91 AF:0.882
+0s [29000/12091(29000)] dpt:17 [ 1498702.685, 718179.900, 2393933.000, 70.000%] cutoff:93 AF:0.882
+0s [30000/12485(30000)] dpt:18 [ 1653312.375, 718179.900, 2393933.000, 70.000%] cutoff:106 AF:0.882
+0s [31000/12885(31000)] dpt:19 [ 2040931.270, 718179.900, 2393933.000, 70.000%] cutoff:100 AF:0.882
+0s [32000/13295(32000)] dpt:22 [ 1963617.040, 718179.900, 2393933.000, 70.000%] cutoff:90 AF:0.882
+0s [33000/13705(33000)] dpt:18 [ 1437869.908, 718179.900, 2393933.000, 70.000%] cutoff:90 AF:0.882
+0s [34000/14107(34000)] dpt:18 [ 1687668.210, 718179.900, 2393933.000, 70.000%] cutoff:98 AF:0.882
+0s [35000/14499(35000)] dpt:23 [ 1158501.041, 718179.900, 2393933.000, 70.000%] cutoff:108 AF:0.882
+0s [36000/14907(36000)] dpt:25 [ 1592238.620, 718179.900, 2393933.000, 70.000%] cutoff:92 AF:0.882
+0s [37000/15312(37000)] dpt:23 [ 1686661.847, 718179.900, 2393933.000, 70.000%] cutoff:95 AF:0.882
+0s [38000/15705(38000)] dpt:20 [ 1405893.951, 718179.900, 2393933.000, 70.000%] cutoff:107 AF:0.882
+0s [39000/16110(39000)] dpt:15 [ 1009614.250, 957573.200, 2393933.000, 60.000%] cutoff:95 AF:0.882
+0s [40000/16504(40000)] dpt:24 [ 1729534.254, 957573.200, 2393933.000, 60.000%] cutoff:106 AF:0.882
+0s [41000/16878(41000)] dpt:12 [ 1739935.576, 957573.200, 2393933.000, 60.000%] cutoff:126 AF:0.882
+0s [42000/17268(42000)] dpt:26 [ 2206795.284, 957573.200, 2393933.000, 60.000%] cutoff:110 AF:0.882
+0s [43000/17673(43000)] dpt:17 [ 1536737.818, 957573.200, 2393933.000, 60.000%] cutoff:95 AF:0.882
+0s [44000/18063(44000)] dpt:18 [ 1597383.151, 957573.200, 2393933.000, 60.000%] cutoff:110 AF:0.882
+0s [45000/18447(45000)] dpt:20 [ 1791332.940, 957573.200, 2393933.000, 60.000%] cutoff:116 AF:0.882
+0s [46000/18836(46000)] dpt:20 [ 2267294.775, 957573.200, 2393933.000, 60.000%] cutoff:111 AF:0.882
+0s [47000/19233(47000)] dpt:21 [ 1835096.691, 957573.200, 2393933.000, 60.000%] cutoff:103 AF:0.882
+0s [48000/19620(48000)] dpt:9 [ 1049151.817, 957573.200, 2393933.000, 60.000%] cutoff:113 AF:0.882
+0s [49000/20010(49000)] dpt:21 [ 1387798.981, 957573.200, 2393933.000, 60.000%] cutoff:110 AF:0.882
+0s [50000/20410(50000)] dpt:19 [ 1162230.967, 957573.200, 2393933.000, 60.000%] cutoff:100 AF:0.882
+0s [51000/20804(51000)] dpt:26 [ 978044.383, 957573.200, 2393933.000, 60.000%] cutoff:106 AF:0.882
+0s [52000/21193(52000)] dpt:15 [ 1243758.750, 957573.200, 2393933.000, 60.000%] cutoff:111 AF:0.882
+0s [53000/21591(53000)] dpt:16 [ 1168862.853, 957573.200, 2393933.000, 60.000%] cutoff:102 AF:0.882
+0s [54000/21976(54000)] dpt:17 [ 2092659.051, 957573.200, 2393933.000, 60.000%] cutoff:115 AF:0.882
+0s [55000/22370(55000)] dpt:18 [ 1987377.570, 957573.200, 2393933.000, 60.000%] cutoff:106 AF:0.882
+0s [56000/22759(56000)] dpt:19 [ 1839888.962, 957573.200, 2393933.000, 60.000%] cutoff:111 AF:0.882
+0s [57000/23141(57000)] dpt:19 [ 1633611.106, 957573.200, 2393933.000, 60.000%] cutoff:118 AF:0.882
+0s [58000/23525(58000)] dpt:23 [ 2096611.600, 957573.200, 2393933.000, 60.000%] cutoff:116 AF:0.882
+0s [59000/23902(59000)] dpt:26 [ 2104777.465, 957573.200, 2393933.000, 60.000%] cutoff:123 AF:0.882
+0s [60000/24265(60000)] dpt:27 [ 1289954.770, 957573.200, 2393933.000, 60.000%] cutoff:137 AF:0.882
+0s [61000/24642(61000)] dpt:22 [ 1761985.468, 957573.200, 2393933.000, 60.000%] cutoff:123 AF:0.882
+0s [62000/25022(62000)] dpt:16 [ 1167709.902, 957573.200, 2393933.000, 60.000%] cutoff:120 AF:0.882
+0s [63000/25411(63000)] dpt:23 [ 2325834.870, 957573.200, 2393933.000, 60.000%] cutoff:111 AF:0.882
+0s [64000/25795(64000)] dpt:26 [ 1253954.187, 957573.200, 2393933.000, 60.000%] cutoff:116 AF:0.882
+1s [65000/26193(65000)] dpt:20 [ 2179025.799, 957573.200, 2393933.000, 60.000%] cutoff:102 AF:0.882
+1s [66000/26591(66000)] dpt:24 [ 1489091.634, 957573.200, 2393933.000, 60.000%] cutoff:102 AF:0.882
+1s [67000/26985(67000)] dpt:17 [ 1219650.022, 957573.200, 2393933.000, 60.000%] cutoff:106 AF:0.882
+1s [68000/27381(68000)] dpt:32 [ 1966943.747, 957573.200, 2393933.000, 60.000%] cutoff:104 AF:0.882
+1s [69000/27766(69000)] dpt:17 [ 1368612.147, 957573.200, 2393933.000, 60.000%] cutoff:115 AF:0.882
+1s [70000/28149(70000)] dpt:17 [ 2049766.799, 957573.200, 2393933.000, 60.000%] cutoff:117 AF:0.882
+1s [71000/28527(71000)] dpt:16 [ 2074684.749, 957573.200, 2393933.000, 60.000%] cutoff:122 AF:0.882
+1s [72000/28915(72000)] dpt:19 [ 1182186.124, 957573.200, 2393933.000, 60.000%] cutoff:112 AF:0.882
+1s [73000/29289(73000)] dpt:21 [ 1100098.767, 957573.200, 2393933.000, 60.000%] cutoff:126 AF:0.882
+1s [74000/29677(74000)] dpt:19 [ 1648804.360, 957573.200, 2393933.000, 60.000%] cutoff:112 AF:0.882
+1s [75000/30060(75000)] dpt:17 [ 2112055.540, 957573.200, 2393933.000, 60.000%] cutoff:117 AF:0.882
+1s [76000/30435(76000)] dpt:20 [ 1717438.134, 957573.200, 2393933.000, 60.000%] cutoff:125 AF:0.882
+1s [77000/30799(77000)] dpt:22 [ 1443682.317, 957573.200, 2393933.000, 60.000%] cutoff:136 AF:0.882
+1s [78000/31169(78000)] dpt:22 [ 1839427.949, 957573.200, 2393933.000, 60.000%] cutoff:130 AF:0.882
+1s [79000/31554(79000)] dpt:19 [ 2088019.849, 957573.200, 2393933.000, 60.000%] cutoff:115 AF:0.882
+1s [80000/31950(80000)] dpt:19 [ 2376894.696, 957573.200, 2393933.000, 60.000%] cutoff:104 AF:0.882
+1s [81000/32334(81000)] dpt:21 [ 2282418.965, 957573.200, 2393933.000, 60.000%] cutoff:116 AF:0.882
+End
+Parallel mode ----------------------------------------------------------------------------------------
+-- BESTVAL: 2393933.000  NORM: 1547.234  AP: 0.882 --
+1s (left: 31424) [t4] push->895
+1s (left: 28282) [t6] push->3142
+1s (left: 25454) [t1] push->2828
+1s (left: 25150) [t28] push->292
+1s (left: 22635) [t29] push->2515
+1s (left: 20369) [t5] push->2263
+1s (left: 18924) [t14] push->1444
+1s (left: 17032) [t12] push->1892
+1s (left: 15329) [t2] push->1703
+1s (left: 13797) [t13] push->1532
+1s (left: 12417) [t21] push->1379
+1s (left: 12339) [t15] push->78
+1s (left: 11106) [t19] push->1233
+1s (left: 9996) [t23] push->1110
+1s (left: 8997) [t16] push->999
+1s (left: 8098) [t10] push->899
+1s (left: 7289) [t22] push->809
+1s (left: 6561) [t18] push->728
+1s (left: 6072) [t25] push->489
+1s (left: 5465) [t30] push->607
+1s (left: 4919) [t17] push->546
+1s (left: 4428) [t11] push->491
+1s (left: 3986) [t31] push->442
+1s (left: 3588) [t24] push->398
+1s (left: 3230) [t20] push->358
+1s (left: 2907) [t27] push->323
+1s (left: 2617) [t7] push->290
+1s (left: 2356) [t9] push->261
+1s (left: 2121) [t8] push->235
+1s (left: 1909) [t0] push->212
+1s (left: 1719) [t26] push->190
+1s (left: 1548) [t3] push->171
+1s (left: 1394) [t26] push->154
+1s (left: 1255) [t3] push->139
+1s (left: 1130) [t8] push->125
+1s (left: 1017) [t26] push->113
+1s (left: 916) [t7] push->101
+1s (left: 816) [t9] push->100
+1s (left: 716) [t3] push->100
+1s (left: 616) [t20] push->100
+1s (left: 516) [t27] push->100
+1s (left: 416) [t0] push->100
+1s (left: 316) [t24] push->100
+1s (left: 216) [t8] push->100
+1s (left: 116) [t7] push->100
+1s (left: 16) [t26] push->100
+1s (left: 0) [t20] push->16
+1s (left: 0) [t31] sleep
+1s (left: 0) [t20] sleep
+1s (left: 0) [t9] sleep
+1s (left: 0) [t3] sleep
+1s (left: 0) [t11] sleep
+1s (left: 0) [t27] sleep
+1s (left: 0) [t7] sleep
+1s (left: 0) [t17] sleep
+1s (left: 0) [t8] sleep
+1s (left: 0) [t24] sleep
+1s (left: 0) [t26] sleep
+1s (left: 0) [t0] sleep
+1s (left: 0) [t30] sleep
+1s (left: 0) [t15] sleep
+1s (left: 0) [t25] sleep
+1s (left: 0) [t18] sleep
+1s (left: 0) [t10] sleep
+1s (left: 0) [t22] sleep
+1s (left: 0) [t16] sleep
+1s (left: 0) [t23] sleep
+1s (left: 0) [t19] sleep
+2s (left: 0) [t21] sleep
+2s (left: 0) [t28] sleep
+2s (left: 0) [t13] sleep
+2s (left: 0) [t2] sleep
+3s (left: 0) [t12] sleep
+3s (left: 473) [t1] pop->473
+3s (left: 373) [t31] push->100
+3s (left: 273) [t20] push->100
+3s (left: 173) [t9] push->100
+3s (left: 73) [t3] push->100
+3s (left: 1) [t11] push->72
+3s (left: 0) [t27] push->1
+3s (left: 0) [t27] sleep
+3s (left: 2449) [t6] pop->2449
+3s (left: 2205) [t7] push->244
+3s (left: 1985) [t17] push->220
+3s (left: 1787) [t8] push->198
+3s (left: 1609) [t24] push->178
+3s (left: 1449) [t26] push->160
+3s (left: 1305) [t0] push->144
+3s (left: 1175) [t30] push->130
+3s (left: 1058) [t15] push->117
+3s (left: 953) [t25] push->105
+3s (left: 853) [t18] push->100
+3s (left: 753) [t10] push->100
+3s (left: 653) [t22] push->100
+3s (left: 553) [t16] push->100
+3s (left: 453) [t23] push->100
+3s (left: 353) [t19] push->100
+3s (left: 253) [t21] push->100
+3s (left: 153) [t28] push->100
+3s (left: 53) [t13] push->100
+3s (left: 1) [t2] push->52
+3s (left: 0) [t12] push->1
+3s (left: 0) [t11] sleep
+3s (left: 0) [t12] sleep
+3s (left: 0) [t31] sleep
+3s (left: 0) [t20] sleep
+3s (left: 0) [t9] sleep
+3s (left: 0) [t3] sleep
+3s (left: 0) [t2] sleep
+3s (left: 2209) [t4] pop->2209
+3s (left: 1989) [t11] push->220
+3s (left: 1791) [t12] push->198
+3s (left: 1612) [t31] push->179
+3s (left: 1451) [t20] push->161
+3s (left: 1306) [t9] push->145
+3s (left: 1176) [t3] push->130
+3s (left: 1059) [t2] push->117
+3s (left: 954) [t27] push->105
+3s (left: 854) [t13] push->100
+3s (left: 754) [t28] push->100
+3s (left: 654) [t19] push->100
+3s (left: 554) [t13] push->100
+3s (left: 454) [t22] push->100
+3s (left: 354) [t16] push->100
+3s (left: 254) [t21] push->100
+3s (left: 154) [t18] push->100
+3s (left: 54) [t27] push->100
+3s (left: 1) [t15] push->53
+3s (left: 0) [t28] push->1
+3s (left: 0) [t28] sleep
+3s (left: 0) [t23] sleep
+3s (left: 0) [t10] sleep
+3s (left: 0) [t13] sleep
+3s (left: 0) [t25] sleep
+3s (left: 0) [t2] sleep
+3s (left: 0) [t26] sleep
+3s (left: 0) [t19] sleep
+3s (left: 0) [t20] sleep
+3s (left: 0) [t15] sleep
+3s (left: 0) [t3] sleep
+3s (left: 0) [t30] sleep
+3s (left: 0) [t16] sleep
+3s (left: 0) [t9] sleep
+3s (left: 0) [t18] sleep
+3s (left: 0) [t22] sleep
+3s (left: 0) [t21] sleep
+3s (left: 0) [t27] sleep
+3s (left: 0) [t31] sleep
+3s (left: 0) [t12] sleep
+3s (left: 5537) [t29] pop->5537
+3s (left: 4984) [t23] push->553
+3s (left: 4486) [t10] push->498
+3s (left: 4038) [t13] push->448
+3s (left: 3635) [t25] push->403
+3s (left: 3272) [t2] push->363
+3s (left: 2945) [t26] push->327
+3s (left: 2651) [t19] push->294
+3s (left: 2386) [t20] push->265
+3s (left: 2148) [t15] push->238
+3s (left: 1934) [t3] push->214
+3s (left: 1741) [t30] push->193
+3s (left: 1567) [t16] push->174
+3s (left: 1411) [t9] push->156
+3s (left: 1270) [t18] push->141
+3s (left: 1143) [t22] push->127
+3s (left: 1029) [t21] push->114
+3s (left: 927) [t27] push->102
+3s (left: 827) [t31] push->100
+3s (left: 727) [t12] push->100
+3s (left: 627) [t24] push->100
+3s (left: 527) [t11] push->100
+3s (left: 427) [t28] push->100
+4s (left: 11767) [t5] pop->11340
+4s (left: 11341) [t24] push->426
+4s (left: 10207) [t0] push->1134
+4s (left: 9187) [t27] push->1020
+4s (left: 8269) [t31] push->918
+4s (left: 7443) [t12] push->826
+4s (left: 6699) [t11] push->744
+4s (left: 6030) [t22] push->669
+4s (left: 5427) [t21] push->603
+4s (left: 4885) [t28] push->542
+4s (left: 4397) [t30] push->488
+4s (left: 3958) [t16] push->439
+4s (left: 3563) [t9] push->395
+4s (left: 3207) [t8] push->356
+4s (left: 2887) [t18] push->320
+4s (left: 2599) [t3] push->288
+4s (left: 2340) [t15] push->259
+4s (left: 2106) [t20] push->234
+4s (left: 1896) [t19] push->210
+4s (left: 1707) [t15] push->189
+4s (left: 1537) [t17] push->170
+4s (left: 1384) [t2] push->153
+4s (left: 1246) [t3] push->138
+4s (left: 1122) [t8] push->124
+4s (left: 1010) [t18] push->112
+4s (left: 909) [t26] push->101
+4s (left: 809) [t20] push->100
+4s (left: 709) [t9] push->100
+4s (left: 609) [t16] push->100
+4s (left: 509) [t19] push->100
+4s (left: 409) [t28] push->100
+4s (left: 309) [t13] push->100
+4s (left: 209) [t30] push->100
+4s (left: 109) [t17] push->100
+4s (left: 9) [t26] push->100
+4s (left: 0) [t20] push->9
+4s (left: 0) [t8] sleep
+4s (left: 0) [t18] sleep
+4s (left: 0) [t20] sleep
+4s (left: 0) [t15] sleep
+4s (left: 0) [t2] sleep
+4s (left: 0) [t19] sleep
+4s (left: 0) [t21] sleep
+4s (left: 0) [t3] sleep
+4s (left: 0) [t9] sleep
+4s (left: 0) [t11] sleep
+4s (left: 0) [t28] sleep
+4s (left: 0) [t16] sleep
+4s (left: 0) [t12] sleep
+4s (left: 0) [t13] sleep
+4s (left: 0) [t17] sleep
+4s (left: 0) [t30] sleep
+4s (left: 0) [t26] sleep
+4s (left: 0) [t25] sleep
+4s (left: 0) [t24] sleep
+4s (left: 0) [t22] sleep
+4s (left: 0) [t31] sleep
+4s (left: 0) [t27] sleep
+4s (left: 0) [t23] sleep
+4s (left: 0) [t10] sleep
+4s (left: 0) [t7] sleep
+4s (left: 0) [t0] sleep
+4s (left: 1264) [t14] pop->1264
+4s (left: 1138) [t18] push->126
+4s (left: 1025) [t20] push->113
+4s (left: 923) [t15] push->102
+4s (left: 823) [t2] push->100
+4s (left: 723) [t19] push->100
+4s (left: 623) [t21] push->100
+4s (left: 523) [t3] push->100
+4s (left: 423) [t9] push->100
+4s (left: 323) [t11] push->100
+4s (left: 223) [t28] push->100
+4s (left: 123) [t16] push->100
+4s (left: 23) [t12] push->100
+4s (left: 0) [t13] push->23
+4s (left: 0) [t13] sleep
+4s (left: 0) [t2] sleep
+4s (left: 0) [t15] sleep
+4s (left: 0) [t9] sleep
+4s (left: 0) [t19] sleep
+4s (left: 0) [t3] sleep
+4s (left: 0) [t20] sleep
+4s (left: 0) [t11] sleep
+4s (left: 0) [t28] sleep
+4s (left: 0) [t16] sleep
+4s (left: 0) [t21] sleep
+4s (left: 0) [t12] sleep
+4s (left: 0) [t18] sleep
+4s (left: 0) [t14] sleep
+5s (left: 0) [t29] sleep
+6s (left: 0) [t5] sleep
+6s (left: 27205) [t6] pop->27205
+6s (left: 24485) [t17] push->2720
+6s (left: 22037) [t30] push->2448
+6s (left: 19834) [t26] push->2203
+6s (left: 17851) [t25] push->1983
+6s (left: 16066) [t24] push->1785
+6s (left: 14460) [t22] push->1606
+6s (left: 13014) [t31] push->1446
+6s (left: 11713) [t27] push->1301
+6s (left: 10542) [t23] push->1171
+6s (left: 9488) [t10] push->1054
+6s (left: 8540) [t7] push->948
+6s (left: 7686) [t0] push->854
+6s (left: 6918) [t8] push->768
+6s (left: 6227) [t13] push->691
+6s (left: 32223) [t1] pop->25996
+6s (left: 29001) [t15] push->3222
+6s (left: 26101) [t9] push->2900
+6s (left: 23491) [t19] push->2610
+6s (left: 21142) [t3] push->2349
+6s (left: 19028) [t20] push->2114
+6s (left: 17126) [t11] push->1902
+6s (left: 15414) [t28] push->1712
+6s (left: 13873) [t16] push->1541
+6s (left: 12486) [t21] push->1387
+6s (left: 11238) [t12] push->1248
+6s (left: 10115) [t18] push->1123
+6s (left: 9104) [t14] push->1011
+6s (left: 8194) [t29] push->910
+6s (left: 7375) [t5] push->819
+6s (left: 6638) [t2] push->737
+6s (left: 5975) [t8] push->663
+6s (left: 5378) [t7] push->597
+6s (left: 4841) [t5] push->537
+6s (left: 4357) [t13] push->484
+6s (left: 3922) [t2] push->435
+6s (left: 3530) [t29] push->392
+6s (left: 3177) [t0] push->353
+6s (left: 2860) [t14] push->317
+6s (left: 2574) [t18] push->286
+6s (left: 2317) [t8] push->257
+6s (left: 2086) [t23] push->231
+6s (left: 1878) [t10] push->208
+6s (left: 1691) [t5] push->187
+6s (left: 1522) [t13] push->169
+6s (left: 1370) [t12] push->152
+6s (left: 1233) [t29] push->137
+6s (left: 1110) [t2] push->123
+6s (left: 999) [t7] push->111
+6s (left: 899) [t29] push->100
+6s (left: 799) [t18] push->100
+6s (left: 699) [t12] push->100
+6s (left: 599) [t14] push->100
+6s (left: 499) [t23] push->100
+6s (left: 399) [t2] push->100
+6s (left: 299) [t8] push->100
+6s (left: 199) [t7] push->100
+6s (left: 99) [t5] push->100
+6s (left: 1) [t13] push->98
+6s (left: 0) [t10] push->1
+6s (left: 0) [t10] sleep
+6s (left: 0) [t0] sleep
+6s (left: 0) [t29] sleep
+6s (left: 0) [t27] sleep
+6s (left: 0) [t21] sleep
+6s (left: 0) [t12] sleep
+6s (left: 0) [t18] sleep
+6s (left: 0) [t23] sleep
+6s (left: 0) [t2] sleep
+6s (left: 0) [t14] sleep
+6s (left: 0) [t5] sleep
+6s (left: 0) [t7] sleep
+6s (left: 0) [t13] sleep
+6s (left: 0) [t8] sleep
+7s (left: 0) [t31] sleep
+7s (left: 0) [t16] sleep
+7s (left: 0) [t22] sleep
+7s (left: 0) [t28] sleep
+7s (left: 0) [t24] sleep
+7s (left: 0) [t20] sleep
+7s (left: 0) [t11] sleep
+7s (left: 0) [t25] sleep
+7s (left: 0) [t26] sleep
+7s (left: 0) [t3] sleep
+7s (left: 7849) [t4] pop->7849
+7s (left: 7065) [t0] push->784
+7s (left: 6359) [t29] push->706
+7s (left: 5724) [t27] push->635
+7s (left: 5152) [t21] push->572
+7s (left: 4637) [t12] push->515
+7s (left: 4174) [t18] push->463
+7s (left: 3757) [t23] push->417
+7s (left: 3382) [t2] push->375
+7s (left: 3044) [t14] push->338
+7s (left: 2740) [t5] push->304
+7s (left: 2466) [t7] push->274
+7s (left: 2220) [t13] push->246
+7s (left: 1998) [t8] push->222
+7s (left: 1799) [t31] push->199
+7s (left: 1620) [t16] push->179
+7s (left: 1458) [t22] push->162
+7s (left: 1313) [t28] push->145
+7s (left: 1182) [t24] push->131
+7s (left: 1064) [t20] push->118
+7s (left: 958) [t11] push->106
+7s (left: 858) [t25] push->100
+7s (left: 758) [t26] push->100
+7s (left: 658) [t3] push->100
+7s (left: 558) [t10] push->100
+7s (left: 458) [t26] push->100
+7s (left: 358) [t3] push->100
+7s (left: 258) [t25] push->100
+7s (left: 158) [t22] push->100
+7s (left: 58) [t20] push->100
+7s (left: 0) [t24] push->58
+7s (left: 0) [t16] sleep
+7s (left: 0) [t10] sleep
+7s (left: 0) [t26] sleep
+7s (left: 0) [t28] sleep
+7s (left: 0) [t11] sleep
+7s (left: 0) [t3] sleep
+7s (left: 0) [t25] sleep
+7s (left: 0) [t24] sleep
+7s (left: 0) [t13] sleep
+7s (left: 0) [t8] sleep
+7s (left: 0) [t22] sleep
+7s (left: 0) [t31] sleep
+7s (left: 0) [t20] sleep
+7s (left: 0) [t2] sleep
+7s (left: 0) [t7] sleep
+7s (left: 0) [t30] sleep
+7s (left: 0) [t14] sleep
+7s (left: 0) [t23] sleep
+7s (left: 0) [t19] sleep
+7s (left: 0) [t5] sleep
+7s (left: 0) [t18] sleep
+7s (left: 0) [t12] sleep
+7s (left: 0) [t29] sleep
+7s (left: 0) [t21] sleep
+7s (left: 0) [t27] sleep
+7s (left: 0) [t0] sleep
+7s (left: 0) [t17] sleep
+7s (left: 0) [t9] sleep
+7s (left: 0) [t15] sleep
+7s (left: 0) [t4] sleep
+9s (left: 0) [t1] sleep
+9s (left: 0) [t6] break (SOLVED)
+9s (left: 0) [t16] break (SOLVED)
+9s (left: 0) [t10] break (SOLVED)
+9s (left: 0) [t26] break (SOLVED)
+9s (left: 0) [t28] break (SOLVED)
+9s (left: 0) [t11] break (SOLVED)
+9s (left: 0) [t3] break (SOLVED)
+9s (left: 0) [t25] break (SOLVED)
+9s (left: 0) [t24] break (SOLVED)
+9s (left: 0) [t13] break (SOLVED)
+9s (left: 0) [t8] break (SOLVED)
+9s (left: 0) [t22] break (SOLVED)
+9s (left: 0) [t31] break (SOLVED)
+9s (left: 0) [t20] break (SOLVED)
+9s (left: 0) [t2] break (SOLVED)
+9s (left: 0) [t7] break (SOLVED)
+9s (left: 0) [t30] break (SOLVED)
+9s (left: 0) [t14] break (SOLVED)
+9s (left: 0) [t23] break (SOLVED)
+9s (left: 0) [t19] break (SOLVED)
+9s (left: 0) [t5] break (SOLVED)
+9s (left: 0) [t18] break (SOLVED)
+9s (left: 0) [t12] break (SOLVED)
+9s (left: 0) [t29] break (SOLVED)
+9s (left: 0) [t21] break (SOLVED)
+9s (left: 0) [t27] break (SOLVED)
+9s (left: 0) [t0] break (SOLVED)
+9s (left: 0) [t17] break (SOLVED)
+9s (left: 0) [t9] break (SOLVED)
+9s (left: 0) [t15] break (SOLVED)
+9s (left: 0) [t4] break (SOLVED)
+9s (left: 0) [t1] break (SOLVED)
+
+SVPSOLVER found an optimal solution
+
+time: 9s
+best value: 2393933.000
+norm: 1547.234
+AF: 0.882
+Nodes: 2298902
+best solution:
+ 0: 1.000
