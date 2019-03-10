@@ -96,6 +96,7 @@ int main( int argc, char** argv){
 
          case 'h':
             cout << "Usage: " << argv[0] << " [-f filename] [-p nthreads] [-t timelimit]" << endl;
+            return -1;
             break;
 
          case 'm':
@@ -116,6 +117,7 @@ int main( int argc, char** argv){
 
          default: /* '?' */
             cout << "Usage: " << argv[0] << " [-f filename] [-p nthreads] [-t timelimit]" << endl;
+            return -1;
             break;
         }
     }

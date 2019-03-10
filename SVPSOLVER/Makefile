@@ -28,7 +28,6 @@ endif
 MAINFILE	=	$(BINDIR)/$(MAIN)
 
 #Mac
-#CXX	=	/usr/local/bin/g++-4.9
 CXX	=	/usr/local/bin/g++-7
 
 CXXFLAGS	=	-Wall -llapack -lpthread -fopenmp -O2 -std=c++14

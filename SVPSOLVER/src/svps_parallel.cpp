@@ -92,7 +92,7 @@ void SVPsolver::SVPSsolveSubprob(
             {
                cout << stopwatch.get_time() << "s (left: " << nodelist.getListsize() << ") [t" << thread_id << "] ";
                cout << "get new solution ";
-               cout << "-- BESTVAL: " << bestval << "  NORM: " << sqrt( bestval ) << "  AP: " << Appfac << " --";
+               cout << "-- BESTVAL: " << bestval << "  NORM: " << sqrt( bestval ) << "  AF: " << Appfac << " --";
                cout << endl;
             }
          }

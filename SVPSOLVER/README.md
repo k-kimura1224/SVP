@@ -1,21 +1,25 @@
 # Branch-and-Bound Solver for Shortest Vector Problems
 
 ## Compile
-Write ***`CXX` Makefile path of the directory of your scip in SCIPDIR
-Then, execute ``make OPT=opt LPS=none ZIMPL=false PARASCIP=true -j" to compile our software.
+1. Write `CXX` (for C++14), `CXXFLAGS` and `CXXLDFLAGS` (for BLAS) in Makefile.
+2. Execute `make OPT=opt` to compile this solver.
 
 ## Usage
-You can solve _housing.linereg in ``data" by the following command
+SVPSOLVER.opt -f filename
+              (-p nthreads) (-t timelimit) (-m memory) (-H AF)
+              (-q) (-h)
 
- - ./bin/scip -f data/housing.linereg -s settings/default.set
+- -f filename: filename of dat-file
 
-## Definition of Data
-Our software reads from the second line of data file.
-The definition of our data is as follows:
-- [2nd line] the number of data
-- [3rd line] the number of the explanatory variables
-- [4th line] the index of the response variable(Begining is 1)
-- [from 5th line] your data
+## Option
+- -p nthreads: number of threads (default: 1)
+- -t timelimit: timelimit for solving (default: 5000(s))
+- -m memory: max value for memory (default: 8GB)
+- -H AF: approximation factor to execute heuristic methods (default: 0.95)
+- -q: quiet mode (default: false)
+- -h: display usage
 
-See data files in the directory data for more details.
-
+## Example
+- `./bin/SVPSOLVER.opt -f sample.dat`
+- `./bin/SVPSOLVER.opt -f sample.dat -p 4 -m 8 -t 5000`
+- `./bin/SVPSOLVER.opt -f sample.dat -p 32 -m 128 -t 86400`
