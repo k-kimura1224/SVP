@@ -5,9 +5,7 @@
 2. Execute `make OPT=opt` to compile this solver.
 
 ## Usage
-`SVPSOLVER.opt -f filename
-              [-p nthreads] [-t timelimit] [-m memory] [-H AF]
-              [-q] [-h]`
+`SVPSOLVER.opt -f filename [-p nthreads] [-t timelimit] [-m memory] [-H AF] [-q] [-h]`
 
 - -f filename: filename of dat-file
 
@@ -15,7 +13,8 @@
 - -p nthreads: number of threads (default: 1)
 - -t timelimit: timelimit for solving (default: 5000(s))
 - -m memory: max value for memory (default: 8(GB))
-- -H AF: approximation factor to execute heuristic methods (default: 0.95)
+- -H AF: approximation factor to execute heuristic methods (default: 0.95)  
+a
 - -q: quiet mode (default: false)
 - -h: display usage
 
