@@ -1,7 +1,7 @@
 # Branch-and-Bound Solver for Shortest Vector Problems
 
 ## Compile
-Write :qin Makefile path of the directory of your scip in SCIPDIR
+Write ***`CXX` Makefile path of the directory of your scip in SCIPDIR
 Then, execute ``make OPT=opt LPS=none ZIMPL=false PARASCIP=true -j" to compile our software.
 
 ## Usage
