@@ -40,7 +40,6 @@ void  SVPsolver::SVPSheurQuadratic(
    assert( B_ != nullptr );
 
    double val;
-   double val_new;
    double* solvals = nullptr;
    double* solvals_new = nullptr;
 
@@ -90,7 +89,8 @@ void  SVPsolver::SVPSheurQuadratic(
    for( auto i = 0; i < m; ++i )
       normv[i] = colnorm[i] * colnorm[i];
 
-#if 1
+#if 0
+   double val_new;
    while(1)
    {
       Com_mat_Ax( B_, m, m, solvals, Bx );
