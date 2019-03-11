@@ -14,7 +14,7 @@
 - -t timelimit: timelimit for solving (default: 5000(s))
 - -m memory: max value for memory (default: 8(GB))
 - -H AF: approximation factor to execute heuristic methods (default: 0.95)  
-a
+If AF is -1, all heuristic methods do not run
 - -q: quiet mode (default: false)
 - -h: display usage
 

@@ -96,7 +96,8 @@ class SVPsolver{
    bool  quiet;
    bool  CUTMODE;
    bool  ENUM;
-   double  HEUR_APP;
+   double   HEUR_APP;
+   bool  HEUR;
 
    Status status;
 
@@ -274,6 +275,8 @@ class SVPsolver{
       void  SVPSsetCutMode( const bool cutmode ) { CUTMODE = cutmode; }
       void  SVPSsetEnum( const bool enumeration ) { ENUM = enumeration; }
       void  SVPSsetHeurApp( const double heur_app ) { HEUR_APP = heur_app; }
+      void  SVPSsetHeur( const bool heur ) { HEUR = heur; }
+      bool  SVPSgetHeur() const { return HEUR; }
 
       int         get_runtime(){ return stopwatch.get_result(); }
       double      get_gap(){ return 100*(bestval - GLB)/bestval; }
