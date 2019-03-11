@@ -14,7 +14,7 @@ run()
    mem=$5
    heur=$6
 
-	export OMP_NUM_THREADS=1
+   export OMP_NUM_THREADS=1
    echo "../bin/SVPSOLVER.${opt} -f $file -p $thread -t $time -m $mem -H $heur > ${name}.log"
    ../bin/SVPSOLVER.${opt} -f $file -p $thread -t $time -m $mem -H $heur > ${name}.log
 }
