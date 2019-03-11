@@ -14,8 +14,8 @@ run()
    mem=$5
 
 	export OMP_NUM_THREADS=1
-   echo "../bin/SVPSOLVER.${opt} -f $file -p $thread -t $time -m $mem -H 10.0> ${name}.log"
-   ../bin/SVPSOLVER.${opt} -f $file -p $thread -t $time -m $mem -H 1.04 > ${name}.log
+   echo "../bin/SVPSOLVER.${opt} -f $file -p $thread -t $time -m $mem -H -1 > ${name}.log"
+   ../bin/SVPSOLVER.${opt} -f $file -p $thread -t $time -m $mem -H -1 > ${name}.log
 }
 
 dirname=$1

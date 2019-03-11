@@ -44,6 +44,7 @@ void SVPsolver::SVPSsolveSubprob(
                true, false, false, false, false, false );
       sub.SVPSsetEnum( ENUM );
       sub.SVPSsetHeurApp( HEUR_APP );
+      sub.SVPSsetHeurApp( HEUR );
       sub.SVPSsetBounds( bounds );
       sub.SVPSsetNorm( norm );
 
@@ -92,7 +93,7 @@ void SVPsolver::SVPSsolveSubprob(
             {
                cout << stopwatch.get_time() << "s (left: " << nodelist.getListsize() << ") [t" << thread_id << "] ";
                cout << "get new solution ";
-               cout << "-- BESTVAL: " << bestval << "  NORM: " << sqrt( bestval ) << "  AP: " << Appfac << " --";
+               cout << "-- BESTVAL: " << bestval << "  NORM: " << sqrt( bestval ) << "  AF: " << Appfac << " --";
                cout << endl;
             }
          }

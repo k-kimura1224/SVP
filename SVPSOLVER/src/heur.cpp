@@ -50,6 +50,7 @@ void  SVPsolver::SVPSheur(
    int dpt2;
 
    assert( dpt >= 0 );
+   assert( HEUR == true );
 
    if( subsolver == false )
    {
