@@ -101,6 +101,8 @@ bool SVPsolver::SVPSrunBranchandBound()
    const auto output = !quiet;
    const auto subsol = subsolver;
    auto& nodeindex = index;
+   const auto heur = HEUR;
+   const auto heur_app = HEUR_APP;
    //const auto enumeration = ENUM;
    //const int dpt_enum = m / 2;
    //const int dpt_enum = 0;
@@ -144,7 +146,7 @@ bool SVPsolver::SVPSrunBranchandBound()
       //   relaxresult = SVPSenumerate( *node, vars_localub, vars_locallb );
 
       // run heuristics
-      if( relaxresult == FEASIBLE && HEUR_APP < Appfac )
+      if( heur && relaxresult == FEASIBLE && heur_app < Appfac )
          SVPSheur( *node, vars_localub, vars_locallb );
 
       // branch

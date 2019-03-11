@@ -18,6 +18,25 @@
 using namespace std;
 
 static
+void help( char* binname )
+{
+   cout << endl;
+   cout << "Usage: " << binname;
+   cout << " -f name [-p nthreads] [-t timelimit] [-m memory] [-H AF] [-q] [-h]" << endl;
+   cout << endl;
+   cout << "-f filename:\t filename of dat-file" << endl;
+   cout << endl;
+   cout << "Option:" << endl;
+   cout << "-p nthreads:\t number of threads (default: 1)" << endl;
+   cout << "-t timelimit:\t timelimit for solving (default: 5000(s))" << endl;
+   cout << "-m memory:\t max value for memory (default: 8(GB))" << endl;
+   cout << "-H AF:\t\t approximation factor to execute heuristic methods (default: 0.95)" << endl;
+   cout << "\t\t If AF is -1, all heuristic methods do not run" << endl;
+   cout << "-q:\t\t quiet mode (default: false)" << endl;
+   cout << "-h:\t\t display usage" << endl;
+}
+
+static
 void getProblemName(
    const char* filename,   /* input filename         */
    char*       probname,   /* output problemname     */
@@ -66,13 +85,14 @@ int main( int argc, char** argv){
    opterr = 0;
 
    char* filename = nullptr;
-   int   nthreads = 1;
-   int   timelimit = 5000;
-   bool  quiet = false;
-   int   memory = 8;
-   bool  cutmode = false;
-   bool  enumeration = false;
+   int nthreads = 1;
+   int timelimit = 5000;
+   bool quiet = false;
+   int memory = 8;
+   bool cutmode = false;
+   bool enumeration = false;
    double heur_app = 0.95;
+   bool heur = true;
 
    while ( (opt = getopt(argc, argv, "f:p:t:qhm:ceH:")) != -1)
    {
@@ -95,7 +115,8 @@ int main( int argc, char** argv){
             break;
 
          case 'h':
-            cout << "Usage: " << argv[0] << " [-f filename] [-p nthreads] [-t timelimit]" << endl;
+            help( argv[0] );
+            return -1;
             break;
 
          case 'm':
@@ -112,10 +133,13 @@ int main( int argc, char** argv){
 
          case 'H':
             heur_app = atof ( optarg );
+            if ( heur_app == -1.0 ) // all heuristic do not run
+               heur = false;
             break;
 
          default: /* '?' */
-            cout << "Usage: " << argv[0] << " [-f filename] [-p nthreads] [-t timelimit]" << endl;
+            help( argv[0] );
+            return -1;
             break;
         }
     }
@@ -123,7 +147,7 @@ int main( int argc, char** argv){
    if ( filename == nullptr )
    {
       cout << "Error: no input file" << endl;
-      cout << "Usage: " << argv[0] << " [-f filename] [-p nthreads] [-t timelimit]" << endl;
+      help( argv[0] );
       return -1;
    }
 
@@ -149,6 +173,7 @@ int main( int argc, char** argv){
    svps.SVPSsetHeurApp( heur_app );
    svps.SVPSsetup( m, B_, nthreads, timelimit, memory, quiet,
          false, true, true, true, true, true );
+   svps.SVPSsetHeur( heur );
 
    bool run;
    if( nthreads == 1 )
